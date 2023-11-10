@@ -26,7 +26,6 @@ class TbUser extends Migration
             'hak_akses' => [
                 'type' => 'ENUM',
                 'constraint' => ['QC', 'Delivery', 'CS'],
-                'default' => 'User',
             ],
         ]);
         $this->forge->addKey('idUser', true);
