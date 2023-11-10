@@ -36,6 +36,7 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+$routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
 $routes->get('/', 'Home::index');
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');
