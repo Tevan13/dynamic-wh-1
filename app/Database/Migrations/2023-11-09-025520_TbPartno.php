@@ -33,6 +33,10 @@ class TbPartno extends Migration
                 'type' => 'datetime',
                 'null' => true,
             ],
+            'updated_at' => [
+                'type' => 'datetime',
+                'null' => true,
+            ],
         ]);
         $this->forge->addKey('idPartNo', true);
         $this->forge->createTable('tb_partno');
