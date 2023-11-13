@@ -21,11 +21,11 @@ class TbUser extends Migration
             ],
             'password' => [
                 'type' => 'VARCHAR',
-                'constraint' => '25',
+                'constraint' => '255',
             ],
             'hak_akses' => [
                 'type' => 'ENUM',
-                'constraint' => ['QC', 'Delivery', 'CS'],
+                'constraint' => ['QC', 'Delivery', 'CS', 'Admin'],
             ],
         ]);
         $this->forge->addKey('idUser', true);

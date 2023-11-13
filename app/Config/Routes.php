@@ -17,7 +17,7 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+$routes->setDefaultController('Dashboard');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -37,12 +37,13 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
-$routes->get('/', 'Home::index');
+$routes->get('/login', 'loginController::index', ['as' => 'login']);
+// $routes->get('/', 'Home::index');
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');
 $routes->delete('/master-part/(:any)', 'Partnumber::delete/$1');
-$routes->get('dashboard', 'Dashboard::index');
+$routes->get('dashboard', 'Dashboard::index', ['as' => 'dashboard']);
 $routes->get('transaksi', 'HistoryTransaksi::index');
 /*
  * --------------------------------------------------------------------

@@ -7,12 +7,16 @@ use App\Controllers\BaseController;
 
 class Partnumber extends BaseController
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->PartnumberModel = new PartnumberModel();
     }
 
     public function index()
     {
+        if (session()->get('tb_user') == null) {
+            return redirect()->to('/login');
+        }
         $data = [
             'parts' => $this->PartnumberModel->findAll(),
             'tittle' => 'Master Part',
@@ -20,7 +24,8 @@ class Partnumber extends BaseController
         return view('cs/masterPart', $data);
     }
 
-    public function store() {
+    public function store()
+    {
         $data = $this->request->getPost();
         $store = $this->PartnumberModel->protect(false)->insert($data, false);
         if ($store) {
@@ -31,7 +36,8 @@ class Partnumber extends BaseController
         return redirect()->route('master-part');
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $data = $this->request->getPost();
         unset($data['_method']);
         $update = $this->PartnumberModel->protect(false)->update($id, $data);
