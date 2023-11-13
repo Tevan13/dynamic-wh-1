@@ -14,7 +14,7 @@
     <div class="container">
         <h2>Dashboard</h2>
         <div class="">
-            <a href="#" class="btn btn-primary">
+            <a href="#" class="btn btn-primary" onclick='nextPage'>
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">scan</h5>
@@ -28,10 +28,17 @@
                     </div>
                 </div>
             </a>
-            <a href="#" class="btn btn-primary">
+            <a href="http://localhost:8080/history/" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">history</h5>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="btn btn-primary">
+                <div>
+                    <div class="card-body">
+                        <h5 class="card-title">master part number</h5>
                     </div>
                 </div>
             </a>
