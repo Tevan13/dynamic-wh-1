@@ -43,7 +43,8 @@ $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');
 $routes->delete('/master-part/(:any)', 'Partnumber::delete/$1');
 $routes->get('dashboard', 'Dashboard::index');
-$routes->get('transaksi', 'HistoryTransaksi::index');
+$routes->get('history', 'HistoryTransaksi::index');
+$routes->post('history', 'HistoryTransaksi::update');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

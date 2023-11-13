@@ -12,6 +12,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "codeigniter4/framework": "^4.0",
+        "phpoffice/phpexcel": "^1.8",
         "phpoffice/phpspreadsheet": "^1.29"
     },
     "require-dev": {

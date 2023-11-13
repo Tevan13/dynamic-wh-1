@@ -12,6 +12,7 @@
 <body>
     <div class="p-5">
         <h2 class="card-title">History Transaksi</h2>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Cari...">
         <table class="table table-bordered mt-5">
             <tr>
                 <th>No.</th>
@@ -23,19 +24,37 @@
                 <th>Tanggal Check Out</th>
             </tr>
             <tr>
-                <?php $no = 1; foreach ($trans as $tran) : ?>
-                    <td><?php $no?></td>
-                    <td><?php $tran['idTransaksi']?></td>
-                    <td><?php $tran['idPartNo']?></td>
-                    <td><?php $tran['idRak']?></td>
-                    <td><?php $tran['statusDelivery']?></td>
-                    <td><?php $tran['tgl_ci']?></td>
-                    <td><?php $tran['tgl_co']?></td>
-                <?php $no++; endforeach ?>
+                <?php
+                $no = 1;
+                foreach ($trans as $tran) : ?>
+                    <td><?php $no ?></td>
+                    <td><?php $tran['idTransaksi'] ?></td>
+                    <td><?php $tran['idPartNo'] ?></td>
+                    <td><?php $tran['idRak'] ?></td>
+                    <td><?php $tran['statusDelivery'] ?></td>
+                    <td><?php $tran['tgl_ci'] ?></td>
+                    <td><?php $tran['tgl_co'] ?></td>
+                <?php $no++;
+                endforeach ?>
             </tr>
         </table>
-        <button>Download</button>
+        <form method="post" action="<?php echo base_url(); ?>ExcelExport/action">
+            <input type="submit" name="export" class="btn btn-warning" value="Export">
+        </form>
     </div>
+    <script>
+        $cari = new HistoryTransaksi.search()
+
+        function myFunction() {
+            if (isset($_GET['cari'])) {
+                $cari = $_GET['cari'];
+                $data = new HistoryTransaksiModel($cari);
+            } else {
+                $data = HistoryTransaksiModel();
+            }
+            $no = 1;
+        }
+    </script>
 </body>
 
 </html>
