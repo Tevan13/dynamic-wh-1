@@ -39,10 +39,13 @@ $routes->setAutoRoute(true);
 $routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
 $routes->get('/login', 'loginController::index', ['as' => 'login']);
 // $routes->get('/', 'Home::index');
+
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');
 $routes->delete('/master-part/(:any)', 'Partnumber::delete/$1');
+$routes->post('/import-part', 'Partnumber::import');
+
 $routes->get('dashboard', 'Dashboard::index', ['as' => 'dashboard']);
 $routes->get('transaksi', 'HistoryTransaksi::index');
 /*

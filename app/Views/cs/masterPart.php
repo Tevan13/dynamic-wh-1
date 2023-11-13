@@ -6,7 +6,7 @@
     <div class="card-body">
       <h1><?= $tittle ?></h1>
 
-      <form method="post" action="#" enctype="multipart/form-data">
+      <form method="post" action="/import-part" enctype="multipart/form-data">
         <div class="form-group">
             <div class="row">
                 <div class="col-8">
