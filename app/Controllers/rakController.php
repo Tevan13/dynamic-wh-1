@@ -10,6 +10,7 @@ class rakController extends BaseController
     {
         $this->rModel = new rakModel();
     }
+
     public function index()
     {
         $data = [
@@ -18,6 +19,7 @@ class rakController extends BaseController
         ];
         return view('/cs/masterRak', $data);
     }
+
     public function create()
     {
         $data = [
@@ -34,6 +36,7 @@ class rakController extends BaseController
         ];
         return $this->response->setJSON($response);
     }
+
     public function updateRak($id)
     {
         $rak = $this->rModel->getRakBy($id);
@@ -52,6 +55,7 @@ class rakController extends BaseController
 
         return $this->response->setJSON($response);
     }
+
     public function delete($id)
     {
         $this->rModel->deleteMasterRak($id);

@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\HistoryTransaksiModel;
 use App\Controllers\BaseController;
 
-
 //untuk export ke excel
 if (isset($_POST['submit'])) {
     $history = new HistoryTransaksiModel();
@@ -27,12 +26,14 @@ class HistoryTransaksi extends BaseController
 {
     public function index()
     {
+        if (session()->get('tb_user') == null) {
+            return redirect()->to('/login');
+        }
         $model = new HistoryTransaksiModel;
         $data['title'] = 'History Transaksi';
         $data['trans'] = $model->getTransaksi();
         echo view('historyTransaksiView', $data);
     }
-
     public function update()
     {
         $model = new HistoryTransaksiModel;
