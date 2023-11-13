@@ -17,17 +17,21 @@ class Partnumber extends BaseController
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
-        $data['parts'] = $this->PartnumberModel->findAll();
-        return view('master/partnumber', $data);
+        $data = [
+            'parts' => $this->PartnumberModel->findAll(),
+            'tittle' => 'Master Part',
+        ];
+        return view('cs/masterPart', $data);
     }
 
     public function store()
     {
         $data = $this->request->getPost();
         $store = $this->PartnumberModel->protect(false)->insert($data, false);
-
         if ($store) {
-            return redirect()->route('master-part');
+            session()->setFlashdata("success", "Part Number berhasil ditambahkan!");
+        } else {
+            session()->setFlashdata("fail", "Part Number gagal ditambahkan!");
         }
         return redirect()->route('master-part');
     }
@@ -36,13 +40,22 @@ class Partnumber extends BaseController
     {
         $data = $this->request->getPost();
         unset($data['_method']);
-        $this->PartnumberModel->protect(false)->update($id, $data);
+        $update = $this->PartnumberModel->protect(false)->update($id, $data);
+        if ($update) {
+            session()->setFlashdata("success", "Part Number berhasil diedit!");
+        } else {
+            session()->setFlashdata("fail", "Part Number gagal diedit!");
+        }
         return redirect()->route('master-part');
     }
 
-    public function delete($id)
-    {
-        $this->PartnumberModel->where('idPartNo', $id)->delete();
+    public function delete($id) {
+        $delete = $this->PartnumberModel->where('idPartNo', $id)->delete();
+        if ($delete) {
+            session()->setFlashdata("success", "Part Number berhasil dihapus!");
+        } else {
+            session()->setFlashdata("fail", "Part Number gagal dihapus!");
+        }
         return redirect()->route('master-part');
     }
 }
