@@ -28,6 +28,11 @@ class TbRak extends Migration
                 'constraint' => ['Besar', 'Kecil', 'Over Area'],
                 'null' => true,
             ],
+            'status_rak' => [
+                'type' => 'ENUM',
+                'constraint' => ['Kosong', 'Terisi', 'Penuh'],
+                'null' => true,
+            ],
             'created_at' => [
                 'type' => 'datetime',
                 'null' => true,
