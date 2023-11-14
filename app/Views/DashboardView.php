@@ -49,6 +49,13 @@
                     </div>
                 </div>
             </a>
+            <a href="/scan-ci" class="btn btn-primary">
+                <div>
+                    <div class="card-body">
+                        <h5 class="card-title">Scan CheckIn</h5>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </body>
