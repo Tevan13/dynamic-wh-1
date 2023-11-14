@@ -77,10 +77,8 @@
             <input type="text" name="tgl_ci" id="liveTime" readonly>
             <label class="form-label">SCAN</label>
             <input type="text" name="scan" placeholder="Masukkan scan LTS disini" autofocus required>
-            <!-- <label class="form-label">Part Number</label>
-            <input type="text" name="partno" disabled> -->
         </div>
-        <button type="submit" href="#">Submit</button>
+        <button type="submit">Submit</button>
     </form>
 </div>
 <script>
@@ -99,8 +97,8 @@
         icon: 'success',
         title: 'Success',
         text: `<?= session("success") ?>`,
-        showConfirmButton: false,
-        timer: 1500
+        // showConfirmButton: false,
+        // timer: 1500
       })
     <?php } ?>
     <?php if(session()->has("fail")) { ?>

@@ -18,7 +18,7 @@ class User extends BaseController
             'users' => $this->UserModel->findAll(),
             'tittle' => 'Master User',
         ];
-        return view('cs/masterUser', $data);
+        return view('master/masterUser', $data);
     }
 
     public function store() {
