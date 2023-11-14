@@ -38,6 +38,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
 $routes->get('/login', 'loginController::index', ['as' => 'login']);
+$routes->get('/information-rak', 'informationController::index', ['as' => 'information-rak']);
 // $routes->get('/', 'Home::index');
 
 $routes->get('/scan-ci', 'Checkin::index', ['as' => 'scan-ci']);
