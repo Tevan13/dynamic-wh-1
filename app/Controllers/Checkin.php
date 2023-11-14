@@ -21,7 +21,8 @@ class Checkin extends Controller
         return view('scan_ci');
     }
 
-    public function store() {
+    public function store()
+    {
         $input = $this->request->getPost();
         $data = explode(',', $input['scan']);
         $partNo = $data[0];
@@ -35,7 +36,7 @@ class Checkin extends Controller
 
         $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->where('status', 'checkin')->findAll();
         if (count($transaksi) <= 0) {
-            $rak = $this->RakModel->where('status_rak', 'Kosong')->where('keterangan', $part['tipe_rak'])->findAll();
+            $rak = $this->RakModel->where('status_rak', 'Kosong')->where('tipe_rak', $part['tipe_rak'])->findAll();
         } else {
             $rak = $this->RakModel->where('idRak', $transaksi[0]['idRak']);
         }

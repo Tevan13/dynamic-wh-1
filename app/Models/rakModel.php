@@ -8,7 +8,7 @@ class rakModel extends Model
 {
     protected $table = "tb_rak";
     protected $primaryKey = "idRak";
-    protected $allowedFields = ["kode_rak", "tipe_rak", "keterangan", "status_rak", "created_at", "updated_at"];
+    protected $allowedFields = ["kode_rak", "tipe_rak", "status_rak", "created_at", "updated_at"];
 
     public function getMasterRAk()
     {
