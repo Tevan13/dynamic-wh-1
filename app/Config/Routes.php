@@ -48,6 +48,11 @@ $routes->delete('/master-part/(:any)', 'Partnumber::delete/$1');
 $routes->post('/import-part', 'Partnumber::import');
 $routes->post('/export-part', 'Partnumber::export');
 
+$routes->get('/master-user', 'User::index');
+$routes->post('/master-user', 'User::store');
+$routes->put('/master-user/(:any)', 'User::update/$1');
+$routes->delete('/master-user/(:any)', 'User::delete/$1');
+
 $routes->get('history', 'HistoryTransaksi::index');
 $routes->post('history', 'HistoryTransaksi::update');
 
