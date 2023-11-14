@@ -42,6 +42,13 @@
                     </div>
                 </div>
             </a>
+            <a href="/master-user" class="btn btn-primary">
+                <div>
+                    <div class="card-body">
+                        <h5 class="card-title">master User</h5>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </body>
