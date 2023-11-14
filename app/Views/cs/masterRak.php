@@ -14,7 +14,7 @@
                         </div>
                         <div class="col">
                             <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
-                            <a href='#' class="btn btn-success">Export Excel</a>
+                            <a href='<?= base_url('rakController/export'); ?>' class="btn btn-success">Export Excel</a>
                             |
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
                         </div>
@@ -43,9 +43,9 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
-                                                <label for="jenis_rak" class="col-sm-3 col-form-label">Jenis RAK</label>
+                                                <label for="tipe_rak" class="col-sm-3 col-form-label">Tipe Rak</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="jenis_rak" name="jenis_rak" placeholder="Masukkan Jenis Rak" required>
+                                                    <input type="text" class="form-control" id="tipe_rak" name="tipe_rak" placeholder="Masukkan Tipe Rak" required>
                                                 </div>
                                             </div>
 
@@ -82,8 +82,9 @@
                     <tr>
                         <th>NO</th>
                         <th>Kode RAK</th>
-                        <th>Jenis RAK</th>
+                        <th>Tipe Rak</th>
                         <th>Keterangan</th>
+                        <th>Status RAK</th>
                         <th>Action</th>
                 </thead>
                 <tbody id="contactTable">
@@ -95,8 +96,9 @@
                             <tr>
                                 <td><?= $i++; ?></td>
                                 <td><?= $rak['kode_rak'] ?></td>
-                                <td><?= $rak['jenis_rak'] ?></td>
+                                <td><?= $rak['tipe_rak'] ?></td>
                                 <td><?= $rak['keterangan'] ?></td>
+                                <td><?= $rak['status_rak'] ?></td>
                                 <td style="text-align: center;">
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalUpdate<?php echo $i; ?>">
                                         Edit
@@ -120,8 +122,8 @@
                                                         <input type="text" name="kode_rak" class="form-control" value="<?= $rak['kode_rak']; ?>" required>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label class="form-label">Jenis Rak</label>
-                                                        <input type="text" name="jenis_rak" class="form-control" value="<?= $rak['jenis_rak']; ?>" required>
+                                                        <label class="form-label">Tipe Rak</label>
+                                                        <input type="text" name="tipe_rak" class="form-control" value="<?= $rak['tipe_rak']; ?>" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Keterangan</label>
@@ -129,6 +131,23 @@
                                                             <?php
                                                             $ket = ["Kecil", "Besar", "Over Area"];
                                                             $selected = $rak['keterangan'];
+                                                            foreach ($ket as $k) {
+                                                                $option = '<option value="' . $k . '"';
+                                                                if ($selected == $k) {
+                                                                    $option .= ' selected';
+                                                                }
+                                                                $option .= '>' . $k . '</option>';
+                                                                echo $option;
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Status Rak</label>
+                                                        <select class="form-select" id="status_rak" name="status_rak">
+                                                            <?php
+                                                            $ket = ["Kosong", "Terisi", "Penuh"];
+                                                            $selected = $rak['status_rak'];
                                                             foreach ($ket as $k) {
                                                                 $option = '<option value="' . $k . '"';
                                                                 if ($selected == $k) {
@@ -166,12 +185,16 @@
                                                         <input type="text" name="kode_rak" class="form-control" value="<?= $rak['kode_rak']; ?>" required readonly>
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label class="form-label">Jenis Rak</label>
-                                                        <input type="text" name="jenis_rak" class="form-control" value="<?= $rak['jenis_rak']; ?>" required readonly>
+                                                        <label class="form-label">Tipe Rak</label>
+                                                        <input type="text" name="tipe_rak" class="form-control" value="<?= $rak['tipe_rak']; ?>" required readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Keterangan</label>
                                                         <input type="text" name="keterangan" class="form-control" value="<?= $rak['keterangan']; ?>" required readonly>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Status Rak</label>
+                                                        <input type="text" name="status_rak" class="form-control" value="<?= $rak['status_rak']; ?>" required readonly>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">Close</button>
@@ -189,7 +212,7 @@
                     } else {
                         ?>
                         <tr>
-                            <td style="text-align: center;" colspan="5">Tidak ada data</td>
+                            <td style="text-align: center;" colspan="6">Tidak ada data</td>
                         </tr>
                     <?php
                     }
