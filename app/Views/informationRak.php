@@ -39,7 +39,7 @@
                     <tr>
                         <td><?= $i++; ?></td>
                         <td>AS10/41</td>
-                        <td>A1</td>
+                        <td>A5</td>
                         <td>20 Maret 2023</td>
                         <td>
                             <label class="badge rounded-pill bg-danger">26</label>
