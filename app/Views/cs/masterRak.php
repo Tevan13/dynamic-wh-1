@@ -14,9 +14,9 @@
                         </div>
                         <div class="col">
                             <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add</button>
-                            |
                             <a href='#' class="btn btn-success">Export Excel</a>
+                            |
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
                         </div>
                     </div>
                 </div>
@@ -50,9 +50,10 @@
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label for="keterangan" class="col-sm-3 col-form-label">Keterangan</label>
+                                                <label for="keterangan" class="col-sm-3 col-form-label" aria-label=".form-select-lg example">Keterangan</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" id="keterangan" name="keterangan" required>
+                                                        <option selected disabled>--Pilih Keterangan Rak--</option>
                                                         <option value="Kecil">Kecil</option>
                                                         <option value="Besar">Besar</option>
                                                         <option value="Over Area">Over Area</option>
@@ -159,7 +160,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="<?= base_url(); ?>rakController/delete/<?= $rak['idRak'] ?>" method="POST" id="form-delete">
+                                                <form action="<?= base_url(); ?>rakController/delete/<?= $rak['idRak'] ?>" method="POST" enctype="multipart/form-data" id="form-delete">
                                                     <div class="mb-3">
                                                         <label class="form-label">Kode Rak</label>
                                                         <input type="text" name="kode_rak" class="form-control" value="<?= $rak['kode_rak']; ?>" required readonly>

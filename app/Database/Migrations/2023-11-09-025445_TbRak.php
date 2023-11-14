@@ -19,13 +19,18 @@ class TbRak extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255
             ],
-            'jenis_rak' => [
+            'tipe_rak' => [
                 'type' => 'VARCHAR',
                 'constraint' => 10
             ],
             'keterangan' => [
                 'type' => 'ENUM',
                 'constraint' => ['Besar', 'Kecil', 'Over Area'],
+                'null' => true,
+            ],
+            'status_rak' => [
+                'type' => 'ENUM',
+                'constraint' => ['Kosong', 'Terisi', 'Penuh'],
                 'null' => true,
             ],
             'created_at' => [
