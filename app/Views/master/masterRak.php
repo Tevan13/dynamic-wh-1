@@ -6,7 +6,7 @@
         <div class="card-body">
             <h1><?= $tittle ?></h1>
 
-            <form method="post" action="<?= base_url('rakController/upload'); ?>" enctype="multipart/form-data">
+            <form method="post" action="#" enctype="multipart/form-data">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-8">
@@ -43,10 +43,17 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
-                                                <label for="tipe_rak" class="col-sm-3 col-form-label" aria-label=".form-select-lg example">Tipe Rak</label>
+                                                <label for="tipe_rak" class="col-sm-3 col-form-label">Tipe Rak</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" id="tipe_rak" name="tipe_rak" required>
-                                                        <option selected disabled>--Pilih Tipe Rak--</option>
+                                                    <input type="text" class="form-control" id="tipe_rak" name="tipe_rak" placeholder="Masukkan Tipe Rak" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="keterangan" class="col-sm-3 col-form-label" aria-label=".form-select-lg example">Keterangan</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="keterangan" name="keterangan" required>
+                                                        <option selected disabled>--Pilih Keterangan Rak--</option>
                                                         <option value="Kecil">Kecil</option>
                                                         <option value="Besar">Besar</option>
                                                         <option value="Over Area">Over Area</option>
@@ -76,6 +83,7 @@
                         <th>NO</th>
                         <th>Kode RAK</th>
                         <th>Tipe Rak</th>
+                        <th>Keterangan</th>
                         <th>Status RAK</th>
                         <th>Action</th>
                 </thead>
@@ -89,6 +97,7 @@
                                 <td><?= $i++; ?></td>
                                 <td><?= $rak['kode_rak'] ?></td>
                                 <td><?= $rak['tipe_rak'] ?></td>
+                                <td><?= $rak['keterangan'] ?></td>
                                 <td><?= $rak['status_rak'] ?></td>
                                 <td style="text-align: center;">
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalUpdate<?php echo $i; ?>">
@@ -114,10 +123,14 @@
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Tipe Rak</label>
-                                                        <select class="form-select" id="tipe_rak" name="tipe_rak">
+                                                        <input type="text" name="tipe_rak" class="form-control" value="<?= $rak['tipe_rak']; ?>" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Keterangan</label>
+                                                        <select class="form-select" id="keterangan" name="keterangan">
                                                             <?php
                                                             $ket = ["Kecil", "Besar", "Over Area"];
-                                                            $selected = $rak['tipe_rak'];
+                                                            $selected = $rak['keterangan'];
                                                             foreach ($ket as $k) {
                                                                 $option = '<option value="' . $k . '"';
                                                                 if ($selected == $k) {
@@ -174,6 +187,10 @@
                                                     <div class="mb-3">
                                                         <label class="form-label">Tipe Rak</label>
                                                         <input type="text" name="tipe_rak" class="form-control" value="<?= $rak['tipe_rak']; ?>" required readonly>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Keterangan</label>
+                                                        <input type="text" name="keterangan" class="form-control" value="<?= $rak['keterangan']; ?>" required readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Status Rak</label>
@@ -328,4 +345,3 @@
     });
 </script>
 <?= $this->endSection(); ?>
-=======

@@ -27,6 +27,27 @@ class RakSeeder extends Seeder
                 'status_rak' => 'Penuh',
                 'created_at' => date('Y-m-d H:i:s'),
             ],
+            [
+                'kode_rak' => 'B113',
+                'tipe_rak' => 'B',
+                'keterangan' => 'Besar',
+                'status_rak' => 'Kosong',
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'kode_rak' => 'B114',
+                'tipe_rak' => 'B',
+                'keterangan' => 'Besar',
+                'status_rak' => 'Kosong',
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'kode_rak' => 'B115',
+                'tipe_rak' => 'B',
+                'keterangan' => 'Besar',
+                'status_rak' => 'Kosong',
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
         ];
 
         $this->db->table('tb_rak')->insertBatch($data);

@@ -20,7 +20,7 @@ class rakController extends BaseController
             'tittle' => 'Master Rak',
             'masterRak' => $this->rModel->getMasterRAk()
         ];
-        return view('/cs/masterRak', $data);
+        return view('master/masterRak', $data);
     }
 
     public function create()

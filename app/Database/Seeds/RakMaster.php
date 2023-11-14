@@ -4,7 +4,7 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class RakMaster extends Seeder
+class RakSeeder extends Seeder
 {
     public function run()
     {
@@ -28,7 +28,7 @@ class RakMaster extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
             ],
         ];
-        // masukkan data ke dalam tabel users
+
         $this->db->table('tb_rak')->insertBatch($data);
     }
 }

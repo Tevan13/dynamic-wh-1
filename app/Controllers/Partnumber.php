@@ -25,7 +25,7 @@ class Partnumber extends BaseController
             'parts' => $this->PartnumberModel->findAll(),
             'tittle' => 'Master Part',
         ];
-        return view('cs/masterPart', $data);
+        return view('master/masterPart', $data);
     }
 
     public function store()
