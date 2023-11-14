@@ -84,7 +84,16 @@
 <script>
     function updateLiveTime() {
         var currentTime = new Date();
-        var formattedTime = currentTime.toISOString().slice(0, 19).replace("T", " ");
+        var options = {
+            timeZone: 'Asia/Jakarta',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+        var formattedTime = currentTime.toLocaleString('en-ID', options);
         $("#liveTime").val(formattedTime);
     }
     setInterval(updateLiveTime, 1000);
