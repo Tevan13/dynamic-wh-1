@@ -45,6 +45,7 @@ $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');
 $routes->delete('/master-part/(:any)', 'Partnumber::delete/$1');
 $routes->post('/import-part', 'Partnumber::import');
+$routes->post('/export-part', 'Partnumber::export');
 
 $routes->get('history', 'HistoryTransaksi::index');
 $routes->post('history', 'HistoryTransaksi::update');
