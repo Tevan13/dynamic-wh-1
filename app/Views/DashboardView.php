@@ -28,14 +28,14 @@
                     </div>
                 </div>
             </a>
-            <a href="http://localhost:8080/history/" class="btn btn-primary">
+            <a href="history/" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">history</h5>
                     </div>
                 </div>
             </a>
-            <a href="#" class="btn btn-primary">
+            <a href="/master-part" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">master part number</h5>
