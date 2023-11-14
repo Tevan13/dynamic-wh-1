@@ -25,9 +25,13 @@ class TbTransaksi extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
-            'status_delivery' => [
+            'unique_scanid' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
+            'status' => [
                 'type' => 'ENUM',
-                'constraint' => ['true', 'false'],
+                'constraint' => ['checkin', 'checkout', 'adjust'],
             ],
             'tgl_ci' => [
                 'type' => 'datetime',
@@ -36,6 +40,10 @@ class TbTransaksi extends Migration
                 'type' => 'datetime',
                 'null' => true,
             ],
+            'tgl_adjust' => [
+                'type' => 'datetime',
+                'null' => true,
+            ]
         ]);
         $this->forge->addKey('idTransaksi', true);
         $this->forge->addForeignKey('idPartNo', 'tb_partno', 'idPartNo', 'CASCADE', 'CASCADE');
