@@ -33,6 +33,10 @@ class TbTransaksi extends Migration
                 'type' => 'ENUM',
                 'constraint' => ['checkin', 'checkout', 'adjust'],
             ],
+            'pic' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
             'tgl_ci' => [
                 'type' => 'datetime',
             ],
