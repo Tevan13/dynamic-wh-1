@@ -207,7 +207,7 @@
     <?php if(session()->has("fail")) { ?>
       Swal.fire({
         icon: 'error',
-        title: 'Rak gagal dibuat!',
+        title: 'Gagal!',
         text: `<?= session("fail") ?>`,
       })
     <?php } ?>
