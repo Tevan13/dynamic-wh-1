@@ -126,4 +126,65 @@ class rakController extends BaseController
         readfile($fileName);
         exit;
     }
+    public function upload()
+    {
+        $file_excel = $this->request->getFile('fileexcel');
+        $ext = $file_excel->getClientExtension();
+
+        if ($ext == 'xls') {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        } else {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        }
+
+        $spreadsheet = $render->load($file_excel);
+        $data = $spreadsheet->getActiveSheet()->toArray();
+
+        $db = \Config\Database::connect();
+        foreach ($data as $x => $row) {
+            if ($x == 0) {
+                continue;
+            }
+
+            $kode_rak = $row[1];
+            $tipe_rak = $row[2];
+            $keterangan = $row[3];
+            $status_rak = $row[4];
+
+            // Check if the rak exists by kode rak in the table
+            $existingRak = $db->table('tb_rak')->getWhere(['kode_rak' => $kode_rak])->getRow();
+
+            // Start a database transaction
+            $db->transBegin();
+            try {
+                if ($existingRak) {
+                    // Update existing data
+                    $updatedata = [
+                        'tipe_rak' => $tipe_rak,
+                        'keterangan' => $keterangan,
+                        'status_rak' => $status_rak,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ];
+                    session()->setFlashdata('message', '<div class="alert alert-success" style="font-color:white"><b>Data Berhasil Diperbarui</b></div>');
+                } else {
+                    $simpandata = [
+                        'kode_rak' => $kode_rak,
+                        'tipe_rak' => $tipe_rak,
+                        'keterangan' => $keterangan,
+                        'status_rak' => $status_rak,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    $db->table('tb_rak')->insert($simpandata);
+                    session()->setFlashdata('message', '<div class="alert alert-success" style="font-color:white"><b>Data Berhasil Ditambahkan</b></div>');
+                }
+
+                // Commit the transaction for this row
+                $db->transCommit();
+            } catch (\Exception $e) {
+                // Something went wrong, roll back the transaction for this row
+                $db->transRollback();
+            }
+        }
+        return redirect()->to('/master_rak');
+    }
 }
