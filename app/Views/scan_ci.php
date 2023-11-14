@@ -86,31 +86,40 @@
 <script>
     function updateLiveTime() {
         var currentTime = new Date();
-        var formattedTime = currentTime.toISOString().slice(0, 19).replace("T", " ");
+        var options = {
+            timeZone: 'Asia/Jakarta',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+        var formattedTime = currentTime.toLocaleString('en-ID', options);
         $("#liveTime").val(formattedTime);
     }
     setInterval(updateLiveTime, 1000);
     updateLiveTime();
 </script>
 <script>
-  $(function(){
-    <?php if(session()->has("success")) { ?>
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: `<?= session("success") ?>`,
-        showConfirmButton: false,
-        timer: 1500
-      })
-    <?php } ?>
-    <?php if(session()->has("fail")) { ?>
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal',
-        text: `<?= session("fail") ?>`,
-      })
-    <?php } ?>
-  });
+    $(function() {
+        <?php if (session()->has("success")) { ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: `<?= session("success") ?>`,
+                showConfirmButton: false,
+                timer: 1500
+            })
+        <?php } ?>
+        <?php if (session()->has("fail")) { ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: `<?= session("fail") ?>`,
+            })
+        <?php } ?>
+    });
 </script>
 
 <?= $this->endSection(); ?>
