@@ -8,18 +8,20 @@
 
       <form method="post" action="/import-part" enctype="multipart/form-data">
         <div class="form-group">
-            <div class="row">
-                <div class="col-8">
-                    <input type="file" name="fileexcel" class="form-control" id="file" required accept=".xls, .xlsx" />
-                </div>
-                <div class="col">
-                    <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add</button>
-                    |
-                    <a href='#' class="btn btn-success">Export Excel</a>
-                </div>
+          <div class="row">
+            <div class="col-8">
+              <input type="file" name="fileexcel" class="form-control" id="file" required accept=".xls, .xlsx" />
             </div>
+            <div class="col">
+              <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add</button>
+            </div>
+          </div>
         </div>
+      </form>
+
+      <form action="/export-part" method="post" class='mt-3'>
+        <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
       </form>
 
       <!-- Modal tambah data -->
