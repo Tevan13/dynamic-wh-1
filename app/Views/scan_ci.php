@@ -77,8 +77,10 @@
             <input type="text" name="tgl_ci" id="liveTime" readonly>
             <label class="form-label">SCAN</label>
             <input type="text" name="scan" placeholder="Masukkan scan LTS disini" autofocus required>
+            <!-- <label class="form-label">Part Number</label>
+            <input type="text" name="partno" disabled> -->
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" href="#">Submit</button>
     </form>
 </div>
 <script>
@@ -100,24 +102,24 @@
     updateLiveTime();
 </script>
 <script>
-  $(function(){
-    <?php if(session()->has("success")) { ?>
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: `<?= session("success") ?>`,
-        // showConfirmButton: false,
-        // timer: 1500
-      })
-    <?php } ?>
-    <?php if(session()->has("fail")) { ?>
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal',
-        text: `<?= session("fail") ?>`,
-      })
-    <?php } ?>
-  });
+    $(function() {
+        <?php if (session()->has("success")) { ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: `<?= session("success") ?>`,
+                showConfirmButton: false,
+                timer: 1500
+            })
+        <?php } ?>
+        <?php if (session()->has("fail")) { ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: `<?= session("fail") ?>`,
+            })
+        <?php } ?>
+    });
 </script>
 
 <?= $this->endSection(); ?>
