@@ -15,7 +15,10 @@ class TransaksiMetadata extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            "trans_metadata" => [
+            "checkin_metadata" => [
+                'type' => 'JSON',
+            ],
+            "checkout_metadata" => [
                 'type' => 'JSON',
             ]
         ]);
