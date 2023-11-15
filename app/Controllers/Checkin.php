@@ -74,8 +74,22 @@ class Checkin extends Controller
                     return redirect()->route('scan-ci');
                 }
             } else {
-                session()->setFlashdata("fail", "Semua rak sudah penuh, masukkan kedalam over area!");
-                return redirect()->route('scan-ci');
+                $rak = $this->RakModel->where('tipe_rak', 'Over Area')->first();
+                $dataInput = [
+                    'idPartNo' => $part['idPartNo'],
+                    'idRak' => $rak['idRak'],
+                    'unique_scanid' => $scan,
+                    'status' => 'checkin',
+                    'tgl_ci' => $now,
+                ];
+                $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+                if ($store) {
+                    session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak'] . "(Over Area)");
+                    return redirect()->route('scan-ci');
+                } else {
+                    session()->setFlashdata("fail", "Gagal menambahkan part number ke rak over area!");
+                    return redirect()->route('scan-ci');
+                }
             }
         }
 
