@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class TransaksiMetadata extends Migration
+class TbPic extends Migration
 {
     public function up()
     {
@@ -15,16 +15,21 @@ class TransaksiMetadata extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            "trans_metadata" => [
-                'type' => 'JSON',
+            "pic" => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
+            "departemen" => [
+                'type' => 'ENUM',
+                'constraint' => ['CS', 'QC', 'Delivery'],
             ]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('transaksi_history');
+        $this->forge->createTable('tb_pic');
     }
 
     public function down()
     {
-        $this->forge->dropTable('transaksi_history');
+        $this->forge->dropTable('tb_pic');
     }
 }

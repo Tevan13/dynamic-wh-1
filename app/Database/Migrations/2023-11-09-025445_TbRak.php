@@ -29,6 +29,11 @@ class TbRak extends Migration
                 'constraint' => ['Kosong', 'Terisi', 'Penuh'],
                 'null' => true,
             ],
+            'total_packing' => [
+                'type' => 'INT',
+                'constraint' => 12,
+                'default' => 0,
+            ],
             'created_at' => [
                 'type' => 'datetime',
                 'null' => true,
