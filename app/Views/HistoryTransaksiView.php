@@ -15,117 +15,6 @@
 
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
-<!-- <style>
-    .topright {
-        position: absolute;
-        top: 65px;
-        right: 16px;
-    }
-
-    .container {
-        margin-top: 250px;
-    }
-
-    body {
-        background-color: #eee;
-    }
-
-    .demo {
-        background-color: rgb(168, 200, 245);
-    }
-
-    .pagination-outer {
-        text-align: center;
-    }
-
-    .pagination {
-        background-color: #fff;
-        border-radius: 25px !important;
-        overflow: hidden;
-        border: none !important;
-    }
-
-
-    a:focus,
-    a:active {
-        outline: none !important;
-        box-shadow: none !important;
-    }
-
-    .fa {
-        font-size: 11px;
-        vertical-align: middle !important;
-        color: black;
-    }
-
-    .pagination li.active .fa {
-        color: #fff !important;
-    }
-
-    .pagination li a.page-link {
-        color: #505050;
-        background-color: transparent;
-        font-size: 17px;
-        font-weight: 600;
-        padding: 17px 25px;
-        border: none;
-        transition: all 0.3s ease 0s;
-    }
-
-    .fa-home {
-        transform: scale(1.4, 1.4);
-    }
-
-    .pagination li:last-child a.page-link {
-        border: none;
-    }
-
-    .pagination li.active a.page-link,
-    .pagination li a.page-link:hover,
-    .pagination li.active a.page-link:hover {
-        background-color: transparent;
-    }
-
-    .pagination li a.page-link:after {
-        content: '';
-        background-color: #42A5F5 !important;
-        height: 100%;
-        width: 100%;
-        transform: scaleY(0);
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        z-index: -1;
-        transition: all 0.3s;
-    }
-
-    .pagination li.active a.page-link:after,
-    .pagination li a.page-link:hover:after,
-    .pagination li.active a.page-link:hover:after {
-        transform: scaleY(1);
-        border-radius: 25px !important;
-
-    }
-
-    @media (max-width: 767px) {
-
-        .pagination li a.page-link {
-            padding: 11px 8px !important;
-        }
-
-        .fa {
-            font-size: 9px !important;
-        }
-
-        li a {
-            font-size: 12px !important;
-        }
-
-        .page-item+.page-item {
-            padding-left: 0 !important;
-        }
-    }
-</style> -->
 <style>
 * {box-sizing: border-box;}
 
@@ -203,19 +92,6 @@ body {
 }
 </style>
 <div class="p-3">
-    <!-- <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">dashboard</a></li>
-            <li class="breadcrumb-item"><a href="#">scan</a></li>
-            <li class="breadcrumb-item"><a href="#">history</a></li>
-            <li class="breadcrumb-item"><a href="#">master part</a></li>
-            <li class="breadcrumb-item"><a href="#">master rak</li>
-        </ol>
-        <div class="mt-3 mb-3">
-            <input type="text" placeholder="Cari..." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-        </div>
-    </nav> -->
     <div class="topnav">
         <a href="http://localhost:8080/dashboard">Dashboard</a>
         <a href="#about">Scan</a>
@@ -335,8 +211,6 @@ body {
     </div>
 </div>
 <script>
-    // $search = new HistoryTransaksiModel.search()
-
     function nextReport(varId) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
