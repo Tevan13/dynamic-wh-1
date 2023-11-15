@@ -26,9 +26,9 @@ class HistoryTransaksi extends BaseController
 {
     public function index()
     {
-        if (session()->get('tb_user') == null) {
-            return redirect()->to('/login');
-        }
+        // if (session()->get('tb_user') == null) {
+        //     return redirect()->to('/login');
+        // }
         $model = new HistoryTransaksiModel;
         $data['title'] = 'History Transaksi';
         $data['trans'] = $model->getTransaksi();
@@ -53,5 +53,11 @@ class HistoryTransaksi extends BaseController
             $cari = $_GET['cari'];
             echo "<b>Hasil pencarian : " . $cari . "</b>";
         }
+    }
+
+    public function export() {
+        $model = new HistoryTransaksiModel;
+        $data = $this->request->getGet();
+        $post = $this->$model->protect(false)->insert($data, false);
     }
 }
