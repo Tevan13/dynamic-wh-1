@@ -108,8 +108,6 @@
                 icon: 'success',
                 title: 'Success',
                 text: `<?= session("success") ?>`,
-                showConfirmButton: false,
-                timer: 1500
             })
         <?php } ?>
         <?php if (session()->has("fail")) { ?>
