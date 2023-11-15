@@ -18,9 +18,9 @@ class Partnumber extends BaseController
 
     public function index()
     {
-        if (session()->get('tb_user') == null) {
-            return redirect()->to('/login');
-        }
+        // if (session()->get('tb_user') == null) {
+        //     return redirect()->to('/login');
+        // }
         $data = [
             'parts' => $this->PartnumberModel->findAll(),
             'tittle' => 'Master Part',
