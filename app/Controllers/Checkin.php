@@ -21,7 +21,8 @@ class Checkin extends Controller
         return view('scan_ci');
     }
 
-    public function store() {
+    public function store()
+    {
         helper('date');
         $now = date('Y-m-d H:i:s', now());
         $input = $this->request->getPost();
@@ -84,6 +85,5 @@ class Checkin extends Controller
         }
         session()->setFlashdata("fail", "Terjadi kesalahan program!");
         return redirect()->route('scan-ci');
-
     }
 }
