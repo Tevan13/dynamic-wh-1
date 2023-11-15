@@ -9,7 +9,8 @@ class userModel extends Model
     protected $table = 'tb_user';
     protected $primaryKey = 'idUser';
 
-    protected $allowedFields = ['username', 'password', 'hak_akses']; // Add this line
+    protected $allowedFields = ['username', 'password', 'hak_akses'];
+
     public function getUserList()
     {
         return $this->db->table('tb_user')->get()->getResultArray();
@@ -19,6 +20,7 @@ class userModel extends Model
     {
         return $this->db->table('tb_user')->insert($user);
     }
+
     public function updateUser($id, $user)
     {
         if ($this->db->table('tb_user')->getWhere(["idUser" => $id])->getResultArray() == null) {
@@ -26,10 +28,12 @@ class userModel extends Model
         }
         return $this->db->table('tb_user')->update($user, ["idUser" => $id]);
     }
+
     public function deleteUser($id)
     {
         return $this->db->query('DELETE FROM `tb_user` WHERE idUser=?', [$id]);
     }
+
     public function getUserByUnamePassword($uname, $pass)
     {
         $user = $this->db->table('tb_user')->where(['username' => $uname])->get()->getRowArray();
@@ -44,19 +48,4 @@ class userModel extends Model
             return null;
         }
     }
-
-    // public function getUserById($id)
-    // {
-    //     $user = $this->db->table('tb_user')->getWhere(["idUser" => $id])->getResultArray();
-
-    //     if ($user) {
-    //         if (password_verify($id, $user["password"])) {
-    //             return $user;
-    //         } else {
-    //             return null;
-    //         }
-    //     } else {
-    //         return null;
-    //     }
-    // }
 }

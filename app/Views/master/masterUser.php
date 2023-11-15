@@ -6,28 +6,30 @@
     <div class="card-body">
       <h1><?= $tittle ?></h1>
 
-      <form method="post" action="/import-part" enctype="multipart/form-data">
+      <!-- <form method="post" action="/import-part" enctype="multipart/form-data">
         <div class="form-group">
-            <div class="row">
-                <div class="col-8">
-                    <input type="file" name="fileexcel" class="form-control" id="file" required accept=".xls, .xlsx" />
-                </div>
-                <div class="col">
-                    <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add</button>
-                    |
-                    <a href='#' class="btn btn-success">Export Excel</a>
-                </div>
+          <div class="row">
+            <div class="col-8">
+              <input type="file" name="fileexcel" class="form-control" id="file" required accept=".xls, .xlsx" />
             </div>
+            <div class="col">
+              <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
+            </div>
+          </div>
         </div>
-      </form>
+      </form> -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add</button>
+
+      <!-- <form action="/export-part" method="post" class='mt-3'>
+        <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
+      </form> -->
 
       <!-- Modal tambah data -->
       <div class="form-group">
         <div class="row">
           <div class=" col" style="text-align: right;">
             <!-- Modal -->
-            <form id="form-add" action="/master-part" method="POST">
+            <form id="form-add" action="/master-user" method="POST">
               <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -37,23 +39,25 @@
                     </div>
                     <div class="modal-body">
                       <div class="row mb-3">
-                        <label for="part_number" class="col-sm-3 col-form-label">Part Number</label>
+                        <label for="username" class="col-sm-3 col-form-label">Username</label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control" id="part_number" name="part_number" required>
+                          <input type="text" class="form-control" id="username" name="username" required>
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="max_kapasitas" class="col-sm-3 col-form-label">Kapasitas Maximum</label>
+                        <label for="password" class="col-sm-3 col-form-label">Password</label>
                         <div class="col-sm-9">
-                          <input type="number" class="form-control" id="max_kapasitas" name="max_kapasitas" required>
+                          <input type="password" class="form-control" id="password" name="password" required>
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="tipe_rak" class="col-sm-3 col-form-label">Jenis Rak</label>
+                        <label for="hak_akses" class="col-sm-3 col-form-label">Hak Akses</label>
                         <div class="col-sm-9">
-                          <select class="form-control" id="tipe_rak" name="tipe_rak" required>
-                            <option value="Kecil">Kecil</option>
-                            <option value="Besar">Besar</option>
+                          <select class="form-control" id="hak_akses" name="hak_akses" required>
+                            <option value="QC">QC</option>
+                            <option value="Delivery">Delivery</option>
+                            <option value="CS">CS</option>
+                            <option value="Admin">Admin</option>
                           </select>
                         </div>
                       </div>
@@ -80,34 +84,34 @@
         <thead>
           <tr>
             <th>NO</th>
-            <th>Part Number</th>
-            <th>Tipe Rak</th>
-            <th>Maximum Kapasitas</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Hak Akses</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody id="contactTable">
           <?php
             $i = 1;
-            if (!empty($parts)) {
-              foreach ($parts as $part) {
+            if (!empty($users)) {
+              foreach ($users as $user) {
           ?>
             <tr>
               <td><?= $i++; ?></td>
-              <td><?= $part['part_number'] ?></td>
-              <td><?= $part['tipe_rak'] ?></td>
-              <td><?= $part['max_kapasitas'] ?></td>
+              <td><?= $user['username'] ?></td>
+              <td><?= $user['password'] ?></td>
+              <td><?= $user['hak_akses'] ?></td>
               <td style="text-align: center;">
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalUpdate<?= $part['idPartNo'] ?>">
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalUpdate<?= $user['idUser'] ?>">
                   Edit
                 </button>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalDelete<?= $part['idPartNo'] ?>">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalDelete<?= $user['idUser'] ?>">
                   Delete
                 </button>
               </td>
 
               <!-- Modal Edit -->
-              <div class=" modal fade" id="ModalUpdate<?= $part['idPartNo'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class=" modal fade" id="ModalUpdate<?= $user['idUser'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -115,21 +119,23 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form id="form-update" action="/master-part/<?= $part['idPartNo'] ?>" method="POST">
+                      <form id="form-update" action="/master-user/<?= $user['idUser'] ?>" method="POST">
                         <input type="hidden" name="_method" value="PUT">
                         <div class="mb-3">
-                          <label class="form-label">Part Number</label>
-                          <input type="text" name="part_number" class="form-control" value="<?= $part['part_number'] ?>" required>
+                          <label class="form-label">Username</label>
+                          <input type="text" name="username" class="form-control" value="<?= $user['username'] ?>" required>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label">Kapasitas Maximum</label>
-                          <input type="number" name="max_kapasitas" class="form-control" value="<?= $part['max_kapasitas']; ?>" required>
+                          <label class="form-label">Password</label>
+                          <input type="password" name="password" class="form-control" value="<?= $user['password'] ?>" required>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label">Jenis Rak</label>
-                          <select class="form-select" id="tipe_rak" name="tipe_rak">
-                            <option value="Besar" <?= $part['tipe_rak'] == 'Besar' ? 'selected' : '' ?>>Besar</option>
-                            <option value="Kecil" <?= $part['tipe_rak'] == 'Kecil' ? 'selected' : '' ?>>Kecil</option>
+                          <label class="form-label">Hak Akses</label>
+                          <select class="form-select" id="hak_akses" name="hak_akses">
+                            <option value="QC" <?= $user['hak_akses'] == 'QC' ? 'selected' : '' ?>>QC</option>
+                            <option value="Delivery" <?= $user['hak_akses'] == 'Delivery' ? 'selected' : '' ?>>Delivery</option>
+                            <option value="CS" <?= $user['hak_akses'] == 'CS' ? 'selected' : '' ?>>CS</option>
+                            <option value="Admin" <?= $user['hak_akses'] == 'Admin' ? 'selected' : '' ?>>Admin</option>
                           </select>
                         </div>
                         <div class="modal-footer">
@@ -144,7 +150,7 @@
               <!-- End Modal Edit -->
 
               <!-- Modal Delete -->
-              <div class=" modal fade" id="ModalDelete<?= $part['idPartNo'] ?>" data-modal-id="<?= $part['idPartNo'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class=" modal fade" id="ModalDelete<?= $user['idUser'] ?>" data-modal-id="<?= $user['idUser'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -152,19 +158,19 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <form action="/master-part/<?= $part['idPartNo'] ?>" method="POST" id="form-delete">
+                      <form action="/master-user/<?= $user['idUser'] ?>" method="POST" id="form-delete">
                         <input type="hidden" name="_method" value="DELETE">
                         <div class="mb-3">
-                          <label class="form-label">Part Number</label>
-                          <input type="text" name="part_number" class="form-control" value="<?= $part['part_number'] ?>" required readonly>
+                          <label class="form-label">Usernamer</label>
+                          <input type="text" name="username" class="form-control" value="<?= $user['username'] ?>" required readonly>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label">Kapasitas Maximum</label>
-                          <input type="text" name="max_kapasitas" class="form-control" value="<?= $part['max_kapasitas'] ?>" required readonly>
+                          <label class="form-label">Password</label>
+                          <input type="text" name="password" class="form-control" value="<?= $user['password'] ?>" required readonly>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label">Jenis Rak</label>
-                          <input type="text" name="tipe_rak" class="form-control" value="<?= $part['tipe_rak']; ?>" required readonly>
+                          <label class="form-label">Hak Akses</label>
+                          <input type="text" name="hak_akses" class="form-control" value="<?= $user['hak_akses'] ?>" required readonly>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">Close</button>

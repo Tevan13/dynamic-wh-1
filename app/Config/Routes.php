@@ -38,13 +38,23 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
 $routes->get('/login', 'loginController::index', ['as' => 'login']);
+$routes->get('/information-rak', 'informationController::index', ['as' => 'information-rak']);
 // $routes->get('/', 'Home::index');
+
+$routes->get('/scan-ci', 'Checkin::index', ['as' => 'scan-ci']);
+$routes->post('/scan-ci', 'Checkin::store', ['as' => 'scan-ci']);
 
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');
 $routes->delete('/master-part/(:any)', 'Partnumber::delete/$1');
 $routes->post('/import-part', 'Partnumber::import');
+$routes->post('/export-part', 'Partnumber::export');
+
+$routes->get('/master-user', 'User::index');
+$routes->post('/master-user', 'User::store');
+$routes->put('/master-user/(:any)', 'User::update/$1');
+$routes->delete('/master-user/(:any)', 'User::delete/$1');
 
 $routes->get('history', 'HistoryTransaksi::index');
 $routes->post('history', 'HistoryTransaksi::update');

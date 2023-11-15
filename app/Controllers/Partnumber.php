@@ -6,6 +6,8 @@ use App\Models\PartnumberModel;
 use App\Controllers\BaseController;
 use \PhpOffice\PhpSpreadsheet\Reader\Xls;
 use \PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
+use \PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class Partnumber extends BaseController
 {
@@ -23,7 +25,7 @@ class Partnumber extends BaseController
             'parts' => $this->PartnumberModel->findAll(),
             'tittle' => 'Master Part',
         ];
-        return view('cs/masterPart', $data);
+        return view('master/masterPart', $data);
     }
 
     public function store()
@@ -86,5 +88,38 @@ class Partnumber extends BaseController
         }
         session()->setFlashdata("success", "Part Number berhasil ditambahkan!");
         return redirect()->route('master-part');
+    }
+
+    public function export() {
+        $data = $this->PartnumberModel->findAll();
+        $fileName = 'master_part_number.xlsx';
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Part Number');
+		$sheet->setCellValue('B1', 'Jenis Rak');
+		$sheet->setCellValue('C1', 'Maximum Kapasitas');
+
+        $count = 2;
+		foreach($data as $row)
+		{
+			$sheet->setCellValue('A' . $count, $row['part_number']);
+			$sheet->setCellValue('B' . $count, $row['tipe_rak']);
+			$sheet->setCellValue('C' . $count, $row['max_kapasitas']);
+			$count++;
+		}
+
+        $writer = new WriterXlsx($spreadsheet);
+		$writer->save($fileName);
+		header("Content-Type: application/vnd.ms-excel");
+		header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length:' . filesize($fileName));
+		flush();
+		readfile($fileName);
+		exit;
+
     }
 }
