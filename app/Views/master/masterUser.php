@@ -1,6 +1,16 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 
+<style>
+  .w3-bar {
+    display: flex;
+  }
+
+  .w3-button {
+    flex: 1;
+    text-align: center;
+  }
+</style>
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
   <div class="card">
     <div class="card-body">
@@ -307,19 +317,15 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              <form action="#" method="POST" id="form-delete">
-                                <input type="hidden" name="_method" value="DELETE">
+                              <form action="<?= base_url('User/deletePic/' . $pic['id']) ?>" method="POST" id="delete-pic">
+                                <!-- <input type="hidden" name="_method" value="DELETE"> -->
                                 <div class="mb-3">
-                                  <label class="form-label">Usernamer</label>
-                                  <input type="text" name="username" class="form-control" value="<?= $user['username'] ?>" required readonly>
+                                  <label class="form-label">Nama PIC</label>
+                                  <input type="text" name="pic" class="form-control" value="<?= $pic['pic'] ?>" required readonly>
                                 </div>
                                 <div class="mb-3">
-                                  <label class="form-label">Password</label>
-                                  <input type="text" name="password" class="form-control" value="<?= $user['password'] ?>" required readonly>
-                                </div>
-                                <div class="mb-3">
-                                  <label class="form-label">Hak Akses</label>
-                                  <input type="text" name="hak_akses" class="form-control" value="<?= $user['hak_akses'] ?>" required readonly>
+                                  <label class="form-label">Departemen</label>
+                                  <input type="text" name="departemen" class="form-control" value="<?= $pic['departemen'] ?>" required readonly>
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">Close</button>
@@ -418,6 +424,49 @@
             text: response.message,
           });
         }
+      }
+    });
+  });
+  $(document).on('submit', '#delete-pic', function(e) {
+    e.preventDefault();
+
+    var form = $(this); // Store the form element reference
+    var modalId = form.closest('.modal').data('modal-id'); // Retrieve the modal ID
+    // Hide the modal after success
+    $('#DeleteModal' + modalId).modal('hide');
+
+    $.ajax({
+      url: form.attr('action'),
+      type: 'post',
+      dataType: 'json',
+      data: form.serialize(),
+      success: function(response) {
+        if (response.success) {
+          console.log(response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: response.message,
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(function() {
+            window.location.href = "<?= base_url('master-user'); ?>";
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Hapus gagal!',
+            text: response.message,
+          });
+        }
+      },
+      error: function(xhr, status, error) {
+        console.log(xhr.responseText);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred while updating the data.',
+        });
       }
     });
   });

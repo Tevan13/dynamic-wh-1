@@ -92,4 +92,14 @@ class User extends BaseController
         session()->setFlashdata('message', '<div class="alert alert-success" style="font-color:white"><b>PIC Berhasil Diupdate</b></div>');
         return redirect()->to('/master-user');
     }
+    public function deletePic($id)
+    {
+        $this->picModel->hapusPic($id);
+        $response = [
+            "success" => true,
+            "message" => "PIC Berhasil Dihapus!"
+        ];
+
+        return $this->response->setJSON($response);
+    }
 }

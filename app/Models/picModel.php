@@ -24,8 +24,8 @@ class picModel extends Model
         }
         return $this->db->table('tb_pic')->update($pic, ["id" => $id]);
     }
-    public function deleteUser($id)
+    public function hapusPic($id)
     {
-        return $this->db->query('DELETE FROM `tb_user` WHERE id=?', [$id]);
+        return $this->db->query('DELETE FROM `tb_pic` WHERE id=?', [$id]);
     }
 }
