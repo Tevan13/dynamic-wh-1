@@ -35,6 +35,11 @@ class Checkin extends Controller
             session()->setFlashdata("fail", "Part Number belum ada di data master!");
             return redirect()->route('scan-ci');
         }
+        $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)->first();
+        if ($existingScan !== null) {
+            session()->setFlashdata("fail", "LTS ini sudah terscan. Mohon scan LTS lain");
+            return redirect()->route('scan-ci');
+        }
 
         $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->where('status', 'checkin')->findAll();
         $countPart = count($transaksi);
