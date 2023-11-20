@@ -18,6 +18,9 @@ class Checkin extends Controller
 
     public function index()
     {
+        if (session()->get('tb_user') == null) {
+            return redirect()->to('/login');
+        }
         return view('scan_ci');
     }
 
