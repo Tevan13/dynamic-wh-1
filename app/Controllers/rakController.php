@@ -16,6 +16,9 @@ class rakController extends BaseController
 
     public function index()
     {
+        if (session()->get('tb_user') == null) {
+        return redirect()->to('/login');
+    }
         $data = [
             'tittle' => 'Master Rak',
             'masterRak' => $this->rModel->getMasterRAk()

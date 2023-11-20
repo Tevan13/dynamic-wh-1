@@ -1,5 +1,6 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('layout/navbar'); ?>
 
 <div class="p-3">
     <div class="card p-3">
@@ -8,17 +9,17 @@
             <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen">History Check
                 In</button>
             <button class="tablink btn btn-info" onclick="nextReport('checkOut')">History Check Out</button>
-            <div class="container m-2">
-                <div class="search-container mb-3" style="text-align: end;">
-                    <form action="/HistoryTransaksi/search">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                        <input type="text" placeholder="Search.." name="search">
-                    </form>
-                </div>
-                <div class="topright mt-3 mb-3">
+            <div class="container m-2" style="float:right; text-align:end" >
+                <div class="mb-3">
                     <input type="text" id="datepicker" placeholder="Pilih tanggal...">
                     <form method="post" action="/HistoryTransaksi/export">
                         <input type="submit" name="export" class="btn btn-primary" value="Export">
+                    </form>
+                </div>
+                <div class="search-container mb-3">
+                    <form action="/HistoryTransaksi/search">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                        <input type="text" placeholder="Search.." name="search">
                     </form>
                 </div>
             </div>

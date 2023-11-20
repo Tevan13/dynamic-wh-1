@@ -1,5 +1,6 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('layout/navbar'); ?>
 <div class="container-fluid p-3">
     <h2>Dashboard</h2>
     <div class="card mb-3 mt-2 p-3">

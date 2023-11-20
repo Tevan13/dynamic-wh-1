@@ -1,5 +1,6 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
+<?= $this->include('layout/navbar'); ?>
 
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">

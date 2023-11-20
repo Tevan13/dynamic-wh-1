@@ -48,93 +48,10 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .topnav {
-            overflow: hidden;
-            background-color: #4689d0;
-        }
-
-        .topnav a {
-            float: left;
-            display: block;
-            color: black;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
-        }
-
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .topnav a.active {
-            background-color: #2196F3;
-            color: white;
-        }
-
-
-        .topnav input[type=text] {
-            padding: 6px;
-            margin-top: 8px;
-            font-size: 17px;
-            border: none;
-        }
-
-
-        @media screen and (max-width: 600px) {
-            .topnav .search-container {
-                position: absolute;
-                right: 100px;
-                float: none;
-            }
-
-            .topnav a,
-            .topnav input[type=text],
-            .topnav .search-container button {
-                float: none;
-                display: block;
-                text-align: left;
-                width: 100%;
-                margin: 0;
-                padding: 14px;
-            }
-
-            .topnav input[type=text] {
-                border: 1px solid #ccc;
-            }
-        }
-    </style>
+    
 </head>
 
 <body>
-    <div class="topnav">
-        <a href="<?= base_url('/dashboard') ?>">Dashboard</a>
-        <a href="<?= base_url('/checkin') ?>">Scan</a>
-        <a href="<?= base_url('/informationController') ?>">Informasi Rak</a>
-        <a href="<?= base_url('/history') ?>">History</a>
-        <a href="<?= base_url('/partnumber') ?>">Master Part Number</a>
-        <a href="<?= base_url('/rakController') ?>">Master Rak</a>
-        <a href="<?= base_url('/user') ?>">Master User</a>
-        <a href="<?= base_url('') ?>">Log out</a>
-    </div>
-    <!-- <div class="nav navbar-nav navbar-right">
-    </div> -->
-    <!-- <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownMaster">Masters</a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMaster">
-            </div>
-        </div> -->
     <?= $this->renderSection('content'); ?>
 
     <!-- <script>
