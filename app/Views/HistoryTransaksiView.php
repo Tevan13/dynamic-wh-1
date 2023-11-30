@@ -6,11 +6,11 @@
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">History Transaksi</h1>
-            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
-                style="float: right;">History Check
-                In</button>
             <button class="tablink btn btn-info" onclick="nextReport('checkOut')"
-                style="float: right; margin-right: 5px;">History Check Out</button>
+                style="float: right;">History Check Out</button>
+            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
+                style="float: right; margin-right: 5px;">History Check
+                In</button>
             <table border="0" cellspacing="5" cellpadding="5">
                     <tbody>
                         <tr>
