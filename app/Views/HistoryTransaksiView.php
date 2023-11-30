@@ -2,27 +2,39 @@
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
 
-<div class="p-3">
-    <div class="card p-3">
-        <div class="container-fluid">
+<div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
+    <div class="card">
+        <div class="card-body">
             <h1 class="card-title">History Transaksi</h1>
-            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkOut')"
+                style="float: right;">History Check Out</button>
+            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
+                style="float: right; margin-right: 5px;">History Check
                 In</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkOut')">History Check Out</button>
-            <div class="container m-2" style="float:right; text-align:end" >
-                <div class="mb-3">
-                    <input type="text" id="datepicker" placeholder="Pilih tanggal...">
-                    <form method="post" action="/HistoryTransaksi/export">
-                        <input type="submit" name="export" class="btn btn-primary" value="Export">
-                    </form>
-                </div>
-                <div class="search-container mb-3">
-                    <form action="/HistoryTransaksi/search">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                        <input type="text" placeholder="Search.." name="search">
-                    </form>
-                </div>
-            </div>
+            <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td scope="col">Minimum Date: </td>
+                            <td scope="col"><input type="text" class="form-control" id="datepicker" name="min"></td>
+                            <td rowspan="2"><form action="/historyTransaksi/export" method="post" class='mt-3'>
+                                <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
+                            </form></td>
+                        </tr>
+                        <tr>
+                            <td scope="col">Maximum Date:</td>
+                            <td scope="col"><input type="text" class="form-control" id="datepicker2" name="max">
+                            </td>
+                        </tr>
+                    </tbody>
+            </table>
+            <table border="0" cellspacing="5" cellpadding="5" style="float: right;">
+                <tbody>
+                    <tr>
+                        <td>Search: </td>
+                        <td><input class="form-control" type="text" placeholder="Search.." name="search"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card mt-2 mb-3">
@@ -42,26 +54,26 @@
                         <?php
                         $no = 1;
                         if (!empty($parts)) {
-                            foreach ($trans as $tran):
+                            foreach ($models as $model):
                                 if ('statusDelivery' == 'CI') {
                                     ?>
                                     <td>
                                         <?php $no ?>
                                     </td>
                                     <td>
-                                        <?php $tran['idTransaksi'] ?>
+                                        <?php $model['idTransaksi'] ?>
                                     </td>
                                     <td>
-                                        <?php $tran['idPartNo'] ?>
+                                        <?php $model['idPartNo'] ?>
                                     </td>
                                     <td>
-                                        <?php $tran['idRak'] ?>
+                                        <?php $model['idRak'] ?>
                                     </td>
                                     <td>
-                                        <?php $tran['statusDelivery' == 'CI'] ?>
+                                        <?php $model['statusDelivery' == 'CI'] ?>
                                     </td>
                                     <td>
-                                        <?php $tran['tgl_ci'] ?>
+                                        <?php $model['tgl_ci'] ?>
                                     </td>
                                 <?php }
                                 $no++;
@@ -70,7 +82,8 @@
                             ?>
                         </tr>
                         <tr>
-                            <td style="text-align: center;" colspan="6">Belum ada transaksi check in</td>
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="6">Belum ada transaksi check
+                                in</td>
                         </tr>
                     <?php } ?>
                 </table>
@@ -90,28 +103,28 @@
                         <?php
                         $no = 1;
                         if (!empty($parts)) {
-                            foreach ($trans as $tran):
+                            foreach ($models as $model):
                                 if ('statusDelivery' == 'CO') {
                                     ?>
                                     <td>
                                         <?php $no ?>
                                     </td>
                                     <td>
-                                        <?php $tran['idTransaksi'] ?>
+                                        <?php $model['idTransaksi'] ?>
                                     </td>
                                     <td>
-                                        <?php $tran['idPartNo'] ?>
+                                        <?php $model['idPartNo'] ?>
                                     </td>
                                     <td>
-                                        <?php $tran['idRak'] ?>
+                                        <?php $model['idRak'] ?>
                                     </td>
                                     <td>
                                         <?php
-                                        $tran['statusDelivery' == 'CO'];
+                                        $model['statusDelivery' == 'CO'];
                                         ?>
                                     </td>
                                     <td>
-                                        <?php $tran['tgl_co'] ?>
+                                        <?php $model['tgl_co'] ?>
                                     </td>
                                 <?php }
                                 $no++;
@@ -120,7 +133,8 @@
                             ?>
                         </tr>
                         <tr>
-                            <td style="text-align: center;" colspan="6">Belum ada transaksi check out</td>
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="6">Belum ada transaksi check
+                                out</td>
                         </tr>
                     <?php } ?>
                 </table>
