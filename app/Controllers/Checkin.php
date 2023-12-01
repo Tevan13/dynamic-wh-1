@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\PartnumberModel;
+use App\Models\picModel;
 use App\Models\rakModel;
 use App\Models\TransaksiModel;
 
@@ -14,6 +15,7 @@ class Checkin extends Controller
         $this->PartnumberModel = new PartnumberModel();
         $this->RakModel = new rakModel();
         $this->TransaksiModel = new TransaksiModel();
+        $this->picModel = new picModel();
     }
 
     public function index()
@@ -21,7 +23,11 @@ class Checkin extends Controller
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
-        return view('scan_ci');
+        $data = [
+            'picList' => $this->picModel->getPicList(),
+            'title' => 'SCAN CHECKIN'
+        ];
+        return view('scan_ci', $data);
     }
 
     public function store()
@@ -29,6 +35,7 @@ class Checkin extends Controller
         helper('date');
         $now = date('Y-m-d H:i:s', now());
         $input = $this->request->getPost();
+        $pic = $this->request->getPost('pic');
         $data = explode(',', $input['scan']);
         $partNo = $data[0];
         $scan = $data[3];
@@ -38,11 +45,11 @@ class Checkin extends Controller
             session()->setFlashdata("fail", "Part Number belum ada di data master!");
             return redirect()->route('scan-ci');
         }
-        $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)->first();
-        if ($existingScan !== null) {
-            session()->setFlashdata("fail", "LTS ini sudah terscan. Mohon scan LTS lain");
-            return redirect()->route('scan-ci');
-        }
+        // $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)->first();
+        // if ($existingScan !== null) {
+        //     session()->setFlashdata("fail", "LTS ini sudah terscan. Mohon scan LTS lain");
+        //     return redirect()->route('scan-ci');
+        // }
 
         $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->where('status', 'checkin')->findAll();
         $countPart = count($transaksi);
@@ -53,12 +60,20 @@ class Checkin extends Controller
                 'idRak' => $rak['idRak'],
                 'unique_scanid' => $scan,
                 'status' => 'checkin',
+                'pic' => $pic,
                 'tgl_ci' => $now,
             ];
             $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
             if ($store) {
-                session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
-                return redirect()->route('scan-ci');
+                // Increment total_packing in tb_rak
+                $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
+                if ($updateResult) {
+                    session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
+                    return redirect()->route('scan-ci');
+                } else {
+                    session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
+                    return redirect()->route('scan-ci');
+                }
             } else {
                 session()->setFlashdata("fail", "Gagal menambahkan part number ke rak!");
                 return redirect()->route('scan-ci');
@@ -71,12 +86,19 @@ class Checkin extends Controller
                     'idRak' => $rak['idRak'],
                     'unique_scanid' => $scan,
                     'status' => 'checkin',
+                    'pic' => $pic,
                     'tgl_ci' => $now,
                 ];
                 $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
                 if ($store) {
-                    session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
-                    return redirect()->route('scan-ci');
+                    $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
+                    if ($updateResult) {
+                        session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
+                        return redirect()->route('scan-ci');
+                    } else {
+                        session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
+                        return redirect()->route('scan-ci');
+                    }
                 } else {
                     session()->setFlashdata("fail", "Gagal menambahkan part number ke rak!");
                     return redirect()->route('scan-ci');
@@ -88,12 +110,19 @@ class Checkin extends Controller
                     'idRak' => $rak['idRak'],
                     'unique_scanid' => $scan,
                     'status' => 'checkin',
+                    'pic' => $pic,
                     'tgl_ci' => $now,
                 ];
                 $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
                 if ($store) {
-                    session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak'] . "(Over Area)");
-                    return redirect()->route('scan-ci');
+                    $updateResult = $this->RakModel->updateOverArea($rak['idRak']);
+                    if ($updateResult) {
+                        session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
+                        return redirect()->route('scan-ci');
+                    } else {
+                        session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
+                        return redirect()->route('scan-ci');
+                    }
                 } else {
                     session()->setFlashdata("fail", "Gagal menambahkan part number ke rak over area!");
                     return redirect()->route('scan-ci');
