@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\HistoryTransaksiModel;
 use CodeIgniter\Controller;
 use App\Models\PartnumberModel;
 use App\Models\picModel;
@@ -13,9 +14,10 @@ class Checkin extends Controller
     public function __construct()
     {
         $this->PartnumberModel = new PartnumberModel();
-        $this->RakModel = new rakModel();
         $this->TransaksiModel = new TransaksiModel();
         $this->picModel = new picModel();
+        $this->RakModel = new rakModel();
+        $this->historyModel = new HistoryTransaksiModel();
     }
 
     public function index()
@@ -68,6 +70,19 @@ class Checkin extends Controller
                 // Increment total_packing in tb_rak
                 $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
                 if ($updateResult) {
+                    // Insert into tb_history
+                    $historyData = [
+                        'trans_metadata' => json_encode([
+                            'idTransaksi' => $store,
+                            'unique_scanid' => $scan,
+                            'part_number' => $partNo,
+                            'kode_rak' => $rak['kode_rak'],
+                            'status' => 'checkin',
+                            'pic' => $pic,
+                            'tgl_ci' => $now,
+                        ]),
+                    ];
+                    $this->historyModel->insert($historyData);
                     session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
                     return redirect()->route('scan-ci');
                 } else {
@@ -93,6 +108,19 @@ class Checkin extends Controller
                 if ($store) {
                     $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
                     if ($updateResult) {
+                        // Insert into tb_history
+                        $historyData = [
+                            'trans_metadata' => json_encode([
+                                'idTransaksi' => $store,
+                                'unique_scanid' => $scan,
+                                'part_number' => $partNo,
+                                'kode_rak' => $rak['kode_rak'],
+                                'status' => 'checkin',
+                                'pic' => $pic,
+                                'tgl_ci' => $now,
+                            ]),
+                        ];
+                        $this->historyModel->insert($historyData);
                         session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
                         return redirect()->route('scan-ci');
                     } else {
@@ -117,6 +145,19 @@ class Checkin extends Controller
                 if ($store) {
                     $updateResult = $this->RakModel->updateOverArea($rak['idRak']);
                     if ($updateResult) {
+                        // Insert into tb_history
+                        $historyData = [
+                            'trans_metadata' => json_encode([
+                                'idTransaksi' => $store,
+                                'unique_scanid' => $scan,
+                                'part_number' => $partNo,
+                                'kode_rak' => $rak['kode_rak'],
+                                'status' => 'checkin',
+                                'pic' => $pic,
+                                'tgl_ci' => $now,
+                            ]),
+                        ];
+                        $this->historyModel->insert($historyData);
                         session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
                         return redirect()->route('scan-ci');
                     } else {

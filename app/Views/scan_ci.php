@@ -98,6 +98,23 @@
     </form>
 </div>
 <script>
+    // JavaScript to store and set the selected PIC value
+    document.addEventListener('DOMContentLoaded', function() {
+        var picSelect = document.getElementById('pic');
+
+        // Check if there is a selected PIC value (stored in localStorage)
+        var storedPic = localStorage.getItem('selectedPic');
+        if (storedPic) {
+            // Set the selected PIC value as the default option
+            picSelect.value = storedPic;
+        }
+
+        // Listen for changes in the PIC dropdown and store the selected value
+        picSelect.addEventListener('change', function() {
+            localStorage.setItem('selectedPic', picSelect.value);
+        });
+    });
+
     function updateLiveTime() {
         var currentTime = new Date();
         var options = {
@@ -114,8 +131,6 @@
     }
     setInterval(updateLiveTime, 1000);
     updateLiveTime();
-</script>
-<script>
     $(function() {
         <?php if (session()->has("success")) { ?>
             Swal.fire({
