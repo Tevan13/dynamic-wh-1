@@ -59,6 +59,7 @@ $routes->get('/history', 'HistoryTransaksi::index');
 $routes->get('/export-history', 'HistoryTransaksi::export');
 
 $routes->get('dashboard', 'Dashboard::index', ['as' => 'dashboard']);
+$routes->get('scan-co', 'Checkout::index', ['as' => 'scan-co']);
 
 /*
  * --------------------------------------------------------------------
