@@ -17,8 +17,8 @@ class rakController extends BaseController
     public function index()
     {
         if (session()->get('tb_user') == null) {
-        return redirect()->to('/login');
-    }
+            return redirect()->to('/login');
+        }
         $data = [
             'tittle' => 'Master Rak',
             'masterRak' => $this->rModel->getMasterRAk()
@@ -32,6 +32,7 @@ class rakController extends BaseController
             'kode_rak' => $this->request->getPost('kode_rak'),
             'tipe_rak' => $this->request->getPost('tipe_rak'),
             'status_rak' => 'Kosong',
+            'total_packing' => 0,
             'created_at' => date('Y-m-d H:i:s'),
         ];
         $this->rModel->addMasterRak($data);

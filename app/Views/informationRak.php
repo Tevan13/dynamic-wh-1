@@ -18,34 +18,75 @@
                 <thead>
                     <tr>
                         <th>NO</th>
+                        <th>Kode RAK</th>
                         <th>Part Number</th>
-                        <th>Kode Rak</th>
                         <th>Tanggal Masuk</th>
                         <th>Total Packing</th>
                     </tr>
                 </thead>
                 <tbody id="contactTable">
                     <?php
-                    $i = 1;
+                    if (!empty($dataRak)) {
+                        $i = 0;
+                        foreach ($dataRak as $rak) {
+                            $i++;
                     ?>
-                    <tr>
-                        <td><?= $i++; ?></td>
-                        <td>4111-03550-C</td>
-                        <td>A1</td>
-                        <td>10 Maret 2023</td>
-                        <td>
-                            <label class="badge rounded-pill bg-success">13</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><?= $i++; ?></td>
-                        <td>AS10/41</td>
-                        <td>A5</td>
-                        <td>20 Maret 2023</td>
-                        <td>
-                            <label class="badge rounded-pill bg-danger">26</label>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td><?= $i; ?></td>
+                                <td><?= $rak['kode_rak'] ?></td>
+
+                                <?php if ($rak['tipe_rak'] === 'Over Area') : ?>
+                                    <?php if (!empty($rak['transaksi'])) : ?>
+                                        <td>
+                                            <?php
+                                            $uniquePartNumbers = array_unique(array_column($rak['transaksi'], 'part_number'));
+                                            foreach ($uniquePartNumbers as $partNumber) :
+                                            ?>
+                                                <?= $partNumber ?><br>
+                                            <?php endforeach; ?>
+                                        </td>
+                                        <td>
+                                            <?php foreach ($uniquePartNumbers as $partNumber) : ?>
+                                                <?php
+                                                // Find the latest tgl_ci for each unique part_number
+                                                $latestTglCi = null;
+                                                foreach ($rak['transaksi'] as $transaction) {
+                                                    if ($transaction['part_number'] == $partNumber) {
+                                                        $latestTglCi = $transaction['tgl_ci'];
+                                                    }
+                                                }
+                                                ?>
+                                                <?= $latestTglCi ?><br>
+                                            <?php endforeach; ?>
+                                        </td>
+                                    <?php else : ?>
+                                        <td colspan="2">-</td>
+                                    <?php endif; ?>
+                                <?php else : ?>
+                                    <td><?= isset($rak['part_number']) && !empty($rak['part_number']) ? $rak['part_number'] : '-' ?></td>
+                                    <td><?= isset($rak['tgl_ci']) && !empty($rak['tgl_ci']) ? $rak['tgl_ci'] : '-' ?></td>
+                                <?php endif; ?>
+
+                                <td>
+                                    <?php if ($rak['status_rak'] == 'Terisi') : ?>
+                                        <label class="badge rounded-pill bg-success"><?= $rak['total_packing'] ?></label>
+                                    <?php elseif ($rak['status_rak'] == 'Penuh') : ?>
+                                        <label class="badge rounded-pill bg-danger"><?= $rak['total_packing'] ?></label>
+                                    <?php else : ?>
+                                        <label class="badge rounded-pill bg-success"><?= $rak['total_packing'] ?></label>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                    } else {
+                        ?>
+                        <tr>
+                            <td style="text-align: center;" colspan="5">No Data Found</td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
