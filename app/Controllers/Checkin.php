@@ -66,6 +66,7 @@ class Checkin extends Controller
                 'tgl_ci' => $now,
             ];
             $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+            $insertedID = $this->TransaksiModel->insertID();
             if ($store) {
                 // Increment total_packing in tb_rak
                 $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
@@ -73,7 +74,7 @@ class Checkin extends Controller
                     // Insert into tb_history
                     $historyData = [
                         'trans_metadata' => json_encode([
-                            'idTransaksi' => $store,
+                            'idTransaksi' => $insertedID,
                             'unique_scanid' => $scan,
                             'part_number' => $partNo,
                             'kode_rak' => $rak['kode_rak'],
@@ -105,13 +106,14 @@ class Checkin extends Controller
                     'tgl_ci' => $now,
                 ];
                 $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+                $insertedID = $this->TransaksiModel->insertID();
                 if ($store) {
                     $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
                     if ($updateResult) {
                         // Insert into tb_history
                         $historyData = [
                             'trans_metadata' => json_encode([
-                                'idTransaksi' => $store,
+                                'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
                                 'kode_rak' => $rak['kode_rak'],
@@ -142,13 +144,14 @@ class Checkin extends Controller
                     'tgl_ci' => $now,
                 ];
                 $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+                $insertedID = $this->TransaksiModel->insertID();
                 if ($store) {
                     $updateResult = $this->RakModel->updateOverArea($rak['idRak']);
                     if ($updateResult) {
                         // Insert into tb_history
                         $historyData = [
                             'trans_metadata' => json_encode([
-                                'idTransaksi' => $store,
+                                'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
                                 'kode_rak' => $rak['kode_rak'],

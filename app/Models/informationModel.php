@@ -6,15 +6,16 @@ use CodeIgniter\Model;
 
 class informationModel extends Model
 {
-    public function getTransaksi($idRak)
+    public function getTransaksi($idRak, $status)
     {
         // get detail lembur joined with karyawan table
         $query = $this->db->query("SELECT tb_transaksi.*, tb_partno.part_number
-        FROM tb_transaksi
-        LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
-        WHERE idRak = $idRak
-        ORDER BY tb_transaksi.tgl_ci DESC
-        LIMIT 1");
+                FROM tb_transaksi
+                LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
+                WHERE tb_transaksi.idRak = $idRak
+                AND tb_transaksi.status = '$status'
+                ORDER BY tb_transaksi.tgl_ci DESC
+                LIMIT 1");
 
         return $query->getRowArray();
     }
@@ -27,7 +28,7 @@ class informationModel extends Model
                 $item['transaksi'] = $this->getTransaksiForOverArea($item['idRak']);
             }
 
-            $transaksi = $this->getTransaksi($item['idRak']);
+            $transaksi = $this->getTransaksi($item['idRak'], 'checkin');
             if ($transaksi) {
                 $item['part_number'] = $transaksi['part_number'];
                 $item['tgl_ci'] = $transaksi['tgl_ci'];

@@ -60,6 +60,12 @@ class rakModel extends Model
     {
         try {
             $this->where('idRak', $idRak)->set('total_packing', 'total_packing + 1', false)->update();
+
+            // Get updated total_packing
+            $updatedTotalPacking = $this->where('idRak', $idRak)->get()->getRowArray()['total_packing'];
+            $newStatus = ($updatedTotalPacking === 0) ? 'Kosong' : 'Terisi'; // Updated this line
+            $this->where('idRak', $idRak)->set('status_rak', $newStatus)->update();
+
             return true;  // Success
         } catch (\Exception $e) {
             log_message('error', 'Error updating total_packing: ' . $e->getMessage());

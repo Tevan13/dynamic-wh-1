@@ -38,13 +38,25 @@
                                 <?php if ($rak['tipe_rak'] === 'Over Area') : ?>
                                     <?php if (!empty($rak['transaksi'])) : ?>
                                         <td>
-                                            <?php foreach ($rak['transaksi'] as $transaction) : ?>
-                                                <?= $transaction['part_number'] ?><br>
+                                            <?php
+                                            $uniquePartNumbers = array_unique(array_column($rak['transaksi'], 'part_number'));
+                                            foreach ($uniquePartNumbers as $partNumber) :
+                                            ?>
+                                                <?= $partNumber ?><br>
                                             <?php endforeach; ?>
                                         </td>
                                         <td>
-                                            <?php foreach ($rak['transaksi'] as $transaction) : ?>
-                                                <?= $transaction['tgl_ci'] ?><br>
+                                            <?php foreach ($uniquePartNumbers as $partNumber) : ?>
+                                                <?php
+                                                // Find the latest tgl_ci for each unique part_number
+                                                $latestTglCi = null;
+                                                foreach ($rak['transaksi'] as $transaction) {
+                                                    if ($transaction['part_number'] == $partNumber) {
+                                                        $latestTglCi = $transaction['tgl_ci'];
+                                                    }
+                                                }
+                                                ?>
+                                                <?= $latestTglCi ?><br>
                                             <?php endforeach; ?>
                                         </td>
                                     <?php else : ?>
