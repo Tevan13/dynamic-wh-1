@@ -43,6 +43,9 @@ $routes->get('/information-rak', 'informationController::index', ['as' => 'infor
 $routes->get('/scan-ci', 'Checkin::index', ['as' => 'scan-ci']);
 $routes->post('/scan-ci', 'Checkin::store', ['as' => 'scan-ci']);
 
+$routes->get('scan-co', 'Checkout::index', ['as' => 'scan-co']);
+
+
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');

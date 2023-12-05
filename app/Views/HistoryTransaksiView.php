@@ -6,26 +6,24 @@
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">History Transaksi</h1>
-            <button class="tablink btn btn-info" onclick="nextReport('checkOut')"
-                style="float: right;">History Check Out</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
-                style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkOut')" style="float: right;">History Check Out</button>
+            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen" style="float: right; margin-right: 5px;">History Check
                 In</button>
             <table border="0" cellspacing="5" cellpadding="5">
-                    <tbody>
-                        <tr>
-                            <td scope="col">Minimum Date: </td>
-                            <td scope="col"><input type="text" class="form-control" id="datepicker" name="min"></td>
-                            <td rowspan="2"><form action="/historyTransaksi/export" method="post" class='mt-3'>
-                                <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
-                            </form></td>
-                        </tr>
-                        <tr>
-                            <td scope="col">Maximum Date:</td>
-                            <td scope="col"><input type="text" class="form-control" id="datepicker2" name="max">
-                            </td>
-                        </tr>
-                    </tbody>
+                <tbody>
+                    <tr>
+                        <td scope="col">Minimum Date: </td>
+                        <td scope="col"><input type="text" class="form-control" id="datepicker" name="min"></td>
+                        <td rowspan="2">
+                            <button style="font-size:16px" class="btn btn-primary" id="search">Search <i class="fa fa-search"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Maximum Date:</td>
+                        <td scope="col"><input type="text" class="form-control" id="datepicker2" name="max">
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <table border="0" cellspacing="5" cellpadding="5" style="float: right;">
                 <tbody>
@@ -47,43 +45,31 @@
                         <th>No Transaksi</th>
                         <th>Part No</th>
                         <th>Rak</th>
-                        <th>Status Delivery</th>
+                        <th>PIC</th>
+                        <th>Status</th>
                         <th>Tanggal Check In</th>
                     </tr>
-                    <tr>
+                    <?php
+                    if (!empty($historyCheckin)) {
+                        $i = 0;
+                        foreach ($historyCheckin as $checkin) {
+                            $i++;
+                    ?>
+                            <tr>
+                                <td><?= $i; ?></td>
+                                <td><?= $checkin['idTransaksi'] ?></td>
+                                <td><?= $checkin['part_number'] ?></td>
+                                <td><?= $checkin['kode_rak'] ?></td>
+                                <td><?= $checkin['pic'] ?></td>
+                                <td><?= $checkin['status'] ?></td>
+                                <td><?= $checkin['tgl_ci'] ?></td>
+                            </tr>
                         <?php
-                        $no = 1;
-                        if (!empty($parts)) {
-                            foreach ($models as $model):
-                                if ('statusDelivery' == 'CI') {
-                                    ?>
-                                    <td>
-                                        <?php $no ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['idTransaksi'] ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['idPartNo'] ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['idRak'] ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['statusDelivery' == 'CI'] ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['tgl_ci'] ?>
-                                    </td>
-                                <?php }
-                                $no++;
-                            endforeach;
-                        } else {
-                            ?>
-                        </tr>
+                        }
+                    } else {
+                        ?>
                         <tr>
-                            <td style="text-align: center; background-color:#c9c9c9" colspan="6">Belum ada transaksi check
-                                in</td>
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="7">Belum ada transaksi checkin</td>
                         </tr>
                     <?php } ?>
                 </table>
@@ -103,9 +89,9 @@
                         <?php
                         $no = 1;
                         if (!empty($parts)) {
-                            foreach ($models as $model):
+                            foreach ($models as $model) :
                                 if ('statusDelivery' == 'CO') {
-                                    ?>
+                        ?>
                                     <td>
                                         <?php $no ?>
                                     </td>
@@ -126,17 +112,17 @@
                                     <td>
                                         <?php $model['tgl_co'] ?>
                                     </td>
-                                <?php }
+                            <?php }
                                 $no++;
                             endforeach;
                         } else {
                             ?>
-                        </tr>
-                        <tr>
-                            <td style="text-align: center; background-color:#c9c9c9" colspan="6">Belum ada transaksi check
-                                out</td>
-                        </tr>
-                    <?php } ?>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; background-color:#c9c9c9" colspan="6">Belum ada transaksi check
+                            out</td>
+                    </tr>
+                <?php } ?>
                 </table>
             </div>
         </div>
