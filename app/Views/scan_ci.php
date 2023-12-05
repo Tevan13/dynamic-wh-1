@@ -83,11 +83,9 @@
                 <select id="pic" name="pic" class="form-select" required>
                     <option value="">--Pilih PIC--</option>
                     <?php
-                    $pic = $picList;
-                    array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
-
-                    // Iterate through the sorted array to populate the dropdown options
-                    foreach ($pic as $item) :
+                        $pic = $picList;
+                        array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
+                        foreach ($pic as $item) :
                     ?>
                         <option value="<?= $item['pic']; ?>"><?= $item['pic']; ?></option>
                     <?php endforeach; ?>
@@ -98,18 +96,14 @@
     </form>
 </div>
 <script>
-    // JavaScript to store and set the selected PIC value
     document.addEventListener('DOMContentLoaded', function() {
         var picSelect = document.getElementById('pic');
 
-        // Check if there is a selected PIC value (stored in localStorage)
         var storedPic = localStorage.getItem('selectedPic');
         if (storedPic) {
-            // Set the selected PIC value as the default option
             picSelect.value = storedPic;
         }
 
-        // Listen for changes in the PIC dropdown and store the selected value
         picSelect.addEventListener('change', function() {
             localStorage.setItem('selectedPic', picSelect.value);
         });
@@ -131,6 +125,7 @@
     }
     setInterval(updateLiveTime, 1000);
     updateLiveTime();
+
     $(function() {
         <?php if (session()->has("success")) { ?>
             Swal.fire({

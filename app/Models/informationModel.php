@@ -8,7 +8,6 @@ class informationModel extends Model
 {
     public function getTransaksi($idRak, $status)
     {
-        // get detail lembur joined with karyawan table
         $query = $this->db->query("SELECT tb_transaksi.*, tb_partno.part_number
                 FROM tb_transaksi
                 LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
@@ -19,6 +18,7 @@ class informationModel extends Model
 
         return $query->getRowArray();
     }
+
     public function getInfoRak()
     {
         $result = $this->db->table("tb_rak")->get()->getResultArray();
