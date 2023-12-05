@@ -43,6 +43,15 @@ class Checkout extends Controller
             return redirect()->route('scan-co');
         }
         $rak = $this->RakModel->find($transaksi['idRak']);
+        $rak['total_packing'] -= 1;
+        if ($rak['total_packing'] === 0) {
+            $rak['status_rak'] = 'kosong';
+        } else {
+            $rak['status_rak'] = 'terisi';
+        }
+        // $coba = $this->RakModel->where('idRak', $transaksi['idRak'])->find();
+        // return dd($coba);
+        $this->RakModel->protect(false)->where('idRak', $transaksi['idRak'])->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])->update();
         $historyData = [
             'trans_metadata' => json_encode([
                 'idTransaksi' => $transaksi['idTransaksi'],
@@ -51,11 +60,11 @@ class Checkout extends Controller
                 'kode_rak' => $rak['kode_rak'],
                 'status' => 'checkout',
                 'pic' => $transaksi['pic'],
-                'tgl_ci' => $now,
+                'tgl_co' => $now,
             ]),
         ];
         $this->HistoryModel->insert($historyData);
-        $update = $this->TransaksiModel->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->set(['status' => 'checkout'])->update();
+        $update = $this->TransaksiModel->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->set(['status' => 'checkout', 'tgl_co' => $now])->update();
         if ($update) {
             session()->setFlashdata("success", "Part number $partNo diambil dari rak");
         } else {
