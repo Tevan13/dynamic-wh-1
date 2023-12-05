@@ -40,6 +40,9 @@ $routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
 $routes->get('/login', 'loginController::index', ['as' => 'login']);
 $routes->get('/information-rak', 'informationController::index', ['as' => 'information-rak']);
 
+$routes->get('/scan-co', 'Checkout::index', ['as' => 'scan-co']);
+$routes->post('/scan-co', 'Checkout::store', ['as' => 'scan-co']);
+
 $routes->get('/scan-ci', 'Checkin::index', ['as' => 'scan-ci']);
 $routes->post('/scan-ci', 'Checkin::store', ['as' => 'scan-ci']);
 
