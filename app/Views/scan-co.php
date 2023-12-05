@@ -67,17 +67,14 @@
                     <div>
 
                         <div class="group">
-                            <label for="tgl">Tanggal(yyyy-mm-dd)
+                            <label for="tgl_co">Tanggal(yyyy-mm-dd)
                                 <?php
                                 echo "Scan = "
                                 ?>
                             </label>
-
                             <br />
-                            <input type="text" name="tgl" id="tgl" value="" />
-
+                            <input type="text" name="tgl_co" id="tgl_co" readonly disabled />
                         </div>
-
                         <div class=" group">
                             <label for="Lokasi">LOKASI</label> <br />
 
@@ -117,6 +114,39 @@
                             // if (!("autofocus" in document.createElement("input"))) {
                             //     document.getElementById("sid").focus();
                             // }
+                            // JavaScript to store and set the selected PIC value
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var picSelect = document.getElementById('pic');
+
+                                // Check if there is a selected PIC value (stored in localStorage)
+                                var storedPic = localStorage.getItem('selectedPic');
+                                if (storedPic) {
+                                    // Set the selected PIC value as the default option
+                                    picSelect.value = storedPic;
+                                }
+
+                                // Listen for changes in the PIC dropdown and store the selected value
+                                picSelect.addEventListener('change', function() {
+                                    localStorage.setItem('selectedPic', picSelect.value);
+                                });
+                            });
+
+                            function updateLiveTime() {
+                                var currentTime = new Date();
+                                var options = {
+                                    timeZone: 'Asia/Jakarta',
+                                    year: 'numeric',
+                                    month: 'numeric',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                    second: 'numeric'
+                                };
+                                var formattedTime = currentTime.toLocaleString('en-ID', options);
+                                $("#tgl_co").val(formattedTime);
+                            }
+                            setInterval(updateLiveTime, 1000);
+                            updateLiveTime();
                         </script>
                     </div>
 

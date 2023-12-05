@@ -46,6 +46,9 @@ $routes->post('/scan-co', 'Checkout::store', ['as' => 'scan-co']);
 $routes->get('/scan-ci', 'Checkin::index', ['as' => 'scan-ci']);
 $routes->post('/scan-ci', 'Checkin::store', ['as' => 'scan-ci']);
 
+$routes->get('scan-co', 'Checkout::index', ['as' => 'scan-co']);
+
+
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');
 $routes->put('/master-part/(:any)', 'Partnumber::update/$1');
@@ -62,7 +65,6 @@ $routes->get('/history', 'HistoryTransaksi::index');
 $routes->get('/export-history', 'HistoryTransaksi::export');
 
 $routes->get('dashboard', 'Dashboard::index', ['as' => 'dashboard']);
-$routes->get('scan-co', 'Checkout::index', ['as' => 'scan-co']);
 
 /*
  * --------------------------------------------------------------------

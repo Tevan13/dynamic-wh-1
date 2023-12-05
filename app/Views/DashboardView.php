@@ -8,14 +8,14 @@
             <a href="<?= base_url('/scan-ci') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
-                        <h5 class="card-title">scan CI</h5>
+                        <h5 class="card-title">SCAN MASUK</h5>
                     </div>
                 </div>
             </a>
             <a href="<?= base_url('/scan-co') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
-                        <h5 class="card-title">scan CO</h5>
+                        <h5 class="card-title">SCAN KELUAR</h5>
                     </div>
                 </div>
             </a>

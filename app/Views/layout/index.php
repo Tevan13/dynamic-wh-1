@@ -16,7 +16,7 @@
     <!-- Google Fonts Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
     <!-- MDB -->
-    <link rel="stylesheet" href="/assets/css/mdb.min.css" />
+    <!-- <link rel="stylesheet" href="/assets/css/mdb.min.css" /> -->
     <!-- Custom styles -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- <link rel="stylesheet" href="/assets/css/style.css"> -->
@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- calendar -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
+    <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
@@ -63,7 +63,7 @@
     <!-- sweet alert js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--Main Navigation-->
-    <script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+    <!-- <script type="text/javascript" src="/assets/js/mdb.min.js"></script> -->
     <!-- Custom scripts -->
     <script>
         function nextReport(varId) {

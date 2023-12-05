@@ -11,15 +11,49 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
 
 class HistoryTransaksi extends BaseController
 {
+    public function __construct()
+    {
+        $this->historyModel = new HistoryTransaksiModel();
+    }
     public function index()
     {
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
-        $model = new HistoryTransaksiModel;
-        $data['title'] = 'History Transaksi';
-        $data['model'] = $model->select('*')->findAll;
+
+        $status = ['checkin', 'checkout', 'adjustment'];
+        $start = $this->request->getGet('min');
+        $end = $this->request->getGet('max');
+        // Validate the date format before using them
+        $start = $this->isValidDate($start) ? $start : '2023-12-04';
+        $end = $this->isValidDate($end) ? $end : '2023-12-04';
+        // Use the updated date range in your existing logic
+        $dateRange = ['min' => $start, 'max' => $end];
+        // Call the model function to get filtered data
+        $transaksiData = $this->historyModel->getTransaksiBy($status[0], $dateRange);
+
+        // Decode the 'trans_metadata' in each row
+        foreach ($transaksiData as &$transaksiRow) {
+            $transaksi = json_decode($transaksiRow['trans_metadata'], true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($transaksi)) {
+                // Merge the decoded data with the original row data
+                $transaksiRow = array_merge($transaksiRow, $transaksi);
+            }
+        }
+        $data = [
+            'title' => 'History Transaksi',
+            'historyCheckin' => $transaksiData,
+        ];
         echo view('historyTransaksiView', $data);
+    }
+
+
+    private function isValidDate($date)
+    {
+        $d = \DateTime::createFromFormat('Y/m/d', $date);
+        return $d && $d->format('Y/m/d') === $date;
     }
 
     public function update()
