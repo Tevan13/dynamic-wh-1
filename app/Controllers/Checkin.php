@@ -57,6 +57,9 @@ class Checkin extends Controller
         $countPart = count($transaksi);
         if ($countPart <= 0) {
             $rak = $this->RakModel->where('status_rak', 'Kosong')->where('tipe_rak', $part['tipe_rak'])->first();
+            if (!$rak) {
+                $rak = $this->RakModel->where('tipe_rak', 'Over Area')->first();
+            }
             $dataInput = [
                 'idPartNo' => $part['idPartNo'],
                 'idRak' => $rak['idRak'],
@@ -68,49 +71,11 @@ class Checkin extends Controller
             $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
             $insertedID = $this->TransaksiModel->insertID();
             if ($store) {
-                // Increment total_packing in tb_rak
-                $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
-                if ($updateResult) {
-                    // Insert into tb_history
-                    $historyData = [
-                        'trans_metadata' => json_encode([
-                            'idTransaksi' => $insertedID,
-                            'unique_scanid' => $scan,
-                            'part_number' => $partNo,
-                            'kode_rak' => $rak['kode_rak'],
-                            'status' => 'checkin',
-                            'pic' => $pic,
-                            'tgl_ci' => $now,
-                        ]),
-                    ];
-                    $this->historyModel->insert($historyData);
-                    session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
-                    return redirect()->route('scan-ci');
-                } else {
-                    session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
-                    return redirect()->route('scan-ci');
-                }
-            } else {
-                session()->setFlashdata("fail", "Gagal menambahkan part number ke rak!");
-                return redirect()->route('scan-ci');
-            }
-        } else {
-            $rak = $this->RakModel->where('idRak', $transaksi[0]['idRak'])->first();
-            if (($countPart + 1) <= intval($part['max_kapasitas'])) {
-                $dataInput = [
-                    'idPartNo' => $part['idPartNo'],
-                    'idRak' => $rak['idRak'],
-                    'unique_scanid' => $scan,
-                    'status' => 'checkin',
-                    'pic' => $pic,
-                    'tgl_ci' => $now,
-                ];
-                $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
-                $insertedID = $this->TransaksiModel->insertID();
-                if ($store) {
+                if ($rak['tipe_rak'] !== 'Over Area') {
+                    // Increment total_packing in tb_rak
                     $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
                     if ($updateResult) {
-                        // Insert into tb_history
+                        // Insert into transaksi_history
                         $historyData = [
                             'trans_metadata' => json_encode([
                                 'idTransaksi' => $insertedID,
@@ -130,8 +95,92 @@ class Checkin extends Controller
                         return redirect()->route('scan-ci');
                     }
                 } else {
-                    session()->setFlashdata("fail", "Gagal menambahkan part number ke rak!");
-                    return redirect()->route('scan-ci');
+                    // If the rack is 'Over Area', only increment total_packing
+                    $updateResult = $this->RakModel->updateTotalPacking($rak['idRak']);
+                    if ($updateResult) {
+                        // Insert into transaksi_history
+                        $historyData = [
+                            'trans_metadata' => json_encode([
+                                'idTransaksi' => $insertedID,
+                                'unique_scanid' => $scan,
+                                'part_number' => $partNo,
+                                'kode_rak' => $rak['kode_rak'],
+                                'status' => 'checkin',
+                                'pic' => $pic,
+                                'tgl_ci' => $now,
+                            ]),
+                        ];
+                        $this->historyModel->insert($historyData);
+                        session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
+                        return redirect()->route('scan-ci');
+                    } else {
+                        session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
+                        return redirect()->route('scan-ci');
+                    }
+                }
+            } else {
+                session()->setFlashdata("fail", "Gagal menambahkan part number ke rak!");
+                return redirect()->route('scan-ci');
+            }
+        } else {
+            $rak = $this->RakModel->where('idRak', $transaksi[0]['idRak'])->first();
+            if (($countPart + 1) <= intval($part['max_kapasitas'])) {
+                $dataInput = [
+                    'idPartNo' => $part['idPartNo'],
+                    'idRak' => $rak['idRak'],
+                    'unique_scanid' => $scan,
+                    'status' => 'checkin',
+                    'pic' => $pic,
+                    'tgl_ci' => $now,
+                ];
+                $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+                $insertedID = $this->TransaksiModel->insertID();
+                if ($rak['tipe_rak'] !== 'Over Area') {
+                    // Increment total_packing in tb_rak
+                    $updateResult = $this->RakModel->updateTotalPackingAndStatus($rak['idRak'], $part['max_kapasitas']);
+                    if ($updateResult) {
+                        // Insert into transaksi_history
+                        $historyData = [
+                            'trans_metadata' => json_encode([
+                                'idTransaksi' => $insertedID,
+                                'unique_scanid' => $scan,
+                                'part_number' => $partNo,
+                                'kode_rak' => $rak['kode_rak'],
+                                'status' => 'checkin',
+                                'pic' => $pic,
+                                'tgl_ci' => $now,
+                            ]),
+                        ];
+                        $this->historyModel->insert($historyData);
+                        session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
+                        return redirect()->route('scan-ci');
+                    } else {
+                        session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
+                        return redirect()->route('scan-ci');
+                    }
+                } else {
+                    // If the rack is 'Over Area', only increment total_packing
+                    $updateResult = $this->RakModel->updateTotalPacking($rak['idRak']);
+                    if ($updateResult) {
+                        // Insert into transaksi_history
+                        $historyData = [
+                            'trans_metadata' => json_encode([
+                                'idTransaksi' => $insertedID,
+                                'unique_scanid' => $scan,
+                                'part_number' => $partNo,
+                                'kode_rak' => $rak['kode_rak'],
+                                'status' => 'checkin',
+                                'pic' => $pic,
+                                'tgl_ci' => $now,
+                            ]),
+                        ];
+                        $this->historyModel->insert($historyData);
+                        session()->setFlashdata("success", "Part number $partNo masuk kedalam rak " . $rak['kode_rak']);
+                        return redirect()->route('scan-ci');
+                    } else {
+                        session()->setFlashdata("fail", "Failed to update total_packing in tb_rak");
+                        return redirect()->route('scan-ci');
+                    }
                 }
             } else {
                 $rak = $this->RakModel->where('tipe_rak', 'Over Area')->first();
