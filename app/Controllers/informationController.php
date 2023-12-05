@@ -24,9 +24,6 @@ class informationController extends BaseController
             'dataRak' => $infoRak
         ];
 
-        // echo '<pre>';
-        // var_dump($infoRak);
-        // echo '</pre>';
         return view('informationRak', $data);
     }
 }
