@@ -93,13 +93,6 @@ class RakSeeder extends Seeder
                 'total_packing' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
             ],
-            [
-                'kode_rak' => 'C002',
-                'tipe_rak' => 'Over Area',
-                'status_rak' => 'Kosong',
-                'total_packing' => 0,
-                'created_at' => date('Y-m-d H:i:s'),
-            ],
         ];
 
         $this->db->table('tb_rak')->insertBatch($data);
