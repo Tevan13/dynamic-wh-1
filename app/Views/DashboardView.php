@@ -26,28 +26,28 @@
                     </div>
                 </div>
             </a>
-            <a href="history/" class="btn btn-primary">
+            <a href="<?= base_url('history') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">history</h5>
                     </div>
                 </div>
             </a>
-            <a href="/master-part" class="btn btn-primary">
+            <a href="<?= base_url('master-part') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">master part number</h5>
                     </div>
                 </div>
             </a>
-            <a href="/master-user" class="btn btn-primary">
+            <a href="<?= base_url('master-user') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">master User</h5>
                     </div>
                 </div>
             </a>
-            <a href="<?= base_url('/master_rak') ?>" class="btn btn-primary">
+            <a href="<?= base_url('master_rak') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">master rak</h5>

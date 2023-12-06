@@ -56,6 +56,19 @@ class rakModel extends Model
             return false;  // Error
         }
     }
+    public function updateTotalPacking($idRak)
+    {
+        try {
+            // Increment total_packing
+            $this->where('idRak', $idRak)->set('total_packing', 'total_packing + 1', false)->update();
+
+            return true;  // Success
+        } catch (\Exception $e) {
+            log_message('error', 'Error updating total_packing: ' . $e->getMessage());
+            return false;  // Error
+        }
+    }
+
     public function updateOverArea($idRak)
     {
         try {
