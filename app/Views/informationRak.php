@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-body">
             <h1>Informasi Rak</h1>
-            <form action="#" method="post" class='mt-3'>
+            <form action="/export-information-rak" method="post" class='mt-3'>
                 <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
             </form>
         </div>
