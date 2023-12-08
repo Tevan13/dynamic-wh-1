@@ -12,7 +12,7 @@ class informationModel extends Model
                 FROM tb_transaksi
                 LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
                 WHERE tb_transaksi.idRak = $idRak
-                AND tb_transaksi.status = '$status'
+                AND tb_transaksi.status IN ('$status', 'adjust_ci')  -- Updated to include 'adjust_ci'
                 ORDER BY tb_transaksi.tgl_ci DESC
                 LIMIT 1");
 
@@ -44,9 +44,10 @@ class informationModel extends Model
     public function getTransaksiForOverArea($idRak)
     {
         $query = $this->db->query("SELECT tb_transaksi.*, tb_partno.part_number
-            FROM tb_transaksi
-            LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
-            WHERE idRak = $idRak");
+        FROM tb_transaksi
+        LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
+        WHERE idRak = $idRak AND status IN ('checkin', 'adjust_ci')  -- Updated to include 'adjust_ci'
+        ");
 
         return $query->getResultArray();
     }

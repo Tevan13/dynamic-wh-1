@@ -29,8 +29,10 @@ class HistoryTransaksi extends BaseController
         $end = $this->isValidDate($end) ? $end : '2023-12-04';
         // Use the updated date range in your existing logic
         $dateRange = ['min' => $start, 'max' => $end];
-        // Call the model function to get filtered data
+        // Call the model function to get Checkin Data
         $transaksiData = $this->historyModel->getTransaksiBy($status[0], $dateRange);
+        // Call the model function to get Checkout Data
+        $checkoutData = $this->historyModel->getTransaksiCheckout($status[1], $dateRange);
 
         // Decode the 'trans_metadata' in each row
         foreach ($transaksiData as &$transaksiRow) {
@@ -42,10 +44,24 @@ class HistoryTransaksi extends BaseController
                 $transaksiRow = array_merge($transaksiRow, $transaksi);
             }
         }
+        // Decode the 'trans_metadata' in each row
+        foreach ($checkoutData as &$checkoutRow) {
+            $transaksi = json_decode($checkoutRow['trans_metadata'], true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($transaksi)) {
+                // Merge the decoded data with the original row data
+                $checkoutRow = array_merge($checkoutRow, $transaksi);
+            }
+        }
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
+            'historyCheckout' => $checkoutData,
         ];
+        // echo '<pre>';
+        // var_dump($checkoutData);
+        // echo '</pre>';
         echo view('historyTransaksiView', $data);
     }
 

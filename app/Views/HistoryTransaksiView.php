@@ -42,7 +42,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>No.</th>
-                        <th>No Transaksi</th>
+                        <th>No LTS</th>
                         <th>Part No</th>
                         <th>Rak</th>
                         <th>PIC</th>
@@ -57,7 +57,7 @@
                     ?>
                             <tr>
                                 <td><?= $i; ?></td>
-                                <td><?= $checkin['idTransaksi'] ?></td>
+                                <td><?= $checkin['unique_scanid'] ?></td>
                                 <td><?= $checkin['part_number'] ?></td>
                                 <td><?= $checkin['kode_rak'] ?></td>
                                 <td><?= $checkin['pic'] ?></td>
@@ -79,50 +79,36 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>No.</th>
-                        <th>No Transaksi</th>
+                        <th>No LTS</th>
                         <th>Part No</th>
                         <th>Rak</th>
-                        <th>Status Delivery</th>
+                        <th>PIC</th>
+                        <th>Status</th>
                         <th>Tanggal Check Out</th>
                     </tr>
-                    <tr>
+                    <?php
+                    if (!empty($historyCheckout)) {
+                        $i = 0;
+                        foreach ($historyCheckout as $checkout) {
+                            $i++;
+                    ?>
+                            <tr>
+                                <td><?= $i; ?></td>
+                                <td><?= $checkout['unique_scanid'] ?></td>
+                                <td><?= $checkout['part_number'] ?></td>
+                                <td><?= $checkout['kode_rak'] ?></td>
+                                <td><?= $checkout['pic'] ?></td>
+                                <td><?= $checkout['status'] ?></td>
+                                <td><?= $checkout['tgl_co'] ?></td>
+                            </tr>
                         <?php
-                        $no = 1;
-                        if (!empty($parts)) {
-                            foreach ($models as $model) :
-                                if ('statusDelivery' == 'CO') {
+                        }
+                    } else {
                         ?>
-                                    <td>
-                                        <?php $no ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['idTransaksi'] ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['idPartNo'] ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['idRak'] ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        $model['statusDelivery' == 'CO'];
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php $model['tgl_co'] ?>
-                                    </td>
-                            <?php }
-                                $no++;
-                            endforeach;
-                        } else {
-                            ?>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; background-color:#c9c9c9" colspan="6">Belum ada transaksi check
-                            out</td>
-                    </tr>
-                <?php } ?>
+                        <tr>
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="7">Belum ada transaksi checkout</td>
+                        </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>

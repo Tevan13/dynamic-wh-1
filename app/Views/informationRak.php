@@ -66,7 +66,6 @@
                                     <td><?= isset($rak['part_number']) && !empty($rak['part_number']) ? $rak['part_number'] : '-' ?></td>
                                     <td><?= isset($rak['tgl_ci']) && !empty($rak['tgl_ci']) ? $rak['tgl_ci'] : '-' ?></td>
                                 <?php endif; ?>
-
                                 <td>
                                     <?php if ($rak['status_rak'] == 'Terisi') : ?>
                                         <label class="badge rounded-pill bg-success"><?= $rak['total_packing'] ?></label>

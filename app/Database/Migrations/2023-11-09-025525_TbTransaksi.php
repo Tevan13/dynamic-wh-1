@@ -31,7 +31,7 @@ class TbTransaksi extends Migration
             ],
             'status' => [
                 'type' => 'ENUM',
-                'constraint' => ['checkin', 'checkout', 'adjust'],
+                'constraint' => ['checkin', 'checkout', 'adjust_co', 'adjust_ci'],
             ],
             'pic' => [
                 'type' => 'VARCHAR',
