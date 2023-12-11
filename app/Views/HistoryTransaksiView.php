@@ -2,58 +2,27 @@
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
 
-
-<script>
-    function searchByDate() {
-        var startDate = document.getElementById("#min").value; //input tanggal awal
-        var endDate = document.getElementById("#max").value; //input tanggal akhir
-        var range = { startDate, endDate }; //jangkauan tanggal--object jangan array
-        var table = document.getElementById("#history" || "#history2" || "#history3"); // panggil tabel table dengan id
-        var tr = [] //array kosong
-        tr = table.getElementsByTagName("tr"); //isi array kosong dengan memanggil tr dalam tabel table
-
-        var filters = tr.filter( //memfilter array tr
-            function () {
-                for (var i = 0; i < tr.length; i++) { //insiasi untuk for loop
-                    var search = tr[i].getElementsByTagName("td")[7]; //mendapatkan nilai dalam tag td index ke7 dari tr yaitu tanggal ci/ tanggal co/ tanggal adj
-                    if (search == range) {
-                        return tr[i].style.display = "";
-                    } else {
-                        return tr[i].style.display = "none";
-                    }
-                }
-            }
-        )
-        return filters;
-    }
-</script>
-
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">History Transaksi</h1>
             <button class="tablink btn btn-info" onclick="nextReport('adjustment')" style="float: right;">History
                 Adjustment</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkOut')"
-                style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkOut')" style="float: right; margin-right: 5px;">History Check
                 Out</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
-                style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen" style="float: right; margin-right: 5px;">History Check
                 In</button>
             <table border="0" cellspacing="5" cellpadding="5">
                 <tbody>
                     <tr>
-                        <td scope="col">Minimum Date: </td>
-                        <datepicker>123</datepicker>
-                        <td scope="col"><input type="text" class="form-control" id="min" name="nim"></td>
+                        <td scope="col">Choose Date: </td>
+                        <td scope="col"><input type="date" class="form-control" id="min" name="min"></td>
                         <td rowspan="2">
-                            <button style="font-size:16px" class="btn btn-primary" id="search"
-                                onclick="searchByDate()">Search <i class="fa fa-search"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td scope="col">Maximum Date:</td>
-                        <td scope="col"><input type="text" class="form-control" id="max" name="xam">
+                            <button style="font-size:16px" class="btn btn-primary" id="search">Search <i class="fa fa-search"></i></button>
+                            <!-- Add the Export Excel buttons for each tab -->
+                            <button style="font-size:16px; display:none;" class="btn btn-success" id="exportAdjustment">Export Adjustment Excel <i class="fa fa-file-excel"></i></button>
+                            <button style="font-size:16px; display:none;" class="btn btn-success" id="exportCheckOut" onclick="location.href='<?php echo base_url('HistoryTransaksi/exportCheckout'); ?>'">Export CheckOut Excel <i class="fa fa-file-excel"></i></button>
+                            <button style="font-size:16px; display:none;" class="btn btn-success" id="exportCheckIn" onclick="location.href='<?php echo base_url('HistoryTransaksi/exportCheckin'); ?>'">Export CheckIn Excel <i class="fa fa-file-excel"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -76,13 +45,13 @@
                     <!-- <table> -->
                     <tr>
                         <th>No.</th>
-                        <th>No Transaksi</th>
                         <th>ID Scan</th>
                         <th>No LTS</th>
                         <th>Part No</th>
                         <th>Rak</th>
                         <th>PIC</th>
                         <th>Status</th>
+                        <th>Quantity</th>
                         <th>Tanggal Check In</th>
                     </tr>
                     <?php
@@ -90,16 +59,16 @@
                         $i = 0;
                         foreach ($historyCheckin as $checkin) {
                             $i++;
-                            ?>
+                    ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
                                 </td>
                                 <td>
-                                    <?= $checkin['idTransaksi'] ?>
+                                    <?= $checkin['unique_scanid'] ?>
                                 </td>
                                 <td>
-                                    <?= $checkin['unique_scanid'] ?>
+                                    <?= $checkin['lot'] ?>
                                 </td>
                                 <td>
                                     <?= $checkin['part_number'] ?>
@@ -114,15 +83,18 @@
                                     <?= $checkin['status'] ?>
                                 </td>
                                 <td>
+                                    <?= $checkin['quantity'] ?>
+                                </td>
+                                <td>
                                     <?= $checkin['tgl_ci'] ?>
                                 </td>
                             </tr>
-                            <?php
+                        <?php
                         }
                     } else {
                         ?>
                         <tr>
-                            <td style="text-align: center; background-color:#c9c9c9" colspan="8">Belum ada history transaksi
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="9">Belum ada history transaksi
                                 checkin
                             </td>
                         </tr>
@@ -136,13 +108,13 @@
                     <!-- <table> -->
                     <tr>
                         <th>No.</th>
-                        <th>No Transaksi</th>
                         <th>ID Scan</th>
                         <th>No LTS</th>
                         <th>Part No</th>
                         <th>Rak</th>
                         <th>PIC</th>
                         <th>Status</th>
+                        <th>Quantity</th>
                         <th>Tanggal Check Out</th>
                     </tr>
                     <?php
@@ -150,16 +122,16 @@
                         $i = 0;
                         foreach ($historyCheckout as $checkout) {
                             $i++;
-                            ?>
+                    ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
                                 </td>
                                 <td>
-                                    <?= $checkout['idTransaksi'] ?>
+                                    <?= $checkout['unique_scanid'] ?>
                                 </td>
                                 <td>
-                                    <?= $checkout['unique_scanid'] ?>
+                                    <?= $checkout['lot'] ?>
                                 </td>
                                 <td>
                                     <?= $checkout['part_number'] ?>
@@ -174,15 +146,18 @@
                                     <?= $checkout['status'] ?>
                                 </td>
                                 <td>
+                                    <?= $checkout['quantity'] ?>
+                                </td>
+                                <td>
                                     <?= $checkout['tgl_co'] ?>
                                 </td>
                             </tr>
-                            <?php
+                        <?php
                         }
                     } else {
                         ?>
                         <tr>
-                            <td style="text-align: center; background-color:#c9c9c9" colspan="8">Belum ada history transaksi
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="9">Belum ada history transaksi
                                 checkout
                             </td>
                         </tr>
@@ -209,7 +184,7 @@
                         $i = 0;
                         foreach ($historyAdjustment as $adjustment) {
                             $i++;
-                            ?>
+                    ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -236,7 +211,7 @@
                                     <!-- </?= $adjustment['tgl_adj'] ?> -->
                                 </td>
                             </tr>
-                            <?php
+                        <?php
                         }
                     } else {
                         ?>
@@ -251,5 +226,74 @@
         </div>
     </div>
 </div>
+<script>
+    // Ensure the DOM is ready
+    $(document).ready(function() {
+        // Attach a click event to the search button
+        $('#search').on('click', function() {
+            // Get the selected dates
+            var minDate = $('#min').val();
+
+            // Convert the date format to YYYY-MM-DD (PHP-compatible format)
+            var formattedMinDate = formatDate(minDate);
+            console.log(formattedMinDate)
+            // Redirect to the same page with the selected date range as query parameters
+            window.location.href = '<?= base_url('history/') ?>?min=' + minDate;
+        });
+        // Function to format date to YYYY-MM-DD
+        function formatDate(inputDate) {
+            var date = new Date(inputDate);
+            var year = date.getFullYear();
+            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+            var day = date.getDate().toString().padStart(2, '0');
+            return year + '-' + month + '-' + day;
+        }
+        // Attach a click event to the Export Excel button
+        $('#exportExcel').on('click', function() {
+            // Get the currently active tab
+            var activeTab = $('.tabcontent:visible').attr('id');
+
+            // Call a function to export data to Excel based on the active tab
+            exportToExcel(activeTab);
+        });
+
+    });
+
+    function nextReport(varId) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        document.getElementById(varId).style.display = "block";
+
+        // Show/hide Export Excel buttons based on the active tab
+        if (varId === 'adjustment') {
+            $('#exportAdjustment').show();
+            $('#exportCheckOut').hide();
+            $('#exportCheckIn').hide();
+        } else if (varId === 'checkOut') {
+            $('#exportAdjustment').hide();
+            $('#exportCheckOut').show();
+            $('#exportCheckIn').hide();
+        } else if (varId === 'checkIn') {
+            $('#exportAdjustment').hide();
+            $('#exportCheckOut').hide();
+            $('#exportCheckIn').show();
+        }
+    }
+
+    document.getElementById("defaultOpen").click();
+
+    function myFunction() {
+        $cari = $_GET['cari'];
+        if (isset($cari)) {
+            $data = new HistoryTransaksiModel($cari);
+        } else {
+            $data = HistoryTransaksiModel();
+        }
+        $no = 1;
+    }
+</script>
 
 <?= $this->endSection(); ?>

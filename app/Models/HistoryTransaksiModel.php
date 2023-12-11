@@ -24,30 +24,29 @@ class HistoryTransaksiModel extends Model
     // protected $cleanValidationRules = true;
 
 
-    public function getCheckin($status, $dateRange)
+    public function getCheckin($status, $minDate)
     {
-        $minDate = isset($dateRange['min']) ? $dateRange['min'] : date('Y-m-d');
-        $maxDate = isset($dateRange['max']) ? $dateRange['max'] : date('Y-m-d');
+        // $minDate = isset($dateRange['min']) ? $dateRange['min'] : date('Y-m-d');
+        // $maxDate = isset($dateRange['max']) ? $dateRange['max'] : date('Y-m-d');
 
         $result = $this->db->table('transaksi_history')
-        ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
-        ->where("trans_metadata LIKE '%\"tgl_ci\":\"$minDate%'")
-        ->where("trans_metadata LIKE '%\"tgl_ci\":\"$maxDate%'")
+            ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
+            ->where("trans_metadata LIKE '%\"tgl_ci\":\"$minDate%'")
             ->get()
             ->getResultArray();
         return $result;
     }
 
-    public function getCheckout($status, $dateRange)
+
+    public function getCheckout($status, $minDate)
     {
-        $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
-        $maxDate = isset($dateRange['max']) ? $dateRange['max'] : '2000/01/10';
+        // $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
+        // $maxDate = isset($dateRange['max']) ? $dateRange['max'] : '2000/01/10';
 
         $result = $this->db->table('transaksi_history')
-        ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
-        ->where("trans_metadata LIKE '%\"tgl_co\":\"$minDate%'")
-        ->where("trans_metadata LIKE '%\"tgl_co\":\"$maxDate%'")
-        // ->where("order by id desc")
+            ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
+            ->where("trans_metadata LIKE '%\"tgl_co\":\"$minDate%'")
+            // ->where("order by id desc")
             ->get()
             ->getResultArray();
         return $result;

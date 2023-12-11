@@ -123,8 +123,12 @@ class overAreaController extends BaseController
                     $sheet->setCellValue('C' . $column, $row['unique_scanid']);
                     $sheet->setCellValue('D' . $column, $row['quantity']);
                     $sheet->setCellValue('E' . $column, $row['pic']);
-                    $sheet->setCellValue('F' . $column, $row['tgl_ci']);
-                    $sheet->setCellValue('G' . $column, $row['tgl_adjust']);
+                    $sheet->setCellValue('F' . $column, date('d-M-Y', strtotime($row['tgl_ci'])));
+                    if (!empty($row['tgl_adjust'])) {
+                        $sheet->setCellValue('G' . $column, date('d-M-Y', strtotime($row['tgl_adjust'])));
+                    } else {
+                        $sheet->setCellValue('G' . $column, '-');
+                    }
                     $sheet->getStyle('A1:G' . $column)->applyFromArray($borderstyle);
                     $column++;
                 }
