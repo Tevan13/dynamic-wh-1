@@ -85,4 +85,9 @@ class rakModel extends Model
             return false;  // Error
         }
     }
+
+    public function getNoRakBy($id)
+    {
+        return $this->db->table('tb_rak')->getWhere(["idRak" => $id])->get('kode_rak');
+    }
 }

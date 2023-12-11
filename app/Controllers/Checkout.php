@@ -36,6 +36,8 @@ class Checkout extends Controller
         $input = $this->request->getPost();
         $data = explode(',', $input['scan']);
         $partNo = $data[0];
+        $lot = $data[1];
+        $quantity = $data[2];
         $scan = $data[3];
         $transaksi = $this->TransaksiModel->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->first();
         if (empty($transaksi)) {
@@ -55,6 +57,8 @@ class Checkout extends Controller
                 'idTransaksi' => $transaksi['idTransaksi'],
                 'unique_scanid' => $scan,
                 'part_number' => $partNo,
+                'lot' => $lot,
+                'quantity' => $quantity,
                 'kode_rak' => $rak['kode_rak'],
                 'status' => 'checkout',
                 'pic' => $transaksi['pic'],
