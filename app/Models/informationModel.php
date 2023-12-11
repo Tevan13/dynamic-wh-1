@@ -55,4 +55,15 @@ class informationModel extends Model
 
         return $query->getResultArray();
     }
+
+    public function getTransactionCheckin()
+    {
+        $query = $this->db->query("SELECT tb_transaksi.*, tb_partno.part_number
+        FROM tb_transaksi
+        LEFT JOIN tb_partno ON tb_transaksi.idPartno = tb_partno.idPartno
+        WHERE status IN ('checkin', 'adjust_ci')
+        ");
+
+        return $query->getResultArray();
+    }
 }
