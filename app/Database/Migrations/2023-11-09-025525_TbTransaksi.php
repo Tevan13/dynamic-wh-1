@@ -29,6 +29,15 @@ class TbTransaksi extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
+            'lot' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
+            'quantity' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
             'status' => [
                 'type' => 'ENUM',
                 'constraint' => ['checkin', 'checkout', 'adjust_co', 'adjust_ci'],
