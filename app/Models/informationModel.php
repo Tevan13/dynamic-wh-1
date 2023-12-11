@@ -23,11 +23,15 @@ class informationModel extends Model
     {
         $result = $this->db->table("tb_rak")->get()->getResultArray();
 
-        foreach ($result as &$item) {
-            if ($item['tipe_rak'] === 'Over Area') {
-                $item['transaksi'] = $this->getTransaksiForOverArea($item['idRak']);
-            }
+        // Filter out "Over Area" racks
+        $result = array_filter($result, function ($item) {
+            return $item['tipe_rak'] !== 'Over Area';
+        });
 
+        foreach ($result as &$item) {
+            // if ($item['tipe_rak'] === 'Over Area') {
+            //     $item['transaksi'] = $this->getTransaksiForOverArea($item['idRak']);
+            // }
             $transaksi = $this->getTransaksi($item['idRak'], 'checkin');
             if ($transaksi) {
                 $item['part_number'] = $transaksi['part_number'];

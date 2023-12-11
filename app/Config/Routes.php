@@ -67,6 +67,9 @@ $routes->get('/history', 'HistoryTransaksi::index');
 $routes->get('/export-history', 'HistoryTransaksi::export');
 
 $routes->get('/adjustment', 'AdjustmentController::index', ['as' => 'adjustment']);
+
+$routes->get('/over-area', 'overAreaController::index', ['as' => 'over-area']);
+
 // $routes->post('/adjustment', 'AdjustmentController::store', ['as' => 'adjustment']);
 
 

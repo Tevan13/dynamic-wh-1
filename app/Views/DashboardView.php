@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </a>
-            <a href="<?= base_url('/informationController') ?>" class="btn btn-primary">
+            <a href="<?= base_url('/information-rak') ?>" class="btn btn-primary">
                 <div>
                     <div class="card-body">
                         <h5 class="card-title">informasi rak</h5>

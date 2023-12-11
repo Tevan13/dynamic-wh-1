@@ -184,7 +184,7 @@
 
                 let json = JSON.stringify(jsonDataArray);
                 console.log(json);
-                let url = "<?= base_url('AdjustmentController/add'); ?>";
+                let url = "<?= base_url('Checkout/store'); ?>";
 
                 $.ajax({
                     url: url,
@@ -201,7 +201,7 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             }).then(function() {
-                                // Additional actions if needed
+                                window.location.href = "<?= base_url('scan-co'); ?>";
                             });
                         } else {
                             Swal.fire({

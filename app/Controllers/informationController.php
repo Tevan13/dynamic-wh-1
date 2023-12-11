@@ -32,7 +32,8 @@ class informationController extends BaseController
         return view('informationRak', $data);
     }
 
-    public function export() {
+    public function export()
+    {
         $allData = $this->infoModel->getInfoRak();
         foreach ($allData as $item) {
             if ($item['part_number'] !== null && $item['tipe_rak'] !== 'Over Area') {
@@ -57,34 +58,38 @@ class informationController extends BaseController
         $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', 'Kode Rak');
-		$sheet->setCellValue('B1', 'Tipe Rak');
-		$sheet->setCellValue('C1', 'Status Rak');
-		$sheet->setCellValue('D1', 'Total Packing');
-		$sheet->setCellValue('E1', 'Part Number');
-		$sheet->setCellValue('F1', 'Tgl Checkin');
+        $sheet->setCellValue('B1', 'Tipe Rak');
+        $sheet->setCellValue('C1', 'Status Rak');
+        $sheet->setCellValue('D1', 'Total Packing');
+        $sheet->setCellValue('E1', 'Part Number');
+        $sheet->setCellValue('F1', 'Tanggal Checkin Terakhir');
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
 
+        // Adjust column widths
+        foreach (range('A', 'F') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
         $count = 2;
-		foreach($data as $row)
-		{
-			$sheet->setCellValue('A' . $count, $row['kode_rak']);
-			$sheet->setCellValue('B' . $count, $row['tipe_rak']);
-			$sheet->setCellValue('C' . $count, $row['status_rak']);
-			$sheet->setCellValue('D' . $count, $row['total_packing']);
-			$sheet->setCellValue('E' . $count, $row['part_number']);
-			$sheet->setCellValue('F' . $count, $row['tgl_ci']);
-			$count++;
-		}
+        foreach ($data as $row) {
+            $sheet->setCellValue('A' . $count, $row['kode_rak']);
+            $sheet->setCellValue('B' . $count, $row['tipe_rak']);
+            $sheet->setCellValue('C' . $count, $row['status_rak']);
+            $sheet->setCellValue('D' . $count, $row['total_packing']);
+            $sheet->setCellValue('E' . $count, $row['part_number']);
+            $sheet->setCellValue('F' . $count, $row['tgl_ci']);
+            $count++;
+        }
 
         $writer = new WriterXlsx($spreadsheet);
-		$writer->save($fileName);
-		header("Content-Type: application/vnd.ms-excel");
-		header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
-		header('Content-Length:' . filesize($fileName));
-		flush();
-		readfile($fileName);
-		exit;
+        $writer->save($fileName);
+        header("Content-Type: application/vnd.ms-excel");
+        header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length:' . filesize($fileName));
+        flush();
+        readfile($fileName);
+        exit;
     }
 }

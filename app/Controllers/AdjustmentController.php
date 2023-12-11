@@ -229,6 +229,20 @@ class AdjustmentController extends Controller
                 return $this->response->setStatusCode(400)->setJSON(['success' => false, 'message' => "Rak ini melebihi batas maksimal yaitu $maxCapacity"]);
             }
 
+            $insertedID = $this->TransaksiModel->insertID();
+            $historyData = [
+                'trans_metadata' => json_encode([
+                    'idTransaksi' => $insertedID,
+                    'unique_scanid' => $uniqueScanId,
+                    'part_number' => $partNumber,
+                    'kode_rak' => $rak,
+                    'status' => 'checkout',
+                    'pic' => $pic,
+                    // 'tgl_co' => $now,
+                ]),
+            ];
+            $this->HistoryModel->insert($historyData);
+
             return $this->response->setJSON(['success' => true, 'message' => 'Data adjusted successfully']);
         } else {
             // Return an error for requests that are not relevant
