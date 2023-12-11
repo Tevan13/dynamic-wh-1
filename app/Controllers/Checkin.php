@@ -40,6 +40,8 @@ class Checkin extends Controller
         $pic = $this->request->getPost('pic');
         $data = explode(',', $input['scan']);
         $partNo = $data[0];
+        $lot = $data[1];
+        $quantity = $data[2];
         $scan = $data[3];
 
         $part = $this->PartnumberModel->where('part_number', $partNo)->first();
@@ -47,19 +49,16 @@ class Checkin extends Controller
             session()->setFlashdata("fail", "Part Number belum ada di data master!");
             return redirect()->route('scan-ci');
         }
-        $existingScan = $this->TransaksiModel
-            ->where('unique_scanid', $scan)
-            ->where('status', 'checkin')
-            ->first();
 
+        $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)
+                        ->where('status', 'checkin')->first();
         if ($existingScan !== null) {
             session()->setFlashdata("fail", "LTS ini sudah terscan. Mohon scan LTS lain");
             return redirect()->route('scan-ci');
         }
 
         $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->where('status', 'checkin')->findAll();
-        $countPart = count($transaksi);
-        if ($countPart <= 0) {
+        if (count($transaksi) <= 0) {
             $rak = $this->RakModel->where('status_rak', 'Kosong')->where('tipe_rak', $part['tipe_rak'])->first();
             if (!$rak) {
                 $rak = $this->RakModel->where('tipe_rak', 'Over Area')->first();
@@ -68,6 +67,8 @@ class Checkin extends Controller
                 'idPartNo' => $part['idPartNo'],
                 'idRak' => $rak['idRak'],
                 'unique_scanid' => $scan,
+                'lot' => $lot,
+                'quantity' => $quantity,
                 'status' => 'checkin',
                 'pic' => $pic,
                 'tgl_ci' => $now,
@@ -85,6 +86,8 @@ class Checkin extends Controller
                                 'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
+                                'lot' => $lot,
+                                'quantity' => $quantity,
                                 'kode_rak' => $rak['kode_rak'],
                                 'status' => 'checkin',
                                 'pic' => $pic,
@@ -108,6 +111,8 @@ class Checkin extends Controller
                                 'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
+                                'lot' => $lot,
+                                'quantity' => $quantity,
                                 'kode_rak' => $rak['kode_rak'],
                                 'status' => 'checkin',
                                 'pic' => $pic,
@@ -128,11 +133,13 @@ class Checkin extends Controller
             }
         } else {
             $rak = $this->RakModel->where('idRak', $transaksi[0]['idRak'])->first();
-            if (($countPart + 1) <= intval($part['max_kapasitas'])) {
+            if ((count($transaksi) + 1) <= intval($part['max_kapasitas'])) {
                 $dataInput = [
                     'idPartNo' => $part['idPartNo'],
                     'idRak' => $rak['idRak'],
                     'unique_scanid' => $scan,
+                    'lot' => $lot,
+                    'quantity' => $quantity,
                     'status' => 'checkin',
                     'pic' => $pic,
                     'tgl_ci' => $now,
@@ -149,6 +156,8 @@ class Checkin extends Controller
                                 'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
+                                'lot' => $lot,
+                                'quantity' => $quantity,
                                 'kode_rak' => $rak['kode_rak'],
                                 'status' => 'checkin',
                                 'pic' => $pic,
@@ -172,6 +181,8 @@ class Checkin extends Controller
                                 'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
+                                'lot' => $lot,
+                                'quantity' => $quantity,
                                 'kode_rak' => $rak['kode_rak'],
                                 'status' => 'checkin',
                                 'pic' => $pic,
@@ -192,6 +203,8 @@ class Checkin extends Controller
                     'idPartNo' => $part['idPartNo'],
                     'idRak' => $rak['idRak'],
                     'unique_scanid' => $scan,
+                    'lot' => $lot,
+                    'quantity' => $quantity,
                     'status' => 'checkin',
                     'pic' => $pic,
                     'tgl_ci' => $now,
@@ -207,6 +220,8 @@ class Checkin extends Controller
                                 'idTransaksi' => $insertedID,
                                 'unique_scanid' => $scan,
                                 'part_number' => $partNo,
+                                'lot' => $lot,
+                                'quantity' => $quantity,
                                 'kode_rak' => $rak['kode_rak'],
                                 'status' => 'checkin',
                                 'pic' => $pic,

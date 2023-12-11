@@ -49,8 +49,6 @@ class Checkout extends Controller
         } else {
             $rak['status_rak'] = 'terisi';
         }
-        // $coba = $this->RakModel->where('idRak', $transaksi['idRak'])->find();
-        // return dd($coba);
         $this->RakModel->protect(false)->where('idRak', $transaksi['idRak'])->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])->update();
         $historyData = [
             'trans_metadata' => json_encode([
@@ -64,7 +62,7 @@ class Checkout extends Controller
             ]),
         ];
         $this->HistoryModel->insert($historyData);
-        $update = $this->TransaksiModel->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->set(['status' => 'checkout', 'tgl_co' => $now])->update();
+        $update = $this->TransaksiModel->protect(false)->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->set(['status' => 'checkout', 'tgl_co' => $now])->update();
         if ($update) {
             session()->setFlashdata("success", "Part number $partNo diambil dari rak");
         } else {
