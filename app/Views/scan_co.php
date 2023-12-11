@@ -29,7 +29,7 @@
         min-height: 100vh;
     }
 
-    form {
+    .form-scan {
         padding: 25px;
         margin: 25px;
         box-shadow: 0 2px 5px #f5f5f5;
@@ -72,28 +72,38 @@
     }
 </style>
 <div class="main-block">
-    <form action="scan-co" method="post" enctype="multipart/form-data" id="form-scan">
+    <form id="form-scan">
         <h1>SCAN CHECK OUT LTS</h1>
         <div class="info">
             <input type="text" name="tgl_ci" id="liveTime" readonly>
-            <label class="form-label">SCAN Check Out</label>
-            <input type="text" name="scan" placeholder="Masukkan scan LTS disini" autofocus required>
             <div class="form-group">
                 <label for="pic" class="form-label">PIC</label>
                 <select id="pic" name="pic" class="form-select" required>
                     <option value="">--Pilih PIC--</option>
                     <?php
-                        $pic = $picList;
-                        array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
-                        foreach ($pic as $item) :
+                    $pic = $picList;
+                    array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
+                    foreach ($pic as $item) :
                     ?>
                         <option value="<?= $item['pic']; ?>"><?= $item['pic']; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
-        </div>
-        <button type="submit" href="#">Submit</button>
     </form>
+    <div class="form-group">
+        <label class="form-label">SCAN Check Out</label>
+        <input type="text" name="scan" placeholder="Masukkan scan LTS disini" autofocus>
+        <label class="form-label">DATA YANG AKAN DI CHECKOUT</label>
+        <textarea id="hasil-scan" name="hasil-scan" rows="10" cols="20" disabled></textarea>
+        <div class="text-center">
+            <button type="submit" id="submitBtn" class="btn btn-outline-dark col-md-2 mx-auto" onclick="handleEnter()">ENTER</button>
+        </div>
+        <!-- Add some space between the buttons -->
+        <div class="mt-2">
+            <button type="button" class="btn btn-primary" onclick="showConfirmation()">Submit</button>
+        </div>
+    </div>
+</div>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -125,23 +135,110 @@
     }
     setInterval(updateLiveTime, 1000);
     updateLiveTime();
+    var jsonDataArray = [];
+    // Function to handle the ENTER button click
+    function handleEnter() {
+        // Get values from the form
+        var picValue = document.getElementById('pic').value;
+        var scanValue = document.getElementsByName('scan')[0].value;
 
-    $(function() {
-        <?php if (session()->has("success")) { ?>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: `<?= session("success") ?>`,
-            })
-        <?php } ?>
-        <?php if (session()->has("fail")) { ?>
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: `<?= session("fail") ?>`,
-            })
-        <?php } ?>
+        // Split the scan data into separate fields
+        var scanDataArray = scanValue.split(',');
+        // Form a string with the desired format
+        var formattedData = picValue + ';' + scanDataArray[0].trim() + ';' + scanDataArray[1].trim() + ';' + scanDataArray[2].trim() + ';' + scanDataArray[3].trim()
+        // + ';' + scanDataArray[1].trim() + ';' + scanDataArray[2].trim() + ';' + scanDataArray[3].trim()
+        // Update the textarea
+        var textarea = document.getElementById('hasil-scan');
+        textarea.value += formattedData + '\n';
+        // Update the JSON data (you may customize this part based on your needs)
+        var jsonData = {
+            pic: picValue,
+            part_number: scanDataArray[0].trim(),
+            lts: scanDataArray[1].trim(),
+            qty: scanDataArray[2].trim(),
+            unique_scanid: scanDataArray[3].trim()
+        };
+        // Push the JSON object to the array
+        jsonDataArray.push(jsonData);
+
+        console.log(jsonDataArray); // Display the JSON data in the console
+        // Clear the scan input field
+        document.getElementsByName('scan')[0].value = '';
+    }
+    document.getElementsByName('scan')[0].addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            handleEnter();
+            event.preventDefault();
+        }
     });
+
+    document.getElementById('submitBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+    });
+
+    function showConfirmation() {
+        var countObjects = jsonDataArray.length;
+
+        Swal.fire({
+            title: "Apakah anda yakin untuk checkout?",
+            text: "Data yang akan dicheckout sebanyak " + countObjects + "!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes!",
+            cancelButtonText: "No!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User clicked "Yes", proceed with the AJAX request
+
+                let json = JSON.stringify(jsonDataArray);
+                console.log(json);
+                let url = "#";
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: json,
+                    dataType: "JSON",
+                    success: function(data) {
+                        if (data.success) {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function() {
+                                // Additional actions if needed
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message,
+                            });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR.responseJSON); // Log the entire response
+                        console.log(jqXHR.responseJSON.received_data); // Log only the received_data field
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error: ' + jqXHR.responseJSON.message,
+                        });
+                    }
+                });
+
+            } else {
+                // User clicked "No" or closed the dialog
+                Swal.fire("Cancelled", "Tidak ada data yang di checkout!", "error");
+            }
+        });
+    }
 </script>
 
 <?= $this->endSection(); ?>

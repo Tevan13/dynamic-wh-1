@@ -52,12 +52,25 @@ class HistoryTransaksi extends BaseController
                 $checkout = array_merge($checkout, $transaksi);
             }
         }
+        // Decode the 'trans_metadata' in each row
+        foreach ($checkoutData as &$checkoutRow) {
+            $transaksi = json_decode($checkoutRow['trans_metadata'], true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($transaksi)) {
+                // Merge the decoded data with the original row data
+                $checkoutRow = array_merge($checkoutRow, $transaksi);
+            }
+        }
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
             'historyCheckout' => $transaksiData2,
             'historyAdjustment'
         ];
+        // echo '<pre>';
+        // var_dump($checkoutData);
+        // echo '</pre>';
         echo view('historyTransaksiView', $data);
     }
 

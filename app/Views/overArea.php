@@ -5,10 +5,10 @@
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-            <h1>Informasi Rak</h1>
-            <form action="<?= base_url('/export-information-rak') ?>" method="post" class='mt-3'>
+            <h1>Over Area Rak</h1>
+            <form action="<?= base_url('overAreaController/export') ?>" method="post" class='mt-3'>
                 <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
-                <a href="<?= base_url('/over-area') ?>" class="btn btn-primary">Over Area</a>
+                <a href="<?= base_url('/information-rak') ?>" class="btn btn-primary">Kembali ke Informasi Rak</a>
             </form>
         </div>
     </div>
@@ -19,43 +19,40 @@
                 <thead>
                     <tr>
                         <th>NO</th>
-                        <th>Kode RAK</th>
                         <th>Part Number</th>
                         <th>Tanggal Masuk</th>
+                        <th>Tanggal Adjust</th>
+                        <th>Quantity</th>
                         <th>Total Packing</th>
                     </tr>
                 </thead>
                 <tbody id="contactTable">
                     <?php
-                    if (!empty($dataRak)) {
+                    if (!empty($overArea)) {
                         $i = 0;
-                        foreach ($dataRak as $rak) {
+                        $totalPackingCounts = []; // Initialize an associative array to store total packing counts for each idPartNo
+
+                        foreach ($overArea as $rak) {
                             $i++;
                     ?>
                             <tr>
                                 <td><?= $i; ?></td>
-                                <td><?= $rak['kode_rak'] ?></td>
-                                <td><?= isset($rak['part_number']) && !empty($rak['part_number']) ? $rak['part_number'] : '-' ?></td>
-                                <td><?= isset($rak['tgl_ci']) && !empty($rak['tgl_ci']) ? $rak['tgl_ci'] : '-' ?></td>
-                                <td>
-                                    <?php if ($rak['status_rak'] == 'Terisi') : ?>
-                                        <label class="badge rounded-pill bg-success"><?= $rak['total_packing'] ?></label>
-                                    <?php elseif ($rak['status_rak'] == 'Penuh') : ?>
-                                        <label class="badge rounded-pill bg-danger"><?= $rak['total_packing'] ?></label>
-                                    <?php else : ?>
-                                        <label class="badge rounded-pill bg-success"><?= $rak['total_packing'] ?></label>
-                                    <?php endif; ?>
-                                </td>
+                                <td><?= $rak['part_number'] ?></td>
+                                <td><?= $rak['tgl_ci'] ?></td>
+                                <td><?= isset($rak['tgl_adjust']) && !empty($rak['tgl_adjust']) ? $rak['tgl_adjust'] : '-' ?></td>
+                                <td><?= $rak['quantity'] ?></td>
+                                <td><?= $rak['total_packing'] ?></td>
                             </tr>
                         <?php
                         }
                     } else {
                         ?>
                         <tr>
-                            <td style="text-align: center;" colspan="5">No Data Found</td>
+                            <td style="text-align: center;" colspan="6">No Data Found</td>
                         </tr>
                     <?php
                     }
+
                     ?>
                 </tbody>
             </table>

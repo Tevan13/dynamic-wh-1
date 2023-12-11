@@ -30,46 +30,75 @@ class Checkout extends Controller
         return view('scan_co', $data);
     }
 
-    public function store() {
-        helper('date');
-        $now = date('Y-m-d H:i:s', now());
-        $input = $this->request->getPost();
-        $data = explode(',', $input['scan']);
-        $partNo = $data[0];
-        $scan = $data[3];
-        $transaksi = $this->TransaksiModel->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->first();
-        if (empty($transaksi)) {
-            session()->setFlashdata("fail", "Part number $partNo tidak terdata dalam rak pada database atau sudah di checkout");
-            return redirect()->route('scan-co');
+    public function store()
+    {
+        if ($this->request->isAJAX()) {
+            $json = $this->request->getJSON();
+
+            foreach ($json as $data) {
+                helper('date');
+                $now = date('Y-m-d H:i:s', now());
+                $scan = $data->unique_scanid;
+                $lot = $data->lts;
+                $quantity = $data->qty;
+                $partNo = $data->part_number;
+                $pic = $data->pic;
+
+                // Check if transaction exists and status is suitable
+                $transaksi = $this->TransaksiModel
+                    ->where('unique_scanid', $scan)
+                    ->whereNotIn('status', ['checkout', 'adjust_co'])
+                    ->first();
+
+                if (empty($transaksi)) {
+                    return $this->response->setJSON(['success' => false, 'message' => 'LTS tidak ada atau sudah di checkout!']);
+                }
+
+                $rak = $this->RakModel->find($transaksi['idRak']);
+                $rak['total_packing'] -= 1;
+
+                if ($rak['total_packing'] === 0) {
+                    $rak['status_rak'] = 'kosong';
+                } else {
+                    $rak['status_rak'] = 'terisi';
+                }
+
+                $this->RakModel->protect(false)
+                    ->where('idRak', $transaksi['idRak'])
+                    ->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])
+                    ->update();
+
+                $historyData = [
+                    'trans_metadata' => json_encode([
+                        'idTransaksi' => $transaksi['idTransaksi'],
+                        'unique_scanid' => $scan,
+                        'part_number' => $partNo,
+                        'lot' => $lot,
+                        'quantity' => $quantity,
+                        'kode_rak' => $rak['kode_rak'],
+                        'status' => 'checkout',
+                        'pic' => $pic,
+                        'tgl_co' => $now,
+                    ]),
+                ];
+                $this->HistoryModel->insert($historyData);
+
+                $update = $this->TransaksiModel->protect(false)
+                    ->where('unique_scanid', $scan)
+                    ->whereNotIn('status', ['checkout', 'adjust_co'])
+                    ->set(['status' => 'checkout', 'tgl_co' => $now, 'pic' => $pic])
+                    ->update();
+
+                if ($update) {
+                    session()->setFlashdata("success", "Part number $partNo diambil dari rak");
+                } else {
+                    session()->setFlashdata("fail", "Part number $partNo gagal diambil dari rak");
+                }
+            }
+
+            return $this->response->setJSON(['success' => true, 'message' => 'Data berhasil di checkout']);
         }
-        $rak = $this->RakModel->find($transaksi['idRak']);
-        $rak['total_packing'] -= 1;
-        if ($rak['total_packing'] === 0) {
-            $rak['status_rak'] = 'kosong';
-        } else {
-            $rak['status_rak'] = 'terisi';
-        }
-        // $coba = $this->RakModel->where('idRak', $transaksi['idRak'])->find();
-        // return dd($coba);
-        $this->RakModel->protect(false)->where('idRak', $transaksi['idRak'])->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])->update();
-        $historyData = [
-            'trans_metadata' => json_encode([
-                'idTransaksi' => $transaksi['idTransaksi'],
-                'unique_scanid' => $scan,
-                'part_number' => $partNo,
-                'kode_rak' => $rak['kode_rak'],
-                'status' => 'checkout',
-                'pic' => $transaksi['pic'],
-                'tgl_co' => $now,
-            ]),
-        ];
-        $this->HistoryModel->insert($historyData);
-        $update = $this->TransaksiModel->where('unique_scanid', $scan)->whereNotIn('status', ['checkout'])->set(['status' => 'checkout', 'tgl_co' => $now])->update();
-        if ($update) {
-            session()->setFlashdata("success", "Part number $partNo diambil dari rak");
-        } else {
-            session()->setFlashdata("fail", "Part number $partNo gagal diambil dari rak");
-        }
-        return redirect()->route('scan-co');
+
+        return $this->response->setStatusCode(400);
     }
 }

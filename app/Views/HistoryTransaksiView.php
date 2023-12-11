@@ -78,6 +78,7 @@
                         <th>No.</th>
                         <th>No Transaksi</th>
                         <th>ID Scan</th>
+                        <th>No LTS</th>
                         <th>Part No</th>
                         <th>Rak</th>
                         <th>PIC</th>
@@ -137,6 +138,7 @@
                         <th>No.</th>
                         <th>No Transaksi</th>
                         <th>ID Scan</th>
+                        <th>No LTS</th>
                         <th>Part No</th>
                         <th>Rak</th>
                         <th>PIC</th>
