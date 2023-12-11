@@ -39,6 +39,8 @@ class Checkout extends Controller
                 helper('date');
                 $now = date('Y-m-d H:i:s', now());
                 $scan = $data->unique_scanid;
+                $lot = $data->lts;
+                $quantity = $data->qty;
                 $partNo = $data->part_number;
                 $pic = $data->pic;
 
@@ -71,6 +73,8 @@ class Checkout extends Controller
                         'idTransaksi' => $transaksi['idTransaksi'],
                         'unique_scanid' => $scan,
                         'part_number' => $partNo,
+                        'lot' => $lot,
+                        'quantity' => $quantity,
                         'kode_rak' => $rak['kode_rak'],
                         'status' => 'checkout',
                         'pic' => $pic,

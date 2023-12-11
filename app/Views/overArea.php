@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-body">
             <h1>Over Area Rak</h1>
-            <form action="#" method="post" class='mt-3'>
+            <form action="<?= base_url('overAreaController/export') ?>" method="post" class='mt-3'>
                 <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
                 <a href="<?= base_url('/information-rak') ?>" class="btn btn-primary">Kembali ke Informasi Rak</a>
             </form>

@@ -118,7 +118,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form id="form-update" action="/master-part/<?= $part['idPartNo'] ?>" method="POST">
+                        <form id="form-update" action="<?= base_url(); ?>/master-part/<?= $part['idPartNo'] ?>" method="POST">
                           <input type="hidden" name="_method" value="PUT">
                           <div class="mb-3">
                             <label class="form-label">Part Number</label>
