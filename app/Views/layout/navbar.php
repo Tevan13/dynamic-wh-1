@@ -152,7 +152,8 @@ li a:hover:not(.active) {
 </style>
 <ul>
   <li><a href="<?= base_url('/dashboard') ?>" >Dashboard</a></li>
-  <li><a href="<?= base_url('/checkin') ?>">Scan</a></li>
+  <li><a href="<?= base_url('/scan-ci') ?>">Scan Masuk</a></li>
+  <li><a href="<?= base_url('/scan-co') ?>">Scan Keluar</a></li>
   <li><a href="<?= base_url('/informationController') ?>">Informasi Rak</a></li>
   <li><a href="<?= base_url('/history') ?>">History</a></li>
   <li><a href="<?= base_url('/partnumber') ?>">Master Part Number</a></li>

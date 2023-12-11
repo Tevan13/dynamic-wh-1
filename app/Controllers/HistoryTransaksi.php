@@ -5,12 +5,11 @@ namespace App\Controllers;
 use App\Models\HistoryTransaksiModel;
 use App\Controllers\BaseController;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-// use \PhpOffice\PhpSpreadsheet\Reader\Xls;
-// use \PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
 
 class HistoryTransaksi extends BaseController
 {
+    public $historyModel;
     public function __construct()
     {
         $this->historyModel = new HistoryTransaksiModel();
@@ -25,13 +24,13 @@ class HistoryTransaksi extends BaseController
         $start = $this->request->getGet('min');
         $end = $this->request->getGet('max');
         // Validate the date format before using them
-        $start = $this->isValidDate($start) ? $start : '2023-12-04';
-        $end = $this->isValidDate($end) ? $end : '2023-12-04';
+        $start = $this->isValidDate($start) ? $start : '2023-12-08';
+        $end = $this->isValidDate($end) ? $end : '2023-12-08';
         // Use the updated date range in your existing logic
         $dateRange = ['min' => $start, 'max' => $end];
         // Call the model function to get filtered data
-        $transaksiData = $this->historyModel->getTransaksiBy($status[0], $dateRange);
-
+        $transaksiData = $this->historyModel->getCheckin($status[0], $dateRange);
+        $transaksiData2 = $this->historyModel->getCheckout($status[1], $dateRange);
         // Decode the 'trans_metadata' in each row
         foreach ($transaksiData as &$transaksiRow) {
             $transaksi = json_decode($transaksiRow['trans_metadata'], true);
@@ -40,15 +39,27 @@ class HistoryTransaksi extends BaseController
             if (is_array($transaksi)) {
                 // Merge the decoded data with the original row data
                 $transaksiRow = array_merge($transaksiRow, $transaksi);
+                $transaksiRow = array_reverse($transaksiRow, true);
+            }
+        }
+        foreach ($transaksiData2 as &$checkout) {
+            $transaksi = json_decode($checkout['trans_metadata'], true);
+            $checkout = array_reverse($transaksi, true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($transaksi)) {
+                // Merge the decoded data with the original row data
+                $checkout = array_merge($checkout, $transaksi);
             }
         }
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
+            'historyCheckout' => $transaksiData2,
+            'historyAdjustment'
         ];
         echo view('historyTransaksiView', $data);
     }
-
 
     private function isValidDate($date)
     {
@@ -58,9 +69,8 @@ class HistoryTransaksi extends BaseController
 
     public function update()
     {
-        $model = new HistoryTransaksiModel;
         $data = $this->request->getPost();
-        $post = $this->$model->protect(false)->insert($data, false);
+        $post = $this->historyModel->protect(false)->insert($data, false);
 
         if ($post) {
             return redirect()->route('history');
@@ -78,8 +88,7 @@ class HistoryTransaksi extends BaseController
 
     public function export()
     {
-        $model = new HistoryTransaksiModel();
-        $export = $model->select('*')->findAll();
+        $export = $this->historyModel->select('*')->findAll();
         $filename = 'History Transaksi.xlsx';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
