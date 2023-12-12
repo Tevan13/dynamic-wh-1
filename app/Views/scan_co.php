@@ -144,24 +144,35 @@
 
         // Split the scan data into separate fields
         var scanDataArray = scanValue.split(',');
-        // Form a string with the desired format
-        var formattedData = picValue + ';' + scanDataArray[0].trim() + ';' + scanDataArray[1].trim() + ';' + scanDataArray[2].trim() + ';' + scanDataArray[3].trim()
-        // + ';' + scanDataArray[1].trim() + ';' + scanDataArray[2].trim() + ';' + scanDataArray[3].trim()
-        // Update the textarea
-        var textarea = document.getElementById('hasil-scan');
-        textarea.value += formattedData + '\n';
-        // Update the JSON data (you may customize this part based on your needs)
-        var jsonData = {
-            pic: picValue,
-            part_number: scanDataArray[0].trim(),
-            lts: scanDataArray[1].trim(),
-            qty: scanDataArray[2].trim(),
-            unique_scanid: scanDataArray[3].trim()
-        };
-        // Push the JSON object to the array
-        jsonDataArray.push(jsonData);
 
-        console.log(jsonDataArray); // Display the JSON data in the console
+        // Check if the unique_scanid already exists in the jsonDataArray
+        var isDuplicate = jsonDataArray.some(function(item) {
+            return item.unique_scanid === scanDataArray[3].trim();
+        });
+
+        if (!isDuplicate) {
+            // Form a string with the desired format
+            var formattedData = picValue + ';' + scanDataArray[0].trim() + ';' + scanDataArray[1].trim() + ';' + scanDataArray[2].trim() + ';' + scanDataArray[3].trim();
+            // Update the textarea
+            var textarea = document.getElementById('hasil-scan');
+            textarea.value += formattedData + '\n';
+            // Update the JSON data
+            var jsonData = {
+                pic: picValue,
+                part_number: scanDataArray[0].trim(),
+                lts: scanDataArray[1].trim(),
+                qty: scanDataArray[2].trim(),
+                unique_scanid: scanDataArray[3].trim()
+            };
+            // Push the JSON object to the array
+            jsonDataArray.push(jsonData);
+
+            console.log(jsonDataArray); // Display the JSON data in the console
+        } else {
+            // Handle the case where the unique_scanid is a duplicate
+            alert('LTS ini sudah terscan!.');
+        }
+
         // Clear the scan input field
         document.getElementsByName('scan')[0].value = '';
     }

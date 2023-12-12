@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\adjustmentModel;
+use App\Models\HistoryTransaksiModel;
 use App\Models\PartnumberModel;
 use App\Models\picModel;
 use App\Models\rakModel;
@@ -19,6 +20,7 @@ class AdjustmentController extends Controller
         $this->adjustModel = new adjustmentModel();
         $this->TransaksiModel = new TransaksiModel();
         $this->PnModel = new PartnumberModel();
+        $this->HistoryModel = new HistoryTransaksiModel();
     }
     public function index()
     {
@@ -168,6 +170,8 @@ class AdjustmentController extends Controller
                 $uniqueScanId = $data->unique_scanid;
                 $partNumber = $data->part_number;
                 $pic = $data->pic;
+                $lot = $data->lts;
+                $quantity = $data->qty;
 
                 $rakRow = $this->rModel->where('kode_rak', $rak)->first();
 
@@ -200,6 +204,8 @@ class AdjustmentController extends Controller
                         'idRak' => $rakRow['idRak'],
                         'idPartNo' => $partNumberRow['idPartNo'],
                         'unique_scanid' => $uniqueScanId,
+                        'lot' => $lot,
+                        'quantity' => $quantity,
                         'status' => 'adjust_ci',
                         'pic' => $pic,
                         'tgl_adjust' => date('Y-m-d H:i:s'),
@@ -232,13 +238,15 @@ class AdjustmentController extends Controller
             $insertedID = $this->TransaksiModel->insertID();
             $historyData = [
                 'trans_metadata' => json_encode([
-                    'idTransaksi' => $insertedID,
+                    'idTransaksi' => $existingTransaksi['idTransaksi'],
                     'unique_scanid' => $uniqueScanId,
                     'part_number' => $partNumber,
                     'kode_rak' => $rak,
+                    'lot' => $lot,
+                    'quantity' => $quantity,
                     'status' => 'checkout',
                     'pic' => $pic,
-                    // 'tgl_co' => $now,
+                    'tgl_adjust' => date('Y-m-d H:i:s'),
                 ]),
             ];
             $this->HistoryModel->insert($historyData);

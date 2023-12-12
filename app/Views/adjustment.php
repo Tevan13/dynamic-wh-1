@@ -184,7 +184,7 @@
 
                 let json = JSON.stringify(jsonDataArray);
                 console.log(json);
-                let url = "<?= base_url('Checkout/store'); ?>";
+                let url = "<?= base_url('AdjustmentController/add'); ?>";
 
                 $.ajax({
                     url: url,
