@@ -1,99 +1,3 @@
-<!-- <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .topnav {
-            overflow: hidden;
-            background-color: #4689d0;
-        }
-
-        .topnav a {
-            float: left;
-            display: block;
-            color: black;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
-        }
-
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .topnav a.active {
-            background-color: #2196F3;
-            color: white;
-        }
-
-
-        .topnav input[type=text] {
-            padding: 6px;
-            margin-top: 8px;
-            font-size: 17px;
-            border: none;
-        }
-
-
-        @media screen and (max-width: 600px) {
-            .topnav .search-container {
-                position: absolute;
-                right: 100px;
-                float: none;
-            }
-
-            .topnav a,
-            .topnav input[type=text],
-            .topnav .search-container button {
-                float: none;
-                display: block;
-                text-align: left;
-                width: 100%;
-                margin: 0;
-                padding: 14px;
-            }
-
-            .topnav input[type=text] {
-                border: 1px solid #ccc;
-            }
-        }
-    </style> -->
-<!-- <style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover:not(.active) {
-  background-color: #111;
-}
-
-.active {
-  background-color: #04AA6D;
-}
-</style> -->
 <style>
   ul {
     list-style-type: none;
@@ -116,9 +20,19 @@ li a:hover:not(.active) {
     text-decoration: none;
   }
 
-  li a:hover,
+  li a:hover:not(.active),
   .dropdown:hover .dropbtn {
-    background-color: red;
+    background-color: azure;
+  }
+
+  /* li a:hover,
+  .dropdown:hover .dropbtn {
+    background-color:azure;
+  } */
+
+  li a:active,
+  .dropdown:active .dropbtn {
+    background-color: #111;
   }
 
   li.dropdown {
@@ -151,25 +65,26 @@ li a:hover:not(.active) {
   }
 </style>
 <ul>
-  <li><a href="<?= base_url('/dashboard') ?>" >Dashboard</a></li>
-  <li><a href="<?= base_url('/scan-ci') ?>">Scan Masuk</a></li>
-  <li><a href="<?= base_url('/scan-co') ?>">Scan Keluar</a></li>
-  <li><a href="<?= base_url('/informationController') ?>">Informasi Rak</a></li>
-  <li><a href="<?= base_url('/history') ?>">History</a></li>
-  <li><a href="<?= base_url('/partnumber') ?>">Master Part Number</a></li>
-  <li><a href="<?= base_url('/master_rak') ?>">Master Rak</a></li>
-  <li><a href="<?= base_url('/user') ?>">Master User</a></li>
-  <li style="float:right"><a href="<?= base_url('/logout') ?>">Log out</a></li>
+  <?php
+  base_url('n');
+  if ('n' == '/dashboard') {
+    ?>
+    <li><a href="<?= base_url('/dashboard') ?>">Dashboard</a></li>
+    <li style="float:right"><a href="<?= base_url('/logout') ?>">Log out</a></li>
+    <?php
+  } else {
+    ?>
+    <li><a href="<?= base_url('/dashboard') ?>">Dashboard</a></li>
+    <li><a href="<?= base_url('/scan-ci') ?>">Scan Masuk</a></li>
+    <li><a href="<?= base_url('/scan-co') ?>">Scan Keluar</a></li>
+    <li><a href="<?= base_url('/adjustment') ?>">Scan Adjustment</a></li>
+    <li><a href="<?= base_url('/informationController') ?>">Informasi Rak</a></li>
+    <li><a href="<?= base_url('/history') ?>">History</a></li>
+    <li><a href="<?= base_url('/master-part') ?>">Master Part Number</a></li>
+    <li><a href="<?= base_url('/master_rak') ?>">Master Rak</a></li>
+    <li><a href="<?= base_url('/user') ?>">Master User</a></li>
+    <li style="float:right"><a href="<?= base_url('/logout') ?>">Log out</a></li>
+  <?php
+  }
+  ?>
 </ul>
-
-<!-- <div class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="javascript:void(0)" class="dropbtn">Masters</a>
-                    <div class="dropdown-content">
-                        </div>
-    </div> -->
-<!-- <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" id="dropdownMaster">Masters</a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMaster">
-            </div>
-        </div> -->

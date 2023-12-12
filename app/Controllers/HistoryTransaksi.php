@@ -36,6 +36,7 @@ class HistoryTransaksi extends BaseController
         // Call the model function to get filtered data
         $transaksiData = $this->historyModel->getCheckin($status[0], $start);
         $transaksiData2 = $this->historyModel->getCheckout($status[1], $start);
+        $transaksiData3 = $this->historyModel->getAdjustment($status[2], $start);
         // Decode the 'trans_metadata' in each row
         foreach ($transaksiData as &$transaksiRow) {
             $transaksi = json_decode($transaksiRow['trans_metadata'], true);
@@ -49,6 +50,16 @@ class HistoryTransaksi extends BaseController
         }
         foreach ($transaksiData2 as &$checkout) {
             $transaksi = json_decode($checkout['trans_metadata'], true);
+            $checkout = array_reverse($transaksi, true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($transaksi)) {
+                // Merge the decoded data with the original row data
+                $checkout = array_merge($checkout, $transaksi);
+            }
+        }
+        foreach ($transaksiData3 as &$adjustment) {
+            $transaksi = json_decode($adjustment['trans_metadata'], true);
             $checkout = array_reverse($transaksi, true);
 
             // Check if $transaksi is an array before pushing it back
@@ -71,7 +82,7 @@ class HistoryTransaksi extends BaseController
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
             'historyCheckout' => $transaksiData2,
-            'historyAdjustment'
+            'historyAdjustment' => $transaksiData3
         ];
         // echo '<pre>';
         // var_dump($transaksiData);
