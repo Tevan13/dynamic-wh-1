@@ -37,45 +37,22 @@ class HistoryTransaksi extends BaseController
         $transaksiData = $this->historyModel->getCheckin($status[0], $start);
         $transaksiData2 = $this->historyModel->getCheckout($status[1], $start);
         $adjustmentData = $this->historyModel->getAdjustment($start);
-        // Decode the 'trans_metadata' in each row
-        foreach ($transaksiData as &$transaksiRow) {
-            $transaksi = json_decode($transaksiRow['trans_metadata'], true);
 
-            // Check if $transaksi is an array before pushing it back
-            if (is_array($transaksi)) {
-                // Merge the decoded data with the original row data
-                $transaksiRow = array_merge($transaksiRow, $transaksi);
-                $transaksiRow = array_reverse($transaksiRow, true);
-            }
-        }
-        foreach ($transaksiData2 as &$checkout) {
-            $transaksi = json_decode($checkout['trans_metadata'], true);
-            $checkout = array_reverse($transaksi, true);
-
-            // Check if $transaksi is an array before pushing it back
-            if (is_array($transaksi)) {
-                // Merge the decoded data with the original row data
-                $checkout = array_merge($checkout, $transaksi);
-            }
-        }
-        foreach ($adjustmentData as &$adjust) {
-            $transaksi = json_decode($adjust['trans_metadata'], true);
-            $adjust = array_reverse($transaksi, true);
-
-            // Check if $transaksi is an array before pushing it back
-            if (is_array($transaksi)) {
-                // Merge the decoded data with the original row data
-                $adjust = array_merge($adjust, $transaksi);
-            }
+        $this->decodeAndMergeMetadata($transaksiData);
+        $this->decodeAndMergeMetadata($transaksiData2);
+        $this->decodeAndMergeMetadata($adjustmentData);
+        $mergedAdjustmentData = [];
+        foreach ($adjustmentData as $adjust) {
+            $mergedAdjustmentData = array_merge($mergedAdjustmentData, $adjust);
         }
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
             'historyCheckout' => $transaksiData2,
-            'historyAdjustment' => $adjustmentData
+            'historyAdjustment' => $mergedAdjustmentData
         ];
         // echo '<pre>';
-        // var_dump($transaksiData);
+        // var_dump($mergedAdjustmentData);
         // echo '</pre>';
         echo view('historyTransaksiView', $data);
     }
@@ -84,6 +61,26 @@ class HistoryTransaksi extends BaseController
     {
         $d = \DateTime::createFromFormat('Y-m-d', $date);
         return $d && $d->format('Y-m-d') === $date;
+    }
+    private function decodeAndMergeMetadata(&$data)
+    {
+        // foreach ($data as &$row) {
+        //     $transaksi = json_decode($row['trans_metadata'], true);
+
+        //     if (is_array($transaksi)) {
+        //         $row = array_merge($row, array_reverse($transaksi, true));
+        //     }
+        // }
+        foreach ($data as &$row) {
+            $transaksi = json_decode($row['trans_metadata'], true);
+            $row = array_reverse($transaksi, true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($transaksi)) {
+                // Merge the decoded data with the original row data
+                $row = array_merge($row, $transaksi);
+            }
+        }
     }
 
     public function update()

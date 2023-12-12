@@ -208,12 +208,34 @@ class AdjustmentController extends Controller
                         'quantity' => $quantity,
                         'status' => 'adjust_ci',
                         'pic' => $pic,
+                        'tgl_ci' => null,
                         'tgl_adjust' => date('Y-m-d H:i:s'),
                     ];
                     // Push each new row into the $dataInputs array
                     $dataInputs[] = $dataInput;
                 }
+                $historyDataRow = [
+                    'idTransaksi' => ($existingTransaksi !== null) ? $existingTransaksi['idTransaksi'] : null,
+                    'unique_scanid' => $uniqueScanId,
+                    'part_number' => $partNumber,
+                    'kode_rak' => $rak,
+                    'lot' => $lot,
+                    'quantity' => $quantity,
+                    'status' => ($existingTransaksi !== null) ? $existingTransaksi['status'] : 'adjust_ci',
+                    'pic' => ($existingTransaksi !== null) ? $existingTransaksi['pic'] : null,
+                    'tgl_adjust' => date('Y-m-d H:i:s'),
+                ];
+
+                // Push the historical data row into the array
+                $historyDataArray[] = $historyDataRow;
             }
+            // Encode the array as a JSON string
+            $historyData = [
+                'trans_metadata' => json_encode($historyDataArray),
+            ];
+
+            // Insert historical data into HistoryModel
+            $this->HistoryModel->insert($historyData);
             // Insert new data if there are any
             if (!empty($dataInputs)) {
                 $this->TransaksiModel->protect(false)->insertBatch($dataInputs);
@@ -234,22 +256,7 @@ class AdjustmentController extends Controller
             if ($countStatus > $maxCapacity) {
                 return $this->response->setStatusCode(400)->setJSON(['success' => false, 'message' => "Rak ini melebihi batas maksimal yaitu $maxCapacity"]);
             }
-
-            $insertedID = $this->TransaksiModel->insertID();
-            $historyData = [
-                'trans_metadata' => json_encode([
-                    'idTransaksi' => $existingTransaksi['idTransaksi'],
-                    'unique_scanid' => $uniqueScanId,
-                    'part_number' => $partNumber,
-                    'kode_rak' => $rak,
-                    'lot' => $lot,
-                    'quantity' => $quantity,
-                    'status' => $existingTransaksi['status'],
-                    'pic' => $pic,
-                    'tgl_adjust' => date('Y-m-d H:i:s'),
-                ]),
-            ];
-            $this->HistoryModel->insert($historyData);
+            // $this->HistoryModel->insert($historyData);
 
             return $this->response->setJSON(['success' => true, 'message' => 'Data adjusted successfully']);
         } else {

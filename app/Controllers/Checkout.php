@@ -94,11 +94,11 @@ class Checkout extends Controller
                     $successMessage = true; // Set the flag to true if at least one update is successful
                 }
             }
-            if ($successMessage) {
-                session()->setFlashdata("success", "Setidaknya satu part number berhasil diambil dari rak");
-            } else {
-                session()->setFlashdata("fail", "LTS tidak ada atau sudah di checkout!");
-            }
+            // if ($successMessage) {
+            //     session()->setFlashdata("success", "Setidaknya satu part number berhasil diambil dari rak");
+            // } else {
+            //     session()->setFlashdata("fail", "LTS tidak ada atau sudah di checkout!");
+            // }
 
             return $this->response->setJSON(['success' => $successMessage, 'message' => $successMessage ? 'Data berhasil di checkout' : 'LTS tidak ada atau sudah di checkout!']);
         } else {

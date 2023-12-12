@@ -61,10 +61,13 @@ class informationController extends BaseController
         $sheet->setCellValue('F1', 'No Scan');
         $sheet->setCellValue('G1', 'Tgl Checkin');
         $sheet->setCellValue('H1', 'Tgl Adjust');
+        $sheet->getStyle('A1:H1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:H1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('FFFF00');
 
         // Adjust column widths
-        foreach (range('A', 'H') as $column) {
-            $sheet->getColumnDimension($column)->setAutoSize(true);
+        foreach (range('A', 'H') as $count) {
+            $sheet->getColumnDimension($count)->setAutoSize(true);
         }
         $count = 2;
         foreach ($newData as $row) {
@@ -75,12 +78,12 @@ class informationController extends BaseController
             $sheet->setCellValue('E' . $count, $row['part_number']);
             $sheet->setCellValue('F' . $count, $row['unique_scanid']);
             $sheet->setCellValue('G' . $count, date('d-M-Y', strtotime($row['tgl_ci'])));
-            // if (!empty($row['tgl_adjust'])) {
-            //     $sheet->setCellValue('H' . $count, date('d-M-Y', strtotime($row['tgl_adjust'])));
-            // } else {
-            //     $sheet->setCellValue('H' . $column, '-');
-            // }
-            // $sheet->getStyle('A1:G' . $column)->applyFromArray($borderstyle);
+            if (!empty($row['tgl_adjust'])) {
+                $sheet->setCellValue('H' . $count, date('d-M-Y', strtotime($row['tgl_adjust'])));
+            } else {
+                $sheet->setCellValue('H' . $count, '-');
+            }
+            $sheet->getStyle('A1:H' . $count)->applyFromArray($borderstyle);
             $count++;
         }
 

@@ -190,10 +190,10 @@
                                     <?= $i; ?>
                                 </td>
                                 <td>
-                                    <?= $adjustment['idTransaksi'] ?>
+                                    <?= $adjustment['unique_scanid'] ?>
                                 </td>
                                 <td>
-                                    <?= $adjustment['unique_scanid'] ?>
+                                    <?= $adjustment['lot'] ?>
                                 </td>
                                 <td>
                                     <?= $adjustment['part_number'] ?>
@@ -208,7 +208,10 @@
                                     <?= $adjustment['status'] ?>
                                 </td>
                                 <td>
-                                    <!-- </?= $adjustment['tgl_adj'] ?> -->
+                                    <?= $adjustment['quantity'] ?>
+                                </td>
+                                <td>
+                                    <?= $adjustment['tgl_adjust'] ?>
                                 </td>
                             </tr>
                         <?php

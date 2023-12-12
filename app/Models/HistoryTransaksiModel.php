@@ -52,19 +52,19 @@ class HistoryTransaksiModel extends Model
         return $result;
     }
 
-    public function getAdjustment($status, $minDate)
-    {
-        // $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
-        // $maxDate = isset($dateRange['max']) ? $dateRange['max'] : '2000/01/10';
+    // public function getAdjustment($status, $minDate)
+    // {
+    //     // $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
+    //     // $maxDate = isset($dateRange['max']) ? $dateRange['max'] : '2000/01/10';
 
-        $result = $this->db->table('transaksi_history')
-            ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
-            ->where("trans_metadata LIKE '%\"tgl_adjust\":\"$minDate%'")
-            // ->where("order by id desc")
-            ->get()
-            ->getResultArray();
-        return $result;
-}
+    //     $result = $this->db->table('transaksi_history')
+    //         ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
+    //         ->where("trans_metadata LIKE '%\"tgl_adjust\":\"$minDate%'")
+    //         // ->where("order by id desc")
+    //         ->get()
+    //         ->getResultArray();
+    //     return $result;
+    // }
 
     public function getTransaksiCheckout($status, $dateRange)
     {
@@ -82,8 +82,6 @@ class HistoryTransaksiModel extends Model
     public function getAdjustment($minDate)
     {
         $result = $this->db->table('transaksi_history')
-            ->where("trans_metadata LIKE '%\"status\":\"adjust_ci\"%'")
-            ->where("trans_metadata LIKE '%\"status\":\"adjust_co\"%'")
             ->where("trans_metadata LIKE '%\"tgl_adjust\":\"$minDate%'")
             ->orderBy('id', 'desc') // Assuming you want to order by id in descending order
             ->get()
