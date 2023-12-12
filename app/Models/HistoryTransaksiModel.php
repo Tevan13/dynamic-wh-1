@@ -52,20 +52,6 @@ class HistoryTransaksiModel extends Model
         return $result;
     }
 
-    // public function getAdjustment($status, $minDate)
-    // {
-    //     // $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
-    //     // $maxDate = isset($dateRange['max']) ? $dateRange['max'] : '2000/01/10';
-
-    //     $result = $this->db->table('transaksi_history')
-    //         ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
-    //         ->where("trans_metadata LIKE '%\"tgl_adjust\":\"$minDate%'")
-    //         // ->where("order by id desc")
-    //         ->get()
-    //         ->getResultArray();
-    //     return $result;
-    // }
-
     public function getTransaksiCheckout($status, $dateRange)
     {
         $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
