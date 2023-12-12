@@ -36,9 +36,9 @@ class Checkin extends Controller
     {
         helper('date');
         $now = date('Y-m-d H:i:s', now());
-        $input = $this->request->getPost();
+        $scan = $this->request->getPost('scan');
         $pic = $this->request->getPost('pic');
-        $data = explode(',', $input['scan']);
+        $data = explode(',', $scan);
         $partNo = $data[0];
         $lot = $data[1];
         $quantity = $data[2];
@@ -132,8 +132,15 @@ class Checkin extends Controller
                 return redirect()->route('scan-ci');
             }
         } else {
+            $count = 0;
+            foreach ($transaksi as $t) {
+                $rak = $this->RakModel->find($t['idRak']);
+                if ($rak['tipe_rak'] !== 'Over Area') {
+                    $count++;
+                }
+            }
             $rak = $this->RakModel->where('idRak', $transaksi[0]['idRak'])->first();
-            if ((count($transaksi) + 1) <= intval($part['max_kapasitas'])) {
+            if ($count + 1 <= intval($part['max_kapasitas'])) {
                 $dataInput = [
                     'idPartNo' => $part['idPartNo'],
                     'idRak' => $rak['idRak'],
