@@ -34,6 +34,7 @@ class Checkout extends Controller
     {
         if ($this->request->isAJAX()) {
             $json = $this->request->getJSON();
+            $successMessage = false;
 
             foreach ($json as $data) {
                 helper('date');
@@ -51,7 +52,7 @@ class Checkout extends Controller
                     ->first();
 
                 if (empty($transaksi)) {
-                    return $this->response->setJSON(['success' => false, 'message' => 'LTS tidak ada atau sudah di checkout!']);
+                    continue; // Skip to the next iteration if the transaction doesn't exist
                 }
 
                 $rak = $this->RakModel->find($transaksi['idRak']);
@@ -90,15 +91,19 @@ class Checkout extends Controller
                     ->update();
 
                 if ($update) {
-                    session()->setFlashdata("success", "Part number $partNo diambil dari rak");
-                } else {
-                    session()->setFlashdata("fail", "Part number $partNo gagal diambil dari rak");
+                    $successMessage = true; // Set the flag to true if at least one update is successful
                 }
             }
+            if ($successMessage) {
+                session()->setFlashdata("success", "Setidaknya satu part number berhasil diambil dari rak");
+            } else {
+                session()->setFlashdata("fail", "LTS tidak ada atau sudah di checkout!");
+            }
 
-            return $this->response->setJSON(['success' => true, 'message' => 'Data berhasil di checkout']);
+            return $this->response->setJSON(['success' => $successMessage, 'message' => $successMessage ? 'Data berhasil di checkout' : 'LTS tidak ada atau sudah di checkout!']);
+        } else {
+
+            return $this->response->setStatusCode(400);
         }
-
-        return $this->response->setStatusCode(400);
     }
 }

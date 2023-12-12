@@ -32,12 +32,11 @@ class HistoryTransaksiModel extends Model
         $result = $this->db->table('transaksi_history')
             ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
             ->where("trans_metadata LIKE '%\"tgl_ci\":\"$minDate%'")
+            ->orderBy('id', 'desc') // Assuming you want to order by id in descending order
             ->get()
             ->getResultArray();
         return $result;
     }
-
-
     public function getCheckout($status, $minDate)
     {
         // $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
@@ -47,6 +46,7 @@ class HistoryTransaksiModel extends Model
             ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
             ->where("trans_metadata LIKE '%\"tgl_co\":\"$minDate%'")
             // ->where("order by id desc")
+            ->orderBy('id', 'desc') // Assuming you want to order by id in descending order
             ->get()
             ->getResultArray();
         return $result;
@@ -75,6 +75,17 @@ class HistoryTransaksiModel extends Model
             ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
             ->where("trans_metadata LIKE '%\"tgl_co\":\"$minDate%'")
             ->where("trans_metadata LIKE '%\"tgl_co\":\"$maxDate%'")
+            ->get()
+            ->getResultArray();
+        return $result;
+    }
+    public function getAdjustment($minDate)
+    {
+        $result = $this->db->table('transaksi_history')
+            ->where("trans_metadata LIKE '%\"status\":\"adjust_ci\"%'")
+            ->where("trans_metadata LIKE '%\"status\":\"adjust_co\"%'")
+            ->where("trans_metadata LIKE '%\"tgl_adjust\":\"$minDate%'")
+            ->orderBy('id', 'desc') // Assuming you want to order by id in descending order
             ->get()
             ->getResultArray();
         return $result;

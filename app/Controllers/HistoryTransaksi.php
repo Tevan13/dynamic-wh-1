@@ -22,21 +22,21 @@ class HistoryTransaksi extends BaseController
             return redirect()->to('/login');
         }
 
-        $status = ['checkin', 'checkout', 'adjustment'];
+        $status = ['checkin', 'checkout'];
         $start = $this->request->getGet('min');
         $end = $this->request->getGet('max');
         // $start = date('Y-m-d', strtotime($starttmp));
         // $end = date('Y-m-d', strtotime($endtmp));
         // Validate the date format before using them
-        // $start = $this->isValidDate($start) ? $start : date('Y-m-d');
-        // $end = $this->isValidDate($end) ? $end : date('Y-m-d');
+        $start = $this->isValidDate($start) ? $start : date('Y-m-d');
+        $end = $this->isValidDate($end) ? $end : date('Y-m-d');
         // Use the updated date range in your existing logic
         // $dateRange = ['min' => $start, 'max' => $end];
         // var_dump($dateRange);
         // Call the model function to get filtered data
         $transaksiData = $this->historyModel->getCheckin($status[0], $start);
         $transaksiData2 = $this->historyModel->getCheckout($status[1], $start);
-        $transaksiData3 = $this->historyModel->getAdjustment($status[2], $start);
+        $adjustmentData = $this->historyModel->getAdjustment($start);
         // Decode the 'trans_metadata' in each row
         foreach ($transaksiData as &$transaksiRow) {
             $transaksi = json_decode($transaksiRow['trans_metadata'], true);
@@ -58,31 +58,21 @@ class HistoryTransaksi extends BaseController
                 $checkout = array_merge($checkout, $transaksi);
             }
         }
-        foreach ($transaksiData3 as &$adjustment) {
-            $transaksi = json_decode($adjustment['trans_metadata'], true);
-            $checkout = array_reverse($transaksi, true);
+        foreach ($adjustmentData as &$adjust) {
+            $transaksi = json_decode($adjust['trans_metadata'], true);
+            $adjust = array_reverse($transaksi, true);
 
             // Check if $transaksi is an array before pushing it back
             if (is_array($transaksi)) {
                 // Merge the decoded data with the original row data
-                $checkout = array_merge($checkout, $transaksi);
+                $adjust = array_merge($adjust, $transaksi);
             }
         }
-        // // Decode the 'trans_metadata' in each row
-        // foreach ($checkoutData as &$checkoutRow) {
-        //     $transaksi = json_decode($checkoutRow['trans_metadata'], true);
-
-        //     // Check if $transaksi is an array before pushing it back
-        //     if (is_array($transaksi)) {
-        //         // Merge the decoded data with the original row data
-        //         $checkoutRow = array_merge($checkoutRow, $transaksi);
-        //     }
-        // }
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
             'historyCheckout' => $transaksiData2,
-            'historyAdjustment' => $transaksiData3
+            'historyAdjustment' => $adjustmentData
         ];
         // echo '<pre>';
         // var_dump($transaksiData);
@@ -92,8 +82,8 @@ class HistoryTransaksi extends BaseController
 
     private function isValidDate($date)
     {
-        $d = \DateTime::createFromFormat('Y/m/d', $date);
-        return $d && $d->format('Y/m/d') === $date;
+        $d = \DateTime::createFromFormat('Y-m-d', $date);
+        return $d && $d->format('Y-m-d') === $date;
     }
 
     public function update()
@@ -199,7 +189,7 @@ class HistoryTransaksi extends BaseController
         ];
 
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet()->setTitle('Lembur Andal');
+        $sheet = $spreadsheet->getActiveSheet();
 
         $sheet->setCellValue('A1', 'Unique ID Scan');
         $sheet->setCellValue('B1', 'NO Lot');

@@ -32,6 +32,14 @@ class informationController extends BaseController
 
     public function export()
     {
+        $borderstyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+
+        ];
         $data = $this->infoModel->getTransactionCheckin();
         $newData = [];
         foreach ($data as $d) {
@@ -52,9 +60,10 @@ class informationController extends BaseController
         $sheet->setCellValue('E1', 'Part Number');
         $sheet->setCellValue('F1', 'No Scan');
         $sheet->setCellValue('G1', 'Tgl Checkin');
+        $sheet->setCellValue('H1', 'Tgl Adjust');
 
         // Adjust column widths
-        foreach (range('A', 'G') as $column) {
+        foreach (range('A', 'H') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
         $count = 2;
@@ -66,6 +75,12 @@ class informationController extends BaseController
             $sheet->setCellValue('E' . $count, $row['part_number']);
             $sheet->setCellValue('F' . $count, $row['unique_scanid']);
             $sheet->setCellValue('G' . $count, date('d-M-Y', strtotime($row['tgl_ci'])));
+            // if (!empty($row['tgl_adjust'])) {
+            //     $sheet->setCellValue('H' . $count, date('d-M-Y', strtotime($row['tgl_adjust'])));
+            // } else {
+            //     $sheet->setCellValue('H' . $column, '-');
+            // }
+            // $sheet->getStyle('A1:G' . $column)->applyFromArray($borderstyle);
             $count++;
         }
 
