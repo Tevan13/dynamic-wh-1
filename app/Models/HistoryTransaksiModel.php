@@ -37,6 +37,7 @@ class HistoryTransaksiModel extends Model
             ->getResultArray();
         return $result;
     }
+
     public function getCheckout($status, $minDate)
     {
         // $minDate = isset($dateRange['min']) ? $dateRange['min'] : '2000/01/01';
@@ -65,6 +66,7 @@ class HistoryTransaksiModel extends Model
             ->getResultArray();
         return $result;
     }
+    
     public function getAdjustment($minDate)
     {
         $result = $this->db->table('transaksi_history')
