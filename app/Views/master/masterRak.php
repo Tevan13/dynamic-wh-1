@@ -5,19 +5,23 @@
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-            <h1><?= $tittle ?></h1>
+            <h1>
+                <?= $tittle ?>
+            </h1>
 
             <form method="post" action="<?= base_url('rakController/upload'); ?>" enctype="multipart/form-data">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-8">
-                            <input type="file" name="fileexcel" class="form-control" id="file" required accept=".xls, .xlsx" />
+                            <input type="file" name="fileexcel" class="form-control" id="file" required
+                                accept=".xls, .xlsx" />
                         </div>
                         <div class="col">
                             <button class="btn btn-primary" type="submit" style="display: inline-block;">Upload</button>
                             <a href='<?= base_url('rakController/export'); ?>' class="btn btn-success">Export Excel</a>
                             |
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">Tambah Data</button>
                         </div>
                     </div>
                 </div>
@@ -29,22 +33,26 @@
 
                         <!-- Modal -->
                         <form id="form-add" action="<?= base_url('rakController/create') ?>" method="post">
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row mb-3">
                                                 <label for="kode_rak" class="col-sm-3 col-form-label">Kode RAK</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="kode_rak" name="kode_rak" placeholder="Masukkan Kode RAK" required>
+                                                    <input type="text" class="form-control" id="kode_rak"
+                                                        name="kode_rak" placeholder="Masukkan Kode RAK" required>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
-                                                <label for="tipe_rak" class="col-sm-3 col-form-label" aria-label=".form-select-lg example">Tipe Rak</label>
+                                                <label for="tipe_rak" class="col-sm-3 col-form-label"
+                                                    aria-label=".form-select-lg example">Tipe Rak</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" id="tipe_rak" name="tipe_rak" required>
                                                         <option selected disabled>--Pilih Tipe Rak--</option>
@@ -56,7 +64,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary">Tambah Data</button>
                                         </div>
                                     </div>
@@ -66,6 +75,14 @@
                     </div>
                 </div>
             </div>
+            <table border="0" cellspacing="5" cellpadding="5" style="float: right;">
+                <tbody>
+                    <tr>
+                        <td>Search: </td>
+                        <td><input class="form-control" type="text" placeholder="Search.." name="search" id="searchInput"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card mt-2 mb-3">
@@ -85,33 +102,48 @@
                     $i = 1;
                     if (!empty($masterRak)) {
                         foreach ($masterRak as $rak) {
-                    ?>
+                            ?>
                             <tr>
-                                <td><?= $i++; ?></td>
-                                <td><?= $rak['kode_rak'] ?></td>
-                                <td><?= $rak['tipe_rak'] ?></td>
-                                <td><?= $rak['status_rak'] ?></td>
+                                <td>
+                                    <?= $i++; ?>
+                                </td>
+                                <td>
+                                    <?= $rak['kode_rak'] ?>
+                                </td>
+                                <td>
+                                    <?= $rak['tipe_rak'] ?>
+                                </td>
+                                <td>
+                                    <?= $rak['status_rak'] ?>
+                                </td>
                                 <td style="text-align: center;">
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalUpdate<?php echo $i; ?>">
+                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#ModalUpdate<?php echo $i; ?>">
                                         Edit
                                     </button>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalDelete<?php echo $i; ?>">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#ModalDelete<?php echo $i; ?>">
                                         Delete
                                     </button>
                                 </td>
                                 <!-- Modal Edit -->
-                                <div class=" modal fade" id="ModalUpdate<?php echo $i; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class=" modal fade" id="ModalUpdate<?php echo $i; ?>" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form id="form-update" action="<?= base_url(); ?>rakController/updateRak/<?= $rak['idRak'] ?>" method="POST">
+                                                <form id="form-update"
+                                                    action="<?= base_url(); ?>rakController/updateRak/<?= $rak['idRak'] ?>"
+                                                    method="POST">
                                                     <div class="mb-3">
                                                         <label class="form-label">Kode Rak</label>
-                                                        <input type="text" name="kode_rak" class="form-control" value="<?= $rak['kode_rak']; ?>" required>
+                                                        <input type="text" name="kode_rak" class="form-control"
+                                                            value="<?= $rak['kode_rak']; ?>" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Tipe Rak</label>
@@ -148,7 +180,8 @@
                                                         </select>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-secondary mr-2"
+                                                            data-bs-dismiss="modal">Close</button>
                                                         <button type="submit" class="btn btn-warning">Update</button>
                                                     </div>
                                                 </form>
@@ -158,30 +191,37 @@
                                 </div>
                                 <!-- End Modal Edit -->
                                 <!-- Modal Delete -->
-                                <div class=" modal fade" id="ModalDelete<?php echo $i; ?>" data-modal-id="<?php echo $i; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class=" modal fade" id="ModalDelete<?php echo $i; ?>" data-modal-id="<?php echo $i; ?>"
+                                    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel">
                                                     Delete Data</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="<?= base_url(); ?>rakController/delete/<?= $rak['idRak'] ?>" method="POST" enctype="multipart/form-data" id="form-delete">
+                                                <form action="<?= base_url(); ?>rakController/delete/<?= $rak['idRak'] ?>"
+                                                    method="POST" enctype="multipart/form-data" id="form-delete">
                                                     <div class="mb-3">
                                                         <label class="form-label">Kode Rak</label>
-                                                        <input type="text" name="kode_rak" class="form-control" value="<?= $rak['kode_rak']; ?>" required readonly>
+                                                        <input type="text" name="kode_rak" class="form-control"
+                                                            value="<?= $rak['kode_rak']; ?>" required readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Tipe Rak</label>
-                                                        <input type="text" name="tipe_rak" class="form-control" value="<?= $rak['tipe_rak']; ?>" required readonly>
+                                                        <input type="text" name="tipe_rak" class="form-control"
+                                                            value="<?= $rak['tipe_rak']; ?>" required readonly>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Status Rak</label>
-                                                        <input type="text" name="status_rak" class="form-control" value="<?= $rak['status_rak']; ?>" required readonly>
+                                                        <input type="text" name="status_rak" class="form-control"
+                                                            value="<?= $rak['status_rak']; ?>" required readonly>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-secondary mr-2"
+                                                            data-bs-dismiss="modal">Close</button>
                                                         <input type="submit" class="btn btn-danger" value="Delete">
                                                     </div>
                                                 </form>
@@ -191,14 +231,14 @@
                                 </div>
                                 <!-- Modal End Delete -->
                             </tr>
-                        <?php
+                            <?php
                         }
                     } else {
                         ?>
                         <tr>
                             <td style="text-align: center;" colspan="6">Tidak ada data</td>
                         </tr>
-                    <?php
+                        <?php
                     }
                     ?>
                 </tbody>
@@ -207,7 +247,7 @@
     </div>
 </div>
 <script>
-    $(document).on('submit', '#form-add', function(e) {
+    $(document).on('submit', '#form-add', function (e) {
         e.preventDefault();
 
         // Use single quotes to wrap the URL in JavaScript
@@ -218,7 +258,7 @@
             type: 'post',
             dataType: 'json',
             data: $(this).serialize(),
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     console.log(response);
                     Swal.fire({
@@ -227,7 +267,7 @@
                         text: response.message,
                         showConfirmButton: false,
                         timer: 1500
-                    }).then(function() {
+                    }).then(function () {
                         // Redirect to the desired URL
                         window.location.href = '<?= base_url('master_rak') ?>';
                     });
@@ -241,7 +281,7 @@
             }
         });
     });
-    $(document).on('submit', '#form-update', function(e) {
+    $(document).on('submit', '#form-update', function (e) {
         e.preventDefault();
 
         var form = $(this); // Store the form element reference
@@ -254,7 +294,7 @@
             type: 'post',
             dataType: 'json',
             data: form.serialize(),
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     console.log(response);
                     Swal.fire({
@@ -263,7 +303,7 @@
                         text: response.message,
                         showConfirmButton: false,
                         timer: 1500,
-                    }).then(function() {
+                    }).then(function () {
                         window.location.href = "<?= base_url('master_rak'); ?>";
                     });
                 } else {
@@ -274,7 +314,7 @@
                     });
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log(xhr.responseText);
                 Swal.fire({
                     icon: 'error',
@@ -284,7 +324,7 @@
             }
         });
     });
-    $(document).on('submit', '#form-delete', function(e) {
+    $(document).on('submit', '#form-delete', function (e) {
         e.preventDefault();
 
         var form = $(this); // Store the form element reference
@@ -297,7 +337,7 @@
             type: 'post',
             dataType: 'json',
             data: form.serialize(),
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     console.log(response);
                     Swal.fire({
@@ -306,7 +346,7 @@
                         text: response.message,
                         showConfirmButton: false,
                         timer: 1500,
-                    }).then(function() {
+                    }).then(function () {
                         window.location.href = "<?= base_url('master_rak'); ?>";
                     });
                 } else {
@@ -317,7 +357,7 @@
                     });
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log(xhr.responseText);
                 Swal.fire({
                     icon: 'error',
@@ -326,6 +366,38 @@
                 });
             }
         });
+    });
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() {
+            // Your search logic
+            var searchQuery = $(this).val().toLowerCase();
+
+            // Flag to track if any matching row is found
+            var foundMatch = false;
+
+            // Iterate through each content row in the table
+            $('#table_id tbody tr').each(function() {
+                var rowText = $(this).text().toLowerCase();
+                // Show/hide rows based on whether they contain the search query
+                var rowMatches = rowText.indexOf(searchQuery) > -1;
+                $(this).toggle(rowMatches);
+
+                // Update the foundMatch flag based on rowMatches
+                foundMatch = foundMatch || rowMatches;
+            });
+
+            // Show/hide the "No matching data" row based on the foundMatch flag
+            $('#noMatchingData').toggle(!foundMatch);
+        });
+
+        // Attach a keypress event to the search input to trigger search on Enter key
+        $('#searchInput').on('keypress', function(e) {
+            if (e.which === 13) { // 13 is the key code for Enter
+                // Prevent the default form submission behavior on Enter key
+                e.preventDefault();
+            }
+        });
+
     });
 </script>
 <?= $this->endSection(); ?>
