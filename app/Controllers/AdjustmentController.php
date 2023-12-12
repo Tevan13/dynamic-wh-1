@@ -142,7 +142,7 @@ class AdjustmentController extends Controller
                     'kode_rak' => $rak,
                     'lot' => $lot,
                     'quantity' => $quantity,
-                    'status' => 'checkout',
+                    'status' => $existingTransaksi['status'],
                     'pic' => $pic,
                     'tgl_adjust' => date('Y-m-d H:i:s'),
                 ]),
