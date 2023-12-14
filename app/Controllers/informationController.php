@@ -25,8 +25,7 @@ class informationController extends BaseController
         $infoRak = $this->infoModel->getInfoRak();
 
         $data = [
-            'dataRak' => $infoRak,
-            'title' => 'Informasi Rak'
+            'dataRak' => $infoRak
         ];
         return view('informationRak', $data);
     }

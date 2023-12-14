@@ -71,10 +71,9 @@
         }
     }
 </style>
-<title><?= $title ?></title>
 <div class="main-block">
     <form action="<?= base_url('Checkin/store') ?>" method="post" enctype="multipart/form-data" id="form-scan">
-        <h1><?= $title ?> LTS</h1>
+        <h1>SCAN LTS</h1>
         <div class="info">
             <input type="text" name="tgl_ci" id="liveTime" readonly>
             <label class="form-label">SCAN</label>
@@ -84,9 +83,9 @@
                 <select id="pic" name="pic" class="form-select" required>
                     <option value="">--Pilih PIC--</option>
                     <?php
-                    $pic = $picList;
-                    array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
-                    foreach ($pic as $item) :
+                        $pic = $picList;
+                        array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
+                        foreach ($pic as $item) :
                     ?>
                         <option value="<?= $item['pic']; ?>"><?= $item['pic']; ?></option>
                     <?php endforeach; ?>

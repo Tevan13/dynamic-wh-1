@@ -1,16 +1,12 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
-<title><?= $title ?></title>
+
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-<<<<<<< Updated upstream
             <h1>Informasi Rak</h1>
             <table border="0" cellspacing="5px" cellpadding="5px" style="float: right;">
-=======
-            <h1><?= $title ?></h1>
->>>>>>> Stashed changes
             <form action="<?= base_url('/export-information-rak') ?>" method="post" class='mt-3'>
                 <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
                 <a href="<?= base_url('/over-area') ?>" class="btn btn-primary">Over Area</a>

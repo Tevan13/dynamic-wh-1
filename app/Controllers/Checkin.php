@@ -51,7 +51,7 @@ class Checkin extends Controller
         }
 
         $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)
-            ->where('status', 'checkin')->first();
+                        ->where('status', 'checkin')->first();
         if ($existingScan !== null) {
             session()->setFlashdata("fail", "LTS ini sudah terscan. Mohon scan LTS lain");
             return redirect()->route('scan-ci');

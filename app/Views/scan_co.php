@@ -71,10 +71,9 @@
         }
     }
 </style>
-<title><?= $title ?></title>
 <div class="main-block">
     <form id="form-scan">
-        <h1><?= $title ?> LTS</h1>
+        <h1>SCAN CHECK OUT LTS</h1>
         <div class="info">
             <input type="text" name="tgl_ci" id="liveTime" readonly>
             <div class="form-group">
@@ -225,7 +224,6 @@
                                 timer: 1500
                             }).then(function() {
                                 // Additional actions if needed
-                                window.location.href = "<?= base_url('scan-co'); ?>";
                             });
                         } else {
                             Swal.fire({
