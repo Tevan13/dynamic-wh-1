@@ -5,20 +5,16 @@
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-<<<<<<< Updated upstream
             <h1>Informasi Rak</h1>
             <table border="0" cellspacing="5px" cellpadding="5px" style="float: right;">
-=======
-            <h1><?= $title ?></h1>
->>>>>>> Stashed changes
-            <form action="<?= base_url('/export-information-rak') ?>" method="post" class='mt-3'>
-                <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
-                <a href="<?= base_url('/over-area') ?>" class="btn btn-primary">Over Area</a>
-            </form>
+                <form action="<?= base_url('/export-information-rak') ?>" method="post" class='mt-3'>
+                    <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
+                    <a href="<?= base_url('/over-area') ?>" class="btn btn-primary">Over Area</a>
+                </form>
                 <tbody>
                     <tr>
                         <td>Search:</td>
-                        <td><input class="form-control" type="text" placeholder="Search..." name="search" id="searchInput" ></td>
+                        <td><input class="form-control" type="text" placeholder="Search..." name="search" id="searchInput"></td>
                     </tr>
                 </tbody>
             </table>
@@ -75,21 +71,21 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-        $('#searchInput').on('input', function () {
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() {
             var search = $(this).val().toLowerCase();
             var foundMatch = false;
 
-            $('#table_id tbody tr').each(function () {
+            $('#table_id tbody tr').each(function() {
                 var rowText = $(this).text().toLowerCase();
                 var rowMatches = rowText.indexOf(search) > -1;
                 $(this).toggle(rowMatches);
 
-                foundMatch =foundMatch ||rowMatches;
+                foundMatch = foundMatch || rowMatches;
             })
             $('#noMatchingData').toggle(!foundMatch);
         })
-        $('#searchInput').on('keypress', function (e) {
+        $('#searchInput').on('keypress', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
             }
