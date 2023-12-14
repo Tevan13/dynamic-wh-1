@@ -36,6 +36,8 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+$routes->post('/adjustment', 'AdjustmentController::store');
+
 $routes->get('/master_rak', 'rakController::index', ['as' => 'master_rak']);
 $routes->get('/login', 'loginController::index', ['as' => 'login']);
 
