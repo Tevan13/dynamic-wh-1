@@ -1,11 +1,11 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
-
+<title><?= $title ?></title>
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-            <h1 class="card-title">History Transaksi</h1>
+            <h1 class="card-title"><?= $title ?></h1>
             <button class="tablink btn btn-info" onclick="nextReport('adjustment')" style="float: right;">History
                 Adjustment</button>
             <button class="tablink btn btn-info" onclick="nextReport('checkOut')" style="float: right; margin-right: 5px;">History Check
@@ -16,13 +16,13 @@
                 <tbody>
                     <tr>
                         <td scope="col">Choose Date: </td>
-                        <td scope="col"><input type="date" class="form-control" id="min" name="min"></td>
+                        <td scope="col"><input type="date" class="form-control" id="min" name="min" value="<?= $start ?>"></td>
                         <td rowspan="2">
                             <button style="font-size:16px" class="btn btn-primary" id="search">Search <i class="fa fa-search"></i></button>
-                            <!-- Add the Export Excel buttons for each tab -->
-                            <button style="font-size:16px; display:none;" class="btn btn-success" id="exportAdjustment">Export Adjustment Excel <i class="fa fa-file-excel"></i></button>
-                            <button style="font-size:16px; display:none;" class="btn btn-success" id="exportCheckOut" onclick="location.href='<?php echo base_url('HistoryTransaksi/exportCheckout'); ?>'">Export CheckOut Excel <i class="fa fa-file-excel"></i></button>
-                            <button style="font-size:16px; display:none;" class="btn btn-success" id="exportCheckIn" onclick="location.href='<?php echo base_url('HistoryTransaksi/exportCheckin'); ?>'">Export CheckIn Excel <i class="fa fa-file-excel"></i></button>
+                            <button style="font-size:16px;" class="btn btn-success" id="exportCheckIn">Export Excel <i class="fa fa-file-excel"></i></button>
+                            <form id="exportForm" action="<?= base_url('HistoryTransaksi/exportAllData') ?>" method="get">
+                                <input type="hidden" id="minDateInput" name="min" value="">
+                            </form>
                         </td>
                     </tr>
                 </tbody>
@@ -177,6 +177,7 @@
                         <th>Rak</th>
                         <th>PIC</th>
                         <th>Status</th>
+                        <th>Quantity</th>
                         <th>Tanggal Adjustment</th>
                     </tr>
                     <?php
@@ -239,9 +240,21 @@
 
             // Convert the date format to YYYY-MM-DD (PHP-compatible format)
             var formattedMinDate = formatDate(minDate);
-            console.log(formattedMinDate)
+            console.log('minDate:', minDate);
+            console.log('formattedMinDate:', formattedMinDate);
             // Redirect to the same page with the selected date range as query parameters
-            window.location.href = '<?= base_url('history/') ?>?min=' + minDate;
+            window.location.href = '<?= base_url('history/') ?>?min=' + formattedMinDate;
+        });
+        $('#exportCheckIn').on('click', function() {
+            // Get the selected date
+            var minDate = $('#min').val();
+            var formattedMinDate = formatDate(minDate);
+
+            // Set the value in the hidden input
+            $('#minDateInput').val(formattedMinDate);
+
+            // Submit the form to initiate the download
+            $('#exportForm').submit();
         });
         // Function to format date to YYYY-MM-DD
         function formatDate(inputDate) {
@@ -298,21 +311,6 @@
             tabcontent[i].style.display = "none";
         }
         document.getElementById(varId).style.display = "block";
-
-        // Show/hide Export Excel buttons based on the active tab
-        if (varId === 'adjustment') {
-            $('#exportAdjustment').show();
-            $('#exportCheckOut').hide();
-            $('#exportCheckIn').hide();
-        } else if (varId === 'checkOut') {
-            $('#exportAdjustment').hide();
-            $('#exportCheckOut').show();
-            $('#exportCheckIn').hide();
-        } else if (varId === 'checkIn') {
-            $('#exportAdjustment').hide();
-            $('#exportCheckOut').hide();
-            $('#exportCheckIn').show();
-        }
     }
 
     document.getElementById("defaultOpen").click();
