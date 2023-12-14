@@ -73,7 +73,7 @@
 </style>
 <title><?= $title ?></title>
 <div class="main-block">
-    <form id="form-scan">
+    <form id="form-scan" action='<? base_url('adjustment') ?>' method='POST'>
         <h1><?= $title ?></h1>
         <div class="info">
             <input type="text" name="tgl_adjust" id="liveTime" readonly disabled>
