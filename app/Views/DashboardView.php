@@ -5,38 +5,44 @@
     .card-title {
         text-align: center;
     }
+
     a {
         color: black;
     }
+
     a :hover {
         color: azure;
     }
+
     #card {
-        display: flex; 
-        flex-direction:column; 
-        overflow:hidden; 
-        background-color:#24a0ed;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: #24a0ed;
         /* background-color:#198754;  */
         /* background-color:#24a0ed;  */
-        width:100%; 
+        width: 100%;
         height: 100%;
     }
+
     .card-item {
-        display: flex; 
-        width:32.2%; 
-        margin:8px;
+        display: flex;
+        width: 32.2%;
+        margin: 8px;
     }
+
     #big-card {
-        display: flex; 
-        flex-wrap:wrap; 
-        flex-direction:row; 
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
         list-style: none;
     }
 </style>
+<title><?= $title ?></title>
 <div class="container-fluid p-3">
     <div class="card">
         <div class="card-body">
-            <h1>Dashboard</h1>
+            <h1><?= $title ?></h1>
             <div>=====================================</div>
             <h5>Welcome to Dynamic Warehouse System</h5>
         </div>

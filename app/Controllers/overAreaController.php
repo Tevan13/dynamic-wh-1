@@ -22,7 +22,8 @@ class overAreaController extends BaseController
         $overArea = $this->getData();
 
         $data = [
-            'overArea' => $overArea
+            'overArea' => $overArea,
+            'title' => 'Over Area'
         ];
 
         // echo '<pre>';

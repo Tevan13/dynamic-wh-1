@@ -137,18 +137,28 @@ class rakController extends BaseController
             $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         }
 
-        $spreadsheet = $render->load($file_excel);
-        $data = $spreadsheet->getActiveSheet()->toArray();
+        try {
+            $spreadsheet = $render->load($file_excel->getTempName());
+            $data = $spreadsheet->getActiveSheet()->toArray();
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            // Handle Excel format mismatch error
+            return $this->response->setStatusCode(400)->setJSON(['success' => false, 'message' => 'Error reading Excel file. Please ensure it is in the correct format.']);
+        }
+
+        $tipeRakMapping = [
+            'SLOT BESAR' => 'Besar',
+            'SLOT KECIL' => 'Kecil',
+            // Add more mappings as needed
+        ];
 
         $db = \Config\Database::connect();
         foreach ($data as $x => $row) {
             if ($x == 0) {
-                continue;
+                continue; // Skip header row
             }
 
-            $kode_rak = $row[1];
-            $tipe_rak = $row[2];
-            $status_rak = $row[3];
+            $kode_rak = $row[2];
+            $tipe_rak = $row[3];
 
             // Check if the rak exists by kode rak in the table
             $existingRak = $db->table('tb_rak')->getWhere(['kode_rak' => $kode_rak])->getRow();
@@ -157,19 +167,16 @@ class rakController extends BaseController
             $db->transBegin();
             try {
                 if ($existingRak) {
-                    // Update existing data
-                    $updatedata = [
-                        'tipe_rak' => $tipe_rak,
-                        'status_rak' => $status_rak,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                    ];
-                    session()->setFlashdata('message', '<div class="alert alert-success" style="font-color:white"><b>Data Berhasil Diperbarui</b></div>');
+                    // Existing rack found, skip
+                    session()->setFlashdata('message', '<div class="alert alert-warning" style="font-color:white"><b>Data dengan Kode Rak ' . $kode_rak . ' sudah ada. Data dilewati.</b></div>');
                 } else {
+                    // Rack not found, insert new data
                     $simpandata = [
                         'kode_rak' => $kode_rak,
-                        'tipe_rak' => $tipe_rak,
-                        'status_rak' => $status_rak,
-                        'created_at' => date('Y-m-d H:i:s')
+                        'tipe_rak' => isset($tipeRakMapping[$tipe_rak]) ? $tipeRakMapping[$tipe_rak] : $tipe_rak, // Map tipe_rak if needed
+                        'status_rak' => 'Kosong',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'total_packing' => 0,
                     ];
                     $db->table('tb_rak')->insert($simpandata);
                     session()->setFlashdata('message', '<div class="alert alert-success" style="font-color:white"><b>Data Berhasil Ditambahkan</b></div>');

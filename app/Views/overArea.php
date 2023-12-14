@@ -1,11 +1,11 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
-
+<title><?= $title ?></title>
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-            <h1>Over Area Rak</h1>
+            <h1><?= $title ?> Rak</h1>
             <form action="<?= base_url('overAreaController/export') ?>" method="post" class='mt-3'>
                 <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
                 <a href="<?= base_url('/information-rak') ?>" class="btn btn-primary">Kembali ke Informasi Rak</a>

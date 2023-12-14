@@ -12,10 +12,7 @@ class Dashboard extends Controller
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
-
-        $model = new DashboardModel;
         $data['title'] = 'Dashboard';
-        $data['getTransaksi'] = $model->getTransaksi();
         echo view('DashboardView', $data);
     }
 }
