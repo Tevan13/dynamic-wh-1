@@ -146,9 +146,6 @@ class AdjustmentController extends Controller
 
         $nowPack = $this->TransaksiModel->where('idRak', $rak['idRak'])
                     ->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
-        // $nowPack = $this->TransaksiModel->where('idRak', $rak['idRak'])
-        //             ->whereIn('status', ['checkin', 'adjust_ci'])->countAllResults();
-        // return dd(count($nowPack), intval($max));
         if (count($nowPack) == intval($max)) {
             $this->rModel->protect(false)->where('kode_rak', $rak['kode_rak'])
                 ->set(['status_rak' => 'Penuh', 'total_packing' => count($nowPack)])->update();
