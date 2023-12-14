@@ -39,6 +39,10 @@ class Checkin extends Controller
         $scan = $this->request->getPost('scan');
         $pic = $this->request->getPost('pic');
         $data = explode(',', $scan);
+        if (count($data) !== 4) {
+            session()->setFlashdata("fail", "Mohon scan QR Code LTS!");
+            return redirect()->route('scan-ci');
+        }
         $partNo = $data[0];
         $lot = $data[1];
         $quantity = $data[2];
