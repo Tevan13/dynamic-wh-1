@@ -13,8 +13,7 @@ use CodeIgniter\Controller;
 
 class AdjustmentController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct() {
         $this->picModel = new picModel();
         $this->rModel = new rakModel();
         $this->adjustModel = new adjustmentModel();
@@ -22,8 +21,8 @@ class AdjustmentController extends Controller
         $this->PnModel = new PartnumberModel();
         $this->HistoryModel = new HistoryTransaksiModel();
     }
-    public function index()
-    {
+
+    public function index() {
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
@@ -34,8 +33,143 @@ class AdjustmentController extends Controller
         ];
         return view('adjustment', $data);
     }
+
+    public function store() {
+        $pic = $this->request->getPost('pic');
+        $uniqueAdjust = [];
+        $now = date('Y-m-d H:i:s');
+        $data = json_decode($this->request->getPost('hasil-scan'));
+        $rakOver = $this->rModel->where('tipe_rak', 'Over Area')->first();
+        $rak = $this->rModel->where('kode_rak', $this->request->getPost('rak'))->first();
+        $pn = $this->PnModel->where('part_number', $data[0]->part_number)->first();
+        $transaksi = $this->TransaksiModel->where('idRak', $rak['idRak'])
+            ->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
+        $max = $pn['max_kapasitas'];
+        $aktual = $rak['total_packing'];
+        $history = [];
+
+        foreach ($data as $d) {
+            $exist = $this->TransaksiModel->where('idRak', $rak['idRak'])
+                ->whereIn('status', ['checkin', 'adjust_ci'])
+                ->where('unique_scanid', $d->unique_scanid)->first();
+
+            if ($exist !== null) {
+                $history[] = [
+                    'idTransaksi' => $exist['idTransaksi'],
+                    'unique_scanid' => $d->unique_scanid,
+                    'part_number' => $d->part_number,
+                    'kode_rak' => $d->rak,
+                    'lot' => $d->lts,
+                    'quantity' => $d->qty,
+                    'status' => 'adjust_ci',
+                    'pic' => $d->pic,
+                    'tgl_adjust' => $now,
+                ];
+
+                $uniqueAdjust[] = $exist['unique_scanid'];
+
+                $this->TransaksiModel->protect(false)
+                    ->where('unique_scanid', $exist['unique_scanid'])
+                    ->set(['pic' => $d->pic, 'status' => 'adjust_ci', 'tgl_adjust' => $now])
+                    ->update();
+            } else {
+                $insertedId;
+                if ((intval($aktual) + 1) <= intval($max)) {
+                    $dataInput = [
+                        'idPartNo' => $pn['idPartNo'],
+                        'idRak' => $rak['idRak'],
+                        'unique_scanid' => $d->unique_scanid,
+                        'lot' => $d->lts,
+                        'quantity' => $d->qty,
+                        'status' => 'adjust_ci',
+                        'pic' => $d->pic,
+                        'tgl_ci' => $now,
+                    ];
+
+                    $uniqueAdjust[] = $d->unique_scanid;
+
+                    $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+                    $insertedID = $this->TransaksiModel->insertID();
+                } else {
+                    $dataInput = [
+                        'idPartNo' => $pn['idPartNo'],
+                        'idRak' => $rakOver['idRak'],
+                        'unique_scanid' => $d->unique_scanid,
+                        'lot' => $d->lts,
+                        'quantity' => $d->qty,
+                        'status' => 'adjust_ci',
+                        'pic' => $d->pic,
+                        'tgl_ci' => $now,
+                    ];
+
+                    $store = $this->TransaksiModel->protect(false)->insert($dataInput, false);
+                    $insertedID = $this->TransaksiModel->insertID();
+                }
+                $history[] = [
+                    'idTransaksi' => $insertedID,
+                    'unique_scanid' => $d->unique_scanid,
+                    'part_number' => $d->part_number,
+                    'kode_rak' => $d->rak,
+                    'lot' => $d->lts,
+                    'quantity' => $d->qty,
+                    'status' => 'adjust_ci',
+                    'pic' => $d->pic,
+                    'tgl_adjust' => $now,
+                ];
+            }
+        }
+
+        $transaksi2 = $this->TransaksiModel->where('idRak', $rak['idRak'])
+            ->whereIn('status', ['checkin', 'adjust_ci'])
+            ->whereNotIn('unique_scanid', $uniqueAdjust)->findAll();
+
+        if (count($transaksi2) > 0) {
+            foreach ($transaksi2 as $d) {
+                $history[] = [
+                    'idTransaksi' => $d['idTransaksi'],
+                    'unique_scanid' => $d['unique_scanid'],
+                    'part_number' => $pn['part_number'],
+                    'kode_rak' => $rak['kode_rak'],
+                    'lot' => $d['lot'],
+                    'quantity' => $d['quantity'],
+                    'status' => 'adjust_co',
+                    'pic' => $d['pic'],
+                    'tgl_adjust' => $now,
+                ];
+
+                $this->TransaksiModel->protect(false)
+                ->where('unique_scanid', $d['unique_scanid'])
+                ->set(['pic' => $pic, 'status' => 'adjust_co', 'tgl_adjust' => $now])
+                ->update();
+            }
+        }
+
+        $nowPack = $this->TransaksiModel->where('idRak', $rak['idRak'])
+                    ->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
+        // $nowPack = $this->TransaksiModel->where('idRak', $rak['idRak'])
+        //             ->whereIn('status', ['checkin', 'adjust_ci'])->countAllResults();
+        // return dd(count($nowPack), intval($max));
+        if (count($nowPack) == intval($max)) {
+            $this->rModel->protect(false)->where('kode_rak', $rak['kode_rak'])
+                ->set(['status_rak' => 'Penuh', 'total_packing' => count($nowPack)])->update();
+        }
+        if (count($nowPack) < intval($max)) {
+            $this->rModel->protect(false)->where('kode_rak', $rak['kode_rak'])
+                ->set(['status_rak' => 'Terisi', 'total_packing' => count($nowPack)])->update();
+        }
+
+        $historyData = [
+            'trans_metadata' => json_encode($history),
+        ];
+        $this->HistoryModel->insert($historyData);
+
+        session()->setFlashdata("success", "Data adjusted successfully");
+        return redirect()->route('adjustment');
+    }
+
     public function add()
     {
+        $history = [];
         // Check if it's a POST request and get JSON data from the AJAX request
         if ($this->request->isAJAX()) {
             $json = $this->request->getJSON();
@@ -57,10 +191,17 @@ class AdjustmentController extends Controller
                     return $this->response->setStatusCode(400)->setJSON(['success' => false, 'message' => 'Part number tidak ditemukan!']);
                 }
 
-                $this->TransaksiModel->protect(false)->where('idRak', $rakRow['idRak'])
-                    ->set(['pic' => $pic, 'status' => 'adjust_co', 'tgl_adjust' => date('Y-m-d H:i:s')])
-                    ->update();
+                // $cek = $this->TransaksiModel->where('idRak', $rakRow['idRak'])->where("status != 'checkout' OR status != 'adjust_co'")->get();
+                $cek = $this->TransaksiModel->where('idRak', $rakRow['idRak'])->where("status != 'checkout' OR status != 'adjust_co'");
+
+                $history[] = $cek;
+
+                // $this->TransaksiModel->protect(false)->where('idRak', $rakRow['idRak'])
+                //     ->set(['pic' => $pic, 'status' => 'adjust_co', 'tgl_adjust' => date('Y-m-d H:i:s')])
+                //     ->update();
             }
+
+            return $this->response->setStatusCode(400)->setJSON(['success' => false, 'message' => $history]);
 
             // Check each 'unique_scanid' in the JSON
             foreach ($json as $data) {

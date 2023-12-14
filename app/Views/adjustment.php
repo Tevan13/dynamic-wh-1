@@ -72,170 +72,196 @@
     }
 </style>
 <div class="main-block">
-    <form id="form-scan">
+    <form id="form-scan" action='/adjustment' method='POST'>
         <h1>SCAN ADJUSTMENT</h1>
-        <div class="info">
-            <input type="text" name="tgl_adjust" id="liveTime" readonly disabled>
-            <div class="form-group">
-                <label for="rak" class="form-label">RAK</label>
-                <select id="rak" name="rak" class="form-select" required>
-                    <option value="">--Pilih RAK--</option>
-                    <?php
-                    $rak = $rakList;
-                    array_multisort(array_column($rak, 'kode_rak'), SORT_ASC, $rak);
-                    foreach ($rak as $items) :
-                    ?>
-                        <option value="<?= $items['kode_rak']; ?>"><?= $items['kode_rak']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="pic" class="form-label">PIC</label>
-                <select id="pic" name="pic" class="form-select" required>
-                    <option value="">--Pilih PIC--</option>
-                    <?php
-                    $pic = $picList;
-                    array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
-                    foreach ($pic as $item) :
-                    ?>
-                        <option value="<?= $item['pic']; ?>"><?= $item['pic']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-    </form>
-    <div class="form-group">
-        <label class="form-label">SCAN</label>
-        <input type="text" name="scan" placeholder="Masukkan scan LTS disini">
-        <label class="form-label">DATA YANG AKAN DI ADJUST</label>
-        <textarea id="hasil-scan" name="hasil-scan" rows="10" cols="20" disabled></textarea>
+        <div class="form-group">
+            <label for="rak" class="form-label">RAK</label>
+            <select id="rak" name="rak" class="form-select" required>
+                <option value="">--Pilih RAK--</option>
+                <?php
+                $rak = $rakList;
+                array_multisort(array_column($rak, 'kode_rak'), SORT_ASC, $rak);
+                foreach ($rak as $items) :
+                ?>
+                    <option value="<?= $items['kode_rak']; ?>"><?= $items['kode_rak']; ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="pic" class="form-label">PIC</label>
+            <select id="pic" name="pic" class="form-select" required>
+                <option value="">--Pilih PIC--</option>
+                <?php
+                $pic = $picList;
+                array_multisort(array_column($pic, 'pic'), SORT_ASC, $pic);
+                foreach ($pic as $item) :
+                ?>
+                    <option value="<?= $item['pic']; ?>"><?= $item['pic']; ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <label class="form-label">SCAN</label>
+            <input type="text" id="scan" name="scan" placeholder="Masukkan scan LTS disini">
+
+            <label class="form-label">DATA YANG AKAN DI ADJUST</label>
+            <textarea id="preview-scan" rows="10" cols="20" disabled></textarea>
+            <textarea class="d-none" id="hasil-scan" name="hasil-scan" rows="10" cols="20"></textarea>
+        </div>
         <div class="text-center">
-            <button type="submit" id="submitBtn" class="btn btn-outline-dark col-md-2 mx-auto" onclick="handleEnter()">ENTER</button>
+            <button type="submit" id="enterBtn" class="btn btn-outline-dark col-md-2 mx-auto" onclick="handleEnter()">ENTER</button>
         </div>
-        <!-- Add some space between the buttons -->
         <div class="mt-2">
-            <button type="button" class="btn btn-primary" onclick="showConfirmation()">Submit</button>
+            <button type="button" id='submitBtn' class="btn btn-primary" onclick="showConfirmation()">Submit</button>
         </div>
-    </div>
-
+    </form>
 </div>
 
-</div>
 <script>
-    var jsonDataArray = [];
-    // Function to handle the ENTER button click
+    let jsonDataArray = [];
+    let rak = document.getElementById('rak');
+    let pic = document.getElementById('pic');
+    let scan = document.getElementById('scan');
+    let prevScan = document.getElementById('preview-scan');
+    let hasilScan = document.getElementById('hasil-scan');
+
     function handleEnter() {
-        // Get values from the form
-        var rakValue = document.getElementById('rak').value;
-        var picValue = document.getElementById('pic').value;
-        var scanValue = document.getElementsByName('scan')[0].value;
+        let rakValue = rak.value;
+        let picValue = pic.value;
+        let scanDataArray = scan.value.split(',');
 
-        // Split the scan data into separate fields
-        var scanDataArray = scanValue.split(',');
-
-        var isDuplicate = jsonDataArray.some(function(item) {
-            return item.unique_scanid === scanDataArray[3].trim();
-        });
-        if (!isDuplicate) {
-            // Form a string with the desired format
-            var formattedData = rakValue + ';' + picValue + ';' + scanDataArray[0].trim() + ';' + scanDataArray[3].trim()
-            // + ';' + scanDataArray[1].trim() + ';' + scanDataArray[2].trim() + ';' + scanDataArray[3].trim()
-            // Update the textarea
-            var textarea = document.getElementById('hasil-scan');
-            textarea.value += formattedData + '\n';
-            // Update the JSON data (you may customize this part based on your needs)
-            var jsonData = {
+        let isDuplicate = jsonDataArray.some((item) => item.unique_scanid === scanDataArray[3]);
+        if (!isDuplicate && rakValue !== '' && picValue !== '') {
+            let formattedData = rakValue + ';' + picValue + ';' + scanDataArray[0] + ';' + scanDataArray[3]
+            prevScan.value += formattedData + '\n';
+            let jsonData = {
                 rak: rakValue,
                 pic: picValue,
-                part_number: scanDataArray[0].trim(),
-                lts: scanDataArray[1].trim(),
-                qty: scanDataArray[2].trim(),
-                unique_scanid: scanDataArray[3].trim()
+                part_number: scanDataArray[0],
+                lts: scanDataArray[1],
+                qty: scanDataArray[2],
+                unique_scanid: scanDataArray[3]
             };
-            // Push the JSON object to the array
             jsonDataArray.push(jsonData);
+            hasilScan.value = JSON.stringify(jsonDataArray);
 
-            console.log(jsonDataArray); // Display the JSON data in the console
+            console.log(jsonDataArray);
         } else {
-            alert('LTS ini sudah terscan!.');
+            alert('Mohon untuk tidak mengisi kolom RAK, PIC dan mengecek apakah LTS ini Sudah terscan atau belum.');
         }
-        // Clear the scan input field
-        document.getElementsByName('scan')[0].value = '';
+        scan.value = '';
     }
-    document.getElementsByName('scan')[0].addEventListener('keyup', function(event) {
+
+    scan.addEventListener('keyup', function(event) {
         if (event.key === 'Enter') {
-            handleEnter();
             event.preventDefault();
         }
     });
 
-    document.getElementById('submitBtn').addEventListener('click', function(event) {
+    document.getElementById('enterBtn').addEventListener('click', function(event) {
         event.preventDefault();
     });
 
     function showConfirmation() {
-        var rakValue = document.getElementById('rak').value;
-        var countObjects = jsonDataArray.length;
+        let countObjects = jsonDataArray.length;
 
         Swal.fire({
             title: "Data akan teradjustment!",
-            text: "Data dari " + rakValue + " akan disesuaikan sebanyak " + countObjects + "!",
+            text: "Data dari " + rak.value + " akan disesuaikan sebanyak " + countObjects + "!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonClass: "btn-danger",
             confirmButtonText: "Yes!",
             cancelButtonText: "No!",
-            closeOnConfirm: false,
-            closeOnCancel: false
         }).then((result) => {
             if (result.isConfirmed) {
-                // User clicked "Yes", proceed with the AJAX request
-
-                let json = JSON.stringify(jsonDataArray);
-                console.log(json);
-                let url = "<?= base_url('AdjustmentController/add'); ?>";
-
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: json,
-                    dataType: "JSON",
-                    success: function(data) {
-                        if (data.success) {
-                            console.log(data);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: data.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                window.location.href = "<?= base_url('scan-co'); ?>";
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: data.message,
-                            });
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR.responseJSON); // Log the entire response
-                        console.log(jqXHR.responseJSON.received_data); // Log only the received_data field
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Error: ' + jqXHR.responseJSON.message,
-                        });
-                    }
-                });
-
+                document.getElementById('form-scan').submit();
             } else {
-                // User clicked "No" or closed the dialog
                 Swal.fire("Cancelled", "Tidak ada data adjustment!", "error");
             }
         });
     }
+
+    $(function() {
+    <?php if (session()->has("success")) { ?>
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: `<?= session("success") ?>`,
+        showConfirmButton: false,
+        timer: 1500
+      })
+    <?php } ?>
+    <?php if (session()->has("fail")) { ?>
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: `<?= session("fail") ?>`,
+      })
+    <?php } ?>
+    });
+
+    // function showConfirmation() {
+    //     let rakValue = document.getElementById('rak').value;
+    //     let countObjects = jsonDataArray.length;
+
+    //     Swal.fire({
+    //         title: "Data akan teradjustment!",
+    //         text: "Data dari " + rakValue + " akan disesuaikan sebanyak " + countObjects + "!",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonClass: "btn-danger",
+    //         confirmButtonText: "Yes!",
+    //         cancelButtonText: "No!",
+    //         closeOnConfirm: false,
+    //         closeOnCancel: false
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             // User clicked "Yes", proceed with the AJAX request
+
+    //             let json = JSON.stringify(jsonDataArray);
+    //             console.log(json);
+    //             let url = "<?= base_url('AdjustmentController/add'); ?>";
+
+    //             $.ajax({
+    //                 url: url,
+    //                 type: "POST",
+    //                 data: json,
+    //                 dataType: "JSON",
+    //                 success: function(data) {
+    //                     if (data.success) {
+    //                         console.log(data);
+    //                         Swal.fire({
+    //                             icon: 'success',
+    //                             title: 'Success',
+    //                             text: data.message,
+    //                             showConfirmButton: false,
+    //                             timer: 1500
+    //                         }).then(function() {
+    //                             window.location.href = "<?= base_url('scan-co'); ?>";
+    //                         });
+    //                     } else {
+    //                         Swal.fire({
+    //                             icon: 'error',
+    //                             title: 'Oops...',
+    //                             text: data.message,
+    //                         });
+    //                     }
+    //                 },
+    //                 error: function(jqXHR, textStatus, errorThrown) {
+    //                     console.log(jqXHR.responseJSON); // Log the entire response
+    //                     console.log(jqXHR.responseJSON.received_data); // Log only the received_data field
+    //                     Swal.fire({
+    //                         icon: 'error',
+    //                         title: 'Oops...',
+    //                         text: 'Error: ' + jqXHR.responseJSON.message,
+    //                     });
+    //                 }
+    //             });
+
+    //         } else {
+    //             // User clicked "No" or closed the dialog
+    //             Swal.fire("Cancelled", "Tidak ada data adjustment!", "error");
+    //         }
+    //     });
+    // }
 </script>
 
 <?= $this->endSection(); ?>
