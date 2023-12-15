@@ -22,7 +22,7 @@
         </div>
       </form>
 
-      <form action="/export-part" method="post" class='mt-3'>
+      <form action="<?= base_url('/export-part') ?>" method="post" class='mt-3'>
         <button class="btn btn-success" type="submit" style="display: inline-block;">Export Excel</button>
       </form>
 
@@ -58,6 +58,7 @@
                           <select class="form-control" id="tipe_rak" name="tipe_rak" required>
                             <option value="Kecil">Kecil</option>
                             <option value="Besar">Besar</option>
+                            <option value="Over Area">Over Area</option>
                           </select>
                         </div>
                       </div>
@@ -144,6 +145,7 @@
                             <select class="form-select" id="tipe_rak" name="tipe_rak">
                               <option value="Besar" <?= $part['tipe_rak'] == 'Besar' ? 'selected' : '' ?>>Besar</option>
                               <option value="Kecil" <?= $part['tipe_rak'] == 'Kecil' ? 'selected' : '' ?>>Kecil</option>
+                              <option value="Over Area" <?= $part['tipe_rak'] == 'Over Area' ? 'selected' : '' ?>>Over Area</option>
                             </select>
                           </div>
                           <div class="modal-footer">
@@ -166,7 +168,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="/master-part/<?= $part['idPartNo'] ?>" method="POST" id="form-delete">
+                        <form action="<?= base_url('') ?>/master-part/<?= $part['idPartNo'] ?>" method="POST" id="form-delete">
                           <input type="hidden" name="_method" value="DELETE">
                           <div class="mb-3">
                             <label class="form-label">Part Number</label>
@@ -224,37 +226,37 @@
       })
     <?php } ?>
   });
-    $(document).ready(function () {
-        $('#searchInput').on('input', function () {
-            // Your search logic
-            var searchQuery = $(this).val().toLowerCase();
+  $(document).ready(function() {
+    $('#searchInput').on('input', function() {
+      // Your search logic
+      var searchQuery = $(this).val().toLowerCase();
 
-            // Flag to track if any matching row is found
-            var foundMatch = false;
+      // Flag to track if any matching row is found
+      var foundMatch = false;
 
-            // Iterate through each content row in the table
-            $('#table_id tbody tr').each(function () {
-                var rowText = $(this).text().toLowerCase();
-                // Show/hide rows based on whether they contain the search query
-                var rowMatches = rowText.indexOf(searchQuery) > -1;
-                $(this).toggle(rowMatches);
+      // Iterate through each content row in the table
+      $('#table_id tbody tr').each(function() {
+        var rowText = $(this).text().toLowerCase();
+        // Show/hide rows based on whether they contain the search query
+        var rowMatches = rowText.indexOf(searchQuery) > -1;
+        $(this).toggle(rowMatches);
 
-                // Update the foundMatch flag based on rowMatches
-                foundMatch = foundMatch || rowMatches;
-            });
+        // Update the foundMatch flag based on rowMatches
+        foundMatch = foundMatch || rowMatches;
+      });
 
-            // Show/hide the "No matching data" row based on the foundMatch flag
-            $('#noMatchingData').toggle(!foundMatch);
-        });
+      // Show/hide the "No matching data" row based on the foundMatch flag
+      $('#noMatchingData').toggle(!foundMatch);
+    });
 
-        // Attach a keypress event to the search input to trigger search on Enter key
-        $('#searchInput').on('keypress', function (e) {
-            if (e.which === 13) { // 13 is the key code for Enter
-                // Prevent the default form submission behavior on Enter key
-                e.preventDefault();
-            }
-        });
-    })
+    // Attach a keypress event to the search input to trigger search on Enter key
+    $('#searchInput').on('keypress', function(e) {
+      if (e.which === 13) { // 13 is the key code for Enter
+        // Prevent the default form submission behavior on Enter key
+        e.preventDefault();
+      }
+    });
+  })
 </script>
 
 <?= $this->endSection(); ?>

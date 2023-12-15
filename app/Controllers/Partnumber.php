@@ -68,6 +68,7 @@ class Partnumber extends BaseController
     {
         $file = $this->request->getFile('fileexcel');
         $ext = $file->getClientExtension();
+
         if ($ext === 'xls') {
             $render = new Xls();
         } else {
@@ -76,29 +77,51 @@ class Partnumber extends BaseController
 
         $spreadsheet = $render->load($file);
         $data = $spreadsheet->getActiveSheet()->toArray();
+
         // Define a mapping array for 'Tipe Rak'
         $tipeRakMapping = [
             'SLOT BESAR' => 'Besar',
             'SLOT KECIL' => 'Kecil',
             // Add more mappings as needed
         ];
+
         foreach (array_slice($data, 1) as $d) {
             // Map 'Tipe Rak' value using the mapping array
-            $tipeRak = isset($tipeRakMapping[$d[2]]) ? $tipeRakMapping[$d[2]] : $d[2];
-            $insert = [
-                'part_number' => $d[0],
-                'tipe_rak' => $tipeRak,
-                'max_kapasitas' => $d[3],
-            ];
-            $store = $this->PartnumberModel->protect(false)->insert($insert, false);
-            if (!$store) {
-                session()->setFlashdata("fail", "Part Number gagal ditambahkan!");
-                return redirect()->route('master-part');
+            $tipeRak = isset($tipeRakMapping[$d[3]]) ? $tipeRakMapping[$d[3]] : 'Over Area';
+
+            // Set max_kapasitas to 99999 if $tipeRak is 'Over Area'
+            $maxKapasitas = ($tipeRak === 'Over Area') ? 99999 : $d[4];
+
+            // Check if the part_number already exists
+            $existingData = $this->PartnumberModel
+                ->where('part_number', $d[1])
+                ->first();
+
+            if ($existingData) {
+                // If the part_number exists, update the data
+                $updateData = [
+                    'tipe_rak' => $tipeRak,
+                    'max_kapasitas' => $maxKapasitas,
+                ];
+
+                $this->PartnumberModel
+                    ->where('part_number', $d[1])
+                    ->update($updateData);
+            } else {
+                // If the part_number doesn't exist, insert new data
+                $insertData = [
+                    'part_number' => $d[1],
+                    'tipe_rak' => $tipeRak,
+                    'max_kapasitas' => $maxKapasitas,
+                ];
+
+                $this->PartnumberModel->protect(false)->insert($insertData, false);
             }
         }
-        session()->setFlashdata("success", "Part Number berhasil ditambahkan!");
+        session()->setFlashdata("success", "Part Number berhasil diimpor!");
         return redirect()->route('master-part');
     }
+
     public function export()
     {
         $data = $this->PartnumberModel->findAll();

@@ -37,24 +37,39 @@ class HistoryTransaksi extends BaseController
         $transaksiData = $this->historyModel->getCheckin($status[0], $start);
         $transaksiData2 = $this->historyModel->getCheckout($status[1], $start);
         $adjustmentData = $this->historyModel->getAdjustment($start);
+        $combinedTransactions = [];
+
+        foreach ($adjustmentData as $adjustment) {
+            $transMetadataJson = $adjustment['trans_metadata'];
+
+            // Decode the JSON string into an array
+            $transMetadataArray = json_decode($transMetadataJson, true);
+
+            // Concatenate the transactions to the combined array
+            $combinedTransactions = array_merge($combinedTransactions, $transMetadataArray);
+        }
+        // foreach ($adjustmentData as $row) {
+        //     $adjustmentRow = json_decode($row['trans_metadata'], true);
+
+        //     // Check if $transaksi is an array before proceeding
+        //     if (is_array($adjustmentRow)) {
+        //         // Update the 'trans_metadata' field with the decoded array
+        //         $row['trans_metadata'] = $adjustmentRow;
+        //     }
+        // }
+        // echo '<pre>';
+        // var_dump($combinedTransactions);
+        // echo '</pre>';
 
         $this->decodeAndMergeMetadata($transaksiData);
         $this->decodeAndMergeMetadata($transaksiData2);
-        $this->decodeAndMergeMetadata($adjustmentData);
-        $mergedAdjustmentData = [];
-        foreach ($adjustmentData as $adjust) {
-            $mergedAdjustmentData = array_merge($mergedAdjustmentData, $adjust);
-        }
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
             'historyCheckout' => $transaksiData2,
-            'historyAdjustment' => $mergedAdjustmentData,
+            'historyAdjustment' => $combinedTransactions,
             'start' => $start,
         ];
-        // echo '<pre>';
-        // var_dump($mergedAdjustmentData);
-        // echo '</pre>';
         echo view('historyTransaksiView', $data);
     }
 

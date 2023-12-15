@@ -13,7 +13,8 @@ use CodeIgniter\Controller;
 
 class AdjustmentController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->picModel = new picModel();
         $this->rModel = new rakModel();
         $this->adjustModel = new adjustmentModel();
@@ -22,19 +23,20 @@ class AdjustmentController extends Controller
         $this->HistoryModel = new HistoryTransaksiModel();
     }
 
-    public function index() {
+    public function index()
+    {
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
         $data = [
             'picList' => $this->picModel->getPicList(),
-            'rakList' => $this->rModel->getMasterRAk(),
             'title' => 'SCAN ADJUSTMENT'
         ];
         return view('adjustment', $data);
     }
 
-    public function store() {
+    public function store()
+    {
         $pic = $this->request->getPost('pic');
         $uniqueAdjust = [];
         $now = date('Y-m-d H:i:s');
@@ -138,14 +140,14 @@ class AdjustmentController extends Controller
                 ];
 
                 $this->TransaksiModel->protect(false)
-                ->where('unique_scanid', $d['unique_scanid'])
-                ->set(['pic' => $pic, 'status' => 'adjust_co', 'tgl_adjust' => $now])
-                ->update();
+                    ->where('unique_scanid', $d['unique_scanid'])
+                    ->set(['pic' => $pic, 'status' => 'adjust_co', 'tgl_adjust' => $now])
+                    ->update();
             }
         }
 
         $nowPack = $this->TransaksiModel->where('idRak', $rak['idRak'])
-                    ->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
+            ->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
         if (count($nowPack) == intval($max)) {
             $this->rModel->protect(false)->where('kode_rak', $rak['kode_rak'])
                 ->set(['status_rak' => 'Penuh', 'total_packing' => count($nowPack)])->update();

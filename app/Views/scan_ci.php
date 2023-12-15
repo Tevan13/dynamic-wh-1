@@ -77,8 +77,6 @@
         <h1><?= $title ?> LTS</h1>
         <div class="info">
             <input type="text" name="tgl_ci" id="liveTime" readonly>
-            <label class="form-label">SCAN</label>
-            <input type="text" name="scan" placeholder="Masukkan scan LTS disini" autofocus required>
             <div class="form-group">
                 <label for="pic" class="form-label">PIC</label>
                 <select id="pic" name="pic" class="form-select" required>
@@ -92,6 +90,8 @@
                     <?php endforeach; ?>
                 </select>
             </div>
+            <label class="form-label">SCAN</label>
+            <input type="text" name="scan" placeholder="Masukkan scan LTS disini" autofocus required>
         </div>
         <button type="submit" href="#">Submit</button>
     </form>

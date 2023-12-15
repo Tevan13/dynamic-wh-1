@@ -190,10 +190,15 @@
 
     function showConfirmation() {
         var countObjects = jsonDataArray.length;
+        var countQuantity = 0; // Initialize the countQuantity variable
 
+        // Iterate through jsonDataArray and sum the quantities
+        for (var i = 0; i < jsonDataArray.length; i++) {
+            countQuantity += parseInt(jsonDataArray[i].qty, 10);
+        }
         Swal.fire({
             title: "Apakah anda yakin untuk checkout?",
-            text: "Data yang akan dicheckout sebanyak " + countObjects + "!",
+            text: "Data yang akan dicheckout sebanyak " + countQuantity + "!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-danger",

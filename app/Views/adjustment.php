@@ -72,21 +72,9 @@
     }
 </style>
 <div class="main-block">
-    <form id="form-scan" action='/adjustment' method='POST'>
+    <form id="form-scan" action='<?= base_url('/adjustment') ?>' method='POST'>
         <h1>SCAN ADJUSTMENT</h1>
         <div class="form-group">
-            <label for="rak" class="form-label">RAK</label>
-            <select id="rak" name="rak" class="form-select" required>
-                <option value="">--Pilih RAK--</option>
-                <?php
-                $rak = $rakList;
-                array_multisort(array_column($rak, 'kode_rak'), SORT_ASC, $rak);
-                foreach ($rak as $items) :
-                ?>
-                    <option value="<?= $items['kode_rak']; ?>"><?= $items['kode_rak']; ?></option>
-                <?php endforeach; ?>
-            </select>
-
             <label for="pic" class="form-label">PIC</label>
             <select id="pic" name="pic" class="form-select" required>
                 <option value="">--Pilih PIC--</option>
@@ -98,7 +86,8 @@
                     <option value="<?= $item['pic']; ?>"><?= $item['pic']; ?></option>
                 <?php endforeach; ?>
             </select>
-
+            <label for="rak" class="form-label">RAK</label>
+            <input type="text" id="rak" name="rak" placeholder="SCAN KODE RAK DISINI!">
             <label class="form-label">SCAN</label>
             <input type="text" id="scan" name="scan" placeholder="Masukkan scan LTS disini">
 

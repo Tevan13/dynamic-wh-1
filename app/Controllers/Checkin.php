@@ -67,6 +67,7 @@ class Checkin extends Controller
             if (!$rak) {
                 $rak = $this->RakModel->where('tipe_rak', 'Over Area')->first();
             }
+            // return d($rak);
             $dataInput = [
                 'idPartNo' => $part['idPartNo'],
                 'idRak' => $rak['idRak'],

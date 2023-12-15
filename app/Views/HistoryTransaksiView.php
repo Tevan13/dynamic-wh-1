@@ -220,7 +220,7 @@
                     } else {
                         ?>
                         <tr>
-                            <td style="text-align: center; background-color:#c9c9c9" colspan="8">Belum ada history
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="9">Belum ada history
                                 adjustment
                             </td>
                         </tr>
