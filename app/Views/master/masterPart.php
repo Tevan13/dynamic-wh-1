@@ -208,6 +208,7 @@
 </div>
 
 <script>
+  const table = new DataTable('#table_id')
   $(function() {
     <?php if (session()->has("success")) { ?>
       Swal.fire({
