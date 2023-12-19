@@ -88,7 +88,6 @@
     </div>
     <div class="card mt-2 mb-3">
         <div class="card-body">
-
             <table id="table_id" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -244,10 +243,12 @@
                     ?>
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
 <script>
+    const table = new DataTable('#table_id')
     $(document).on('submit', '#form-add', function (e) {
         e.preventDefault();
 
