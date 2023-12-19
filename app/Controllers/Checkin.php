@@ -55,7 +55,7 @@ class Checkin extends Controller
         }
 
         $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)
-            ->where('status', 'checkin')->first();
+            ->whereIn('status', ['checkin', 'adjust_ci'])->first();
         if ($existingScan !== null) {
             session()->setFlashdata("fail", "LTS ini sudah terscan. Mohon scan LTS lain");
             return redirect()->route('scan-ci');
@@ -108,7 +108,7 @@ class Checkin extends Controller
                     }
                 } else {
                     // If the rack is 'Over Area', only increment total_packing
-                    $updateResult = $this->RakModel->updateTotalPacking($rak['idRak']);
+                    $updateResult = $this->RakModel->updateOverArea($rak['idRak']);
                     if ($updateResult) {
                         // Insert into transaksi_history
                         $historyData = [

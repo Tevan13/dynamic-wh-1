@@ -52,6 +52,7 @@ $routes->post('/scan-ci', 'Checkin::store', ['as' => 'scan-ci']);
 
 $routes->get('scan-co', 'Checkout::index', ['as' => 'scan-co']);
 
+$routes->get('/return-part', 'ReturPartController::index', ['as' => 'return-part']);
 
 $routes->get('/master-part', 'Partnumber::index');
 $routes->post('/master-part', 'Partnumber::store');

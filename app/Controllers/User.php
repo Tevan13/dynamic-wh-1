@@ -19,11 +19,13 @@ class User extends BaseController
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
+        $level = strtolower(session()->get('tb_user')["level"]);
         $data = [
             'users' => $this->UserModel->findAll(),
             'pics' => $this->picModel->getPicList(),
             'tittle' => 'Master User',
             'tittles' => 'Master PIC',
+            'level' => $level
         ];
         return view('master/masterUser', $data);
     }

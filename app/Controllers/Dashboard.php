@@ -12,7 +12,10 @@ class Dashboard extends Controller
         if (session()->get('tb_user') == null) {
             return redirect()->to('/login');
         }
+        $level = strtolower(session()->get('tb_user')["level"]);
+        // var_dump($level);
         $data['title'] = 'Dashboard';
+        $data['level'] = $level;
         echo view('DashboardView', $data);
     }
 }

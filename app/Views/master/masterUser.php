@@ -16,11 +16,13 @@
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
   <div class="card">
     <div class="card-body">
-      <div class="w3-bar w3-black">
-        <button class="w3-bar-item w3-button" onclick="openCity('master-user')">Master User</button>
-        <button class="w3-bar-item w3-button" onclick="openCity('master-pic')">Master PIC</button>
-      </div>
-      <div id="master-user" class="w3-container w3-display-container city">
+      <?php if (strtolower($level == 'admin')) : ?>
+        <div class="w3-bar w3-black">
+          <button class="w3-bar-item w3-button" onclick="openCity('master-pic')">Master PIC</button>
+          <button class="w3-bar-item w3-button" onclick="openCity('master-user')">Master User</button>
+        </div>
+      <?php endif; ?>
+      <div id="master-user" class="w3-container w3-display-container city" style="display:none">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
         <div class="page-header-title" style="text-align: center; width: 100%;">
           <!-- Add a new <div> element to center-align the contents -->
@@ -33,7 +35,7 @@
           <div class="row">
             <div class=" col" style="text-align: right;">
               <!-- Modal -->
-              <form id="form-add" action="/master-user" method="POST">
+              <form id="form-add" action="<?= base_url('/master-user') ?>" method="POST">
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -119,7 +121,7 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              <form id="form-update" action="/master-user/<?= $user['idUser'] ?>" method="POST">
+                              <form id="form-update" action="<?= base_url('') ?>/master-user/<?= $user['idUser'] ?>" method="POST">
                                 <input type="hidden" name="_method" value="PUT">
                                 <div class="mb-3">
                                   <label class="form-label">Username</label>
@@ -158,7 +160,7 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              <form action="/master-user/<?= $user['idUser'] ?>" method="POST" id="form-delete">
+                              <form action="<?= base_url('') ?>/master-user/<?= $user['idUser'] ?>" method="POST" id="form-delete">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <div class="mb-3">
                                   <label class="form-label">Usernamer</label>
@@ -196,7 +198,7 @@
           </div>
         </div>
       </div>
-      <div id="master-pic" class="w3-container w3-display-container city" style="display:none">
+      <div id="master-pic" class="w3-container w3-display-container city">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
         <div class="page-header-title" style="text-align: center; width: 100%;">
           <!-- Add a new <div> element to center-align the contents -->

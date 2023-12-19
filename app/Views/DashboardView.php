@@ -1,6 +1,6 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
-<?= $this->include('layout/navbar'); ?>
+<?= $this->include('layout/logoutnav'); ?>
 <style>
     .card-title {
         text-align: center;
@@ -48,27 +48,33 @@
         </div>
     </div>
     <div class="card mb-3 mt-2 p-1" id="big-card">
-        <a href="<?= base_url('/scan-ci') ?>" class="card-item">
-            <div class="card" id="card">
-                <div class="card-body">
-                    <h5 class="card-title">SCAN MASUK</h5>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'qc')) : ?>
+            <a href="<?= base_url('/scan-ci') ?>" class="card-item">
+                <div class="card" id="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SCAN MASUK</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
-        <a href="<?= base_url('/scan-co') ?>" class="card-item">
-            <div class="card" id="card">
-                <div class="card-body">
-                    <h5 class="card-title">SCAN KELUAR</h5>
+            </a>
+        <?php endif; ?>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'delivery')) : ?>
+            <a href="<?= base_url('/scan-co') ?>" class="card-item">
+                <div class="card" id="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SCAN KELUAR</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
-        <a href="<?= base_url('/adjustment') ?>" class="card-item">
-            <div class="card" id="card">
-                <div class="card-body">
-                    <h5 class="card-title">SCAN ADJUSTMENT</h5>
+            </a>
+        <?php endif; ?>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
+            <a href="<?= base_url('/adjustment') ?>" class="card-item">
+                <div class="card" id="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SCAN ADJUSTMENT</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php endif; ?>
         <a href="<?= base_url('/information-rak') ?>" class="card-item">
             <div class="card" id="card">
                 <div class="card-body">
@@ -83,13 +89,15 @@
                 </div>
             </div>
         </a>
-        <a href="<?= base_url('/master-part') ?>" class="card-item">
-            <div class="card" id="card">
-                <div class="card-body">
-                    <h5 class="card-title">MASTER PART NUMBER</h5>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
+            <a href="<?= base_url('/master-part') ?>" class="card-item">
+                <div class="card" id="card">
+                    <div class="card-body">
+                        <h5 class="card-title">MASTER PART NUMBER</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php endif; ?>
         <a href="<?= base_url('/master-user') ?>" class="card-item">
             <div class="card" id="card">
                 <div class="card-body">
@@ -97,13 +105,24 @@
                 </div>
             </div>
         </a>
-        <a href="<?= base_url('/master_rak') ?>" class="card-item">
-            <div class="card" id="card">
-                <div class="card-body">
-                    <h5 class="card-title">MASTER RAK</h5>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
+            <a href="<?= base_url('/master_rak') ?>" class="card-item">
+                <div class="card" id="card">
+                    <div class="card-body">
+                        <h5 class="card-title">MASTER RAK</h5>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        <?php endif; ?>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
+            <a href="<?= base_url('/return-part') ?>" class="card-item">
+                <div class="card" id="card">
+                    <div class="card-body">
+                        <h5 class="card-title">RETUR BARANG</h5>
+                    </div>
+                </div>
+            </a>
+        <?php endif; ?>
     </div>
 </div>
 <?= $this->endSection(); ?>

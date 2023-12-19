@@ -1,3 +1,6 @@
+<?php
+$level = strtolower(session()->get('tb_user')["level"]);
+?>
 <style>
   ul {
     list-style-type: none;
@@ -65,26 +68,22 @@
   }
 </style>
 <ul>
-  <?php
-  base_url('n');
-  if ('n' == '/dashboard') {
-    ?>
-    <li><a href="<?= base_url('/dashboard') ?>">Dashboard</a></li>
-    <li style="float:right"><a href="<?= base_url('/logout') ?>">Log out</a></li>
-    <?php
-  } else {
-    ?>
-    <li><a href="<?= base_url('/dashboard') ?>">Dashboard</a></li>
+  <li><a href="<?= base_url('/dashboard') ?>">Dashboard</a></li>
+  <?php if (strtolower($level == 'admin') || strtolower($level == 'qc')) : ?>
     <li><a href="<?= base_url('/scan-ci') ?>">Scan Masuk</a></li>
+  <?php endif; ?>
+  <?php if (strtolower($level == 'admin') || strtolower($level == 'delivery')) : ?>
     <li><a href="<?= base_url('/scan-co') ?>">Scan Keluar</a></li>
+  <?php endif; ?>
+  <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
     <li><a href="<?= base_url('/adjustment') ?>">Scan Adjustment</a></li>
-    <li><a href="<?= base_url('/informationController') ?>">Informasi Rak</a></li>
-    <li><a href="<?= base_url('/history') ?>">History</a></li>
+  <?php endif; ?>
+  <li><a href="<?= base_url('/informationController') ?>">Informasi Rak</a></li>
+  <li><a href="<?= base_url('/history') ?>">History</a></li>
+  <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
     <li><a href="<?= base_url('/master-part') ?>">Master Part Number</a></li>
     <li><a href="<?= base_url('/master_rak') ?>">Master Rak</a></li>
-    <li><a href="<?= base_url('/user') ?>">Master User</a></li>
-    <li style="float:right"><a href="<?= base_url('/logout') ?>">Log out</a></li>
-  <?php
-  }
-  ?>
+  <?php endif; ?>
+  <li><a href="<?= base_url('/user') ?>">Master User</a></li>
+  <li style="float:right"><a href="<?= base_url('/logout') ?>">Log out</a></li>
 </ul>
