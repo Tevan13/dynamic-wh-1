@@ -47,6 +47,9 @@ class ReturPartController extends Controller
         $quantity = $data[2];
         $scan = $data[3];
 
+        $part = $this->PartnumberModel->where('part_number', $partNo)->first();
+        // return dd($part);
+
         $existingScan = $this->TransaksiModel->where('unique_scanid', $scan)
             ->whereIn('status', ['checkout', 'adjust_co'])->first();
         // return dd($existingScan);
@@ -73,8 +76,12 @@ class ReturPartController extends Controller
         $rak = $this->RakModel->find($existingScan['idRak']);
         $rak['total_packing'] += 1;
 
-        // Update status_rak based on total_packing
-        $rak['status_rak'] = ($rak['total_packing'] > 0) ? 'terisi' : 'kosong';
+        // Update status_rak based on total_packing and max_kapasitas
+        if ($rak['total_packing'] >= $part['max_kapasitas']) {
+            $rak['status_rak'] = 'Penuh';
+        } else {
+            $rak['status_rak'] = ($rak['total_packing'] > 0) ? 'terisi' : 'kosong';
+        }
 
         $this->RakModel->protect(false)
             ->where('idRak', $existingScan['idRak'])

@@ -73,10 +73,6 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col text-center">
-                                    <!-- Simple link -->
-                                    <a href="#!">Forgot password?</a>
-                                </div>
                             </div>
                             <!-- Submit button -->
                             <button type="submit" class="btn btn-primary btn-block">Sign in</button>

@@ -63,6 +63,7 @@ class HistoryTransaksi extends BaseController
 
         $this->decodeAndMergeMetadata($transaksiData);
         $this->decodeAndMergeMetadata($transaksiData2);
+        $this->decodeAndMergeMetadata($adjustmentData);
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
@@ -217,7 +218,7 @@ class HistoryTransaksi extends BaseController
         // Fetch the data
         $checkinData = $this->historyModel->getCheckin($status[0], $start);
         $checkoutData = $this->historyModel->getCheckout($status[1], $start);
-        $adjustmentData = $this->historyModel->getAdjustment($status[2], $start);
+        $adjustmentData = $this->historyModel->getAdjustment($start);
 
         foreach ($checkinData as &$checkinRow) {
             $checkin = json_decode($checkinRow['trans_metadata'], true);
@@ -238,6 +239,16 @@ class HistoryTransaksi extends BaseController
                 // Merge the decoded data with the original row data
                 $checkoutRow = array_merge($checkoutRow, $checkout);
                 $checkoutRow = array_reverse($checkoutRow, true);
+            }
+        }
+        foreach ($adjustmentData as &$adjustmentRow) {
+            $adjustment = json_decode($adjustmentRow['trans_metadata'], true);
+
+            // Check if $transaksi is an array before pushing it back
+            if (is_array($adjustment)) {
+                // Merge the decoded data with the original row data
+                $adjustmentRow = array_merge($adjustmentRow, $adjustment);
+                $adjustmentRow = array_reverse($adjustmentRow, true);
             }
         }
 
@@ -327,17 +338,20 @@ class HistoryTransaksi extends BaseController
             }
         } elseif ($jenis == 'dataAdjustment') {
             foreach ($dataAdjustment as $adjustment) {
-                if (!empty($adjustment)) {
-                    $sheet->setCellValue('A' . $column, $adjustment['unique_scanid']);
-                    $sheet->setCellValue('B' . $column, $adjustment['lot']);
-                    $sheet->setCellValue('C' . $column, $adjustment['part_number']);
-                    $sheet->setCellValue('D' . $column, $adjustment['kode_rak']);
-                    $sheet->setCellValue('E' . $column, $adjustment['pic']);
-                    $sheet->setCellValue('F' . $column, $adjustment['status']);
-                    $sheet->setCellValue('G' . $column, $adjustment['quantity']);
-                    $sheet->setCellValue('H' . $column, date('d-M-Y', strtotime($adjustment['tgl_adjustment'])));
-                    $sheet->getStyle('A1:H' . $column)->applyFromArray($borderstyle);
-                    $column++;
+                foreach ($adjustment as $adjust) {
+                    // return dd($adjust);
+                    if (is_array($adjust) && !empty($adjust)) {
+                        $sheet->setCellValue('A' . $column, $adjust['unique_scanid'] ?? ''); // Use the null coalescing operator to handle the case when the key is not present
+                        $sheet->setCellValue('B' . $column, $adjust['lot'] ?? '');
+                        $sheet->setCellValue('C' . $column, $adjust['part_number'] ?? '');
+                        $sheet->setCellValue('D' . $column, $adjust['kode_rak'] ?? '');
+                        $sheet->setCellValue('E' . $column, $adjust['pic'] ?? '');
+                        $sheet->setCellValue('F' . $column, $adjust['status'] ?? '');
+                        $sheet->setCellValue('G' . $column, $adjust['quantity'] ?? '');
+                        $sheet->setCellValue('H' . $column, date('d-M-Y', strtotime($adjust['tgl_adjust'] ?? '')));
+                        $sheet->getStyle('A1:H' . $column)->applyFromArray($borderstyle);
+                        $column++;
+                    }
                 }
             }
         }
