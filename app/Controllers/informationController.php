@@ -28,6 +28,7 @@ class informationController extends BaseController
             'dataRak' => $infoRak,
             'title' => 'Informasi Rak'
         ];
+        // echo dd($infoRak);
         return view('informationRak', $data);
     }
 

@@ -23,6 +23,7 @@
     li a:hover:not(.active),
     .dropdown:hover .dropbtn {
         background-color: azure;
+        color: #333;
     }
 
     /* li a:hover,
