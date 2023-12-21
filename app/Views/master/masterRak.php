@@ -1,7 +1,9 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
-<title><?= $tittle ?></title>
+<title>
+    <?= $tittle ?>
+</title>
 
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
@@ -76,14 +78,6 @@
                     </div>
                 </div>
             </div>
-            <table border="0" cellspacing="5" cellpadding="5" style="float: right;">
-                <tbody>
-                    <tr>
-                        <td>Search: </td>
-                        <td><input class="form-control" type="text" placeholder="Search.." name="search" id="searchInput"></td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
     <div class="card mt-2 mb-3">
@@ -248,7 +242,11 @@
     </div>
 </div>
 <script>
-    const table = new DataTable('#table_id')
+    $('#table_id').dataTable({
+        language: {
+            searchPlaceholder: "Search..."
+        }
+    });
     $(document).on('submit', '#form-add', function (e) {
         e.preventDefault();
 
@@ -368,38 +366,6 @@
                 });
             }
         });
-    });
-    $(document).ready(function() {
-        $('#searchInput').on('input', function() {
-            // Your search logic
-            var searchQuery = $(this).val().toLowerCase();
-
-            // Flag to track if any matching row is found
-            var foundMatch = false;
-
-            // Iterate through each content row in the table
-            $('#table_id tbody tr').each(function() {
-                var rowText = $(this).text().toLowerCase();
-                // Show/hide rows based on whether they contain the search query
-                var rowMatches = rowText.indexOf(searchQuery) > -1;
-                $(this).toggle(rowMatches);
-
-                // Update the foundMatch flag based on rowMatches
-                foundMatch = foundMatch || rowMatches;
-            });
-
-            // Show/hide the "No matching data" row based on the foundMatch flag
-            $('#noMatchingData').toggle(!foundMatch);
-        });
-
-        // Attach a keypress event to the search input to trigger search on Enter key
-        $('#searchInput').on('keypress', function(e) {
-            if (e.which === 13) { // 13 is the key code for Enter
-                // Prevent the default form submission behavior on Enter key
-                e.preventDefault();
-            }
-        });
-
     });
 </script>
 <?= $this->endSection(); ?>

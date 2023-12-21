@@ -1,26 +1,36 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
-<title><?= $title ?></title>
+<title>
+    <?= $title ?>
+</title>
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-            <h1 class="card-title"><?= $title ?></h1>
+            <h1 class="card-title">
+                <?= $title ?>
+            </h1>
             <button class="tablink btn btn-info" onclick="nextReport('adjustment')" style="float: right;">History
                 Adjustment</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkOut')" style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkOut')"
+                style="float: right; margin-right: 5px;">History Check
                 Out</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen" style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
+                style="float: right; margin-right: 5px;">History Check
                 In</button>
             <table border="0" cellspacing="5" cellpadding="5">
                 <tbody>
                     <tr>
                         <td scope="col">Choose Date: </td>
-                        <td scope="col"><input type="date" class="form-control" id="min" name="min" value="<?= $start ?>"></td>
+                        <td scope="col"><input type="date" class="form-control" id="min" name="min"
+                                value="<?= $start ?>"></td>
                         <td rowspan="2">
-                            <button style="font-size:16px" class="btn btn-primary" id="search">Search <i class="fa fa-search"></i></button>
-                            <button style="font-size:16px;" class="btn btn-success" id="exportCheckIn">Export Excel <i class="fa fa-file-excel"></i></button>
-                            <form id="exportForm" action="<?= base_url('HistoryTransaksi/exportAllData') ?>" method="get">
+                            <button style="font-size:16px" class="btn btn-primary" id="search">Search <i
+                                    class="fa fa-search"></i></button>
+                            <button style="font-size:16px;" class="btn btn-success" id="exportCheckIn">Export Excel <i
+                                    class="fa fa-file-excel"></i></button>
+                            <form id="exportForm" action="<?= base_url('HistoryTransaksi/exportAllData') ?>"
+                                method="get">
                                 <input type="hidden" id="minDateInput" name="min" value="">
                             </form>
                         </td>
@@ -31,7 +41,8 @@
                 <tbody>
                     <tr>
                         <td>Search: </td>
-                        <td><input class="form-control" type="text" placeholder="Search.." name="search" id="searchInput"></td>
+                        <td><input class="form-control" type="text" placeholder="Search.." name="search"
+                                id="searchInput"></td>
                     </tr>
                 </tbody>
             </table>
@@ -59,7 +70,7 @@
                         $i = 0;
                         foreach ($historyCheckin as $checkin) {
                             $i++;
-                    ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -89,7 +100,7 @@
                                     <?= $checkin['tgl_ci'] ?>
                                 </td>
                             </tr>
-                        <?php
+                            <?php
                         }
                     } else {
                         ?>
@@ -122,7 +133,7 @@
                         $i = 0;
                         foreach ($historyCheckout as $checkout) {
                             $i++;
-                    ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -152,7 +163,7 @@
                                     <?= $checkout['tgl_co'] ?>
                                 </td>
                             </tr>
-                        <?php
+                            <?php
                         }
                     } else {
                         ?>
@@ -169,23 +180,25 @@
             <div class="tabcontent" id="adjustment">
                 <table class="table table-bordered" id="history3">
                     <!-- <table> -->
-                    <tr>
-                        <th>No.</th>
-                        <th>No Transaksi</th>
-                        <th>ID Scan</th>
-                        <th>Part No</th>
-                        <th>Rak</th>
-                        <th>PIC</th>
-                        <th>Status</th>
-                        <th>Quantity</th>
-                        <th>Tanggal Adjustment</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>No Transaksi</th>
+                            <th>ID Scan</th>
+                            <th>Part No</th>
+                            <th>Rak</th>
+                            <th>PIC</th>
+                            <th>Status</th>
+                            <th>Quantity</th>
+                            <th>Tanggal Adjustment</th>
+                        </tr>
+                    </thead>
                     <?php
                     if (!empty($historyAdjustment)) {
                         $i = 0;
                         foreach ($historyAdjustment as $adjustment) {
                             $i++;
-                    ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -215,7 +228,7 @@
                                     <?= $adjustment['tgl_adjust'] ?>
                                 </td>
                             </tr>
-                        <?php
+                            <?php
                         }
                     } else {
                         ?>
@@ -232,9 +245,9 @@
 </div>
 <script>
     // Ensure the DOM is ready
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Attach a click event to the search button
-        $('#search').on('click', function() {
+        $('#search').on('click', function () {
             // Get the selected dates
             var minDate = $('#min').val();
 
@@ -245,7 +258,7 @@
             // Redirect to the same page with the selected date range as query parameters
             window.location.href = '<?= base_url('history/') ?>?min=' + formattedMinDate;
         });
-        $('#exportCheckIn').on('click', function() {
+        $('#exportCheckIn').on('click', function () {
             // Get the selected date
             var minDate = $('#min').val();
             var formattedMinDate = formatDate(minDate);
@@ -265,14 +278,14 @@
             return year + '-' + month + '-' + day;
         }
         // Attach a click event to the Export Excel button
-        $('#exportExcel').on('click', function() {
+        $('#exportExcel').on('click', function () {
             // Get the currently active tab
             var activeTab = $('.tabcontent:visible').attr('id');
 
             // Call a function to export data to Excel based on the active tab
             exportToExcel(activeTab);
         });
-        $('#searchInput').on('input', function() {
+        $('#searchInput').on('input', function () {
             // Your search logic
             var searchQuery = $(this).val().toLowerCase();
 
@@ -280,7 +293,25 @@
             var foundMatch = false;
 
             // Iterate through each content row in the table
-            $('#history tbody tr').each(function() {
+            $('#history tbody tr').each(function () {
+                var rowText = $(this).text().toLowerCase();
+                // Show/hide rows based on whether they contain the search query
+                var rowMatches = rowText.indexOf(searchQuery) > -1;
+                $(this).toggle(rowMatches);
+
+                // Update the foundMatch flag based on rowMatches
+                foundMatch = foundMatch || rowMatches;
+            });
+            $('#history2 tbody tr').each(function () {
+                var rowText = $(this).text().toLowerCase();
+                // Show/hide rows based on whether they contain the search query
+                var rowMatches = rowText.indexOf(searchQuery) > -1;
+                $(this).toggle(rowMatches);
+
+                // Update the foundMatch flag based on rowMatches
+                foundMatch = foundMatch || rowMatches;
+            });
+            $('#history3 tbody tr').each(function () {
                 var rowText = $(this).text().toLowerCase();
                 // Show/hide rows based on whether they contain the search query
                 var rowMatches = rowText.indexOf(searchQuery) > -1;
@@ -295,7 +326,7 @@
         });
 
         // Attach a keypress event to the search input to trigger search on Enter key
-        $('#searchInput').on('keypress', function(e) {
+        $('#searchInput').on('keypress', function (e) {
             if (e.which === 13) { // 13 is the key code for Enter
                 // Prevent the default form submission behavior on Enter key
                 e.preventDefault();

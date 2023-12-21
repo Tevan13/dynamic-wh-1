@@ -31,6 +31,10 @@
         margin: 8px;
     }
 
+    .card-title {
+        font-weight: 500;
+    }
+
     #big-card {
         display: flex;
         flex-wrap: wrap;
