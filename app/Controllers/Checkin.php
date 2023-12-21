@@ -61,7 +61,7 @@ class Checkin extends Controller
             return redirect()->route('scan-ci');
         }
 
-        $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->where('status', 'checkin')->findAll();
+        $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
         if (count($transaksi) <= 0) {
             $rak = $this->RakModel->where('status_rak', 'Kosong')->where('tipe_rak', $part['tipe_rak'])->first();
             if (!$rak) {
