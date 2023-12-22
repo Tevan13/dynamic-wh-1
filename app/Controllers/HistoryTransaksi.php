@@ -37,6 +37,7 @@ class HistoryTransaksi extends BaseController
         $transaksiData = $this->historyModel->getCheckin($status[0], $start);
         $transaksiData2 = $this->historyModel->getCheckout($status[1], $start);
         $adjustmentData = $this->historyModel->getAdjustment($start);
+        $returData = $this->historyModel->getRetur($status[0], $start);
         $combinedTransactions = [];
 
         foreach ($adjustmentData as $adjustment) {
@@ -63,12 +64,14 @@ class HistoryTransaksi extends BaseController
 
         $this->decodeAndMergeMetadata($transaksiData);
         $this->decodeAndMergeMetadata($transaksiData2);
+        $this->decodeAndMergeMetadata($returData);
         $this->decodeAndMergeMetadata($adjustmentData);
         $data = [
             'title' => 'History Transaksi',
             'historyCheckin' => $transaksiData,
             'historyCheckout' => $transaksiData2,
             'historyAdjustment' => $combinedTransactions,
+            'historyRetur' => $returData,
             'start' => $start,
         ];
         echo view('historyTransaksiView', $data);

@@ -12,25 +12,20 @@
             </h1>
             <button class="tablink btn btn-info" onclick="nextReport('adjustment')" style="float: right;">History
                 Adjustment</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkOut')"
-                style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('retur')" style="float: right; margin-right: 5px;">History Retur Part</button>
+            <button class="tablink btn btn-info" onclick="nextReport('checkOut')" style="float: right; margin-right: 5px;">History Check
                 Out</button>
-            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen"
-                style="float: right; margin-right: 5px;">History Check
+            <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen" style="float: right; margin-right: 5px;">History Check
                 In</button>
             <table border="0" cellspacing="5" cellpadding="5">
                 <tbody>
                     <tr>
                         <td scope="col">Choose Date: </td>
-                        <td scope="col"><input type="date" class="form-control" id="min" name="min"
-                                value="<?= $start ?>"></td>
+                        <td scope="col"><input type="date" class="form-control" id="min" name="min" value="<?= $start ?>"></td>
                         <td rowspan="2">
-                            <button style="font-size:16px" class="btn btn-primary" id="search">Search <i
-                                    class="fa fa-search"></i></button>
-                            <button style="font-size:16px;" class="btn btn-success" id="exportCheckIn">Export Excel <i
-                                    class="fa fa-file-excel"></i></button>
-                            <form id="exportForm" action="<?= base_url('HistoryTransaksi/exportAllData') ?>"
-                                method="get">
+                            <button style="font-size:16px" class="btn btn-primary" id="search">Search <i class="fa fa-search"></i></button>
+                            <button style="font-size:16px;" class="btn btn-success" id="exportCheckIn">Export Excel <i class="fa fa-file-excel"></i></button>
+                            <form id="exportForm" action="<?= base_url('HistoryTransaksi/exportAllData') ?>" method="get">
                                 <input type="hidden" id="minDateInput" name="min" value="">
                             </form>
                         </td>
@@ -41,8 +36,7 @@
                 <tbody>
                     <tr>
                         <td>Search: </td>
-                        <td><input class="form-control" type="text" placeholder="Search.." name="search"
-                                id="searchInput"></td>
+                        <td><input class="form-control" type="text" placeholder="Search.." name="search" id="searchInput"></td>
                     </tr>
                 </tbody>
             </table>
@@ -70,7 +64,7 @@
                         $i = 0;
                         foreach ($historyCheckin as $checkin) {
                             $i++;
-                            ?>
+                    ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -100,7 +94,7 @@
                                     <?= $checkin['tgl_ci'] ?>
                                 </td>
                             </tr>
-                            <?php
+                        <?php
                         }
                     } else {
                         ?>
@@ -133,7 +127,7 @@
                         $i = 0;
                         foreach ($historyCheckout as $checkout) {
                             $i++;
-                            ?>
+                    ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -163,7 +157,7 @@
                                     <?= $checkout['tgl_co'] ?>
                                 </td>
                             </tr>
-                            <?php
+                        <?php
                         }
                     } else {
                         ?>
@@ -175,7 +169,6 @@
                     <?php } ?>
                 </table>
             </div>
-
             <!-- adjustment table -->
             <div class="tabcontent" id="adjustment">
                 <table class="table table-bordered" id="history3">
@@ -198,7 +191,7 @@
                         $i = 0;
                         foreach ($historyAdjustment as $adjustment) {
                             $i++;
-                            ?>
+                    ?>
                             <tr>
                                 <td>
                                     <?= $i; ?>
@@ -228,7 +221,71 @@
                                     <?= $adjustment['tgl_adjust'] ?>
                                 </td>
                             </tr>
-                            <?php
+                        <?php
+                        }
+                    } else {
+                        ?>
+                        <tr>
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="9">Belum ada history
+                                adjustment
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+            <!-- retur table -->
+            <div class="tabcontent" id="retur">
+                <table class="table table-bordered" id="history4">
+                    <!-- <table> -->
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>No Transaksi</th>
+                            <th>ID Scan</th>
+                            <th>Part No</th>
+                            <th>Rak</th>
+                            <th>PIC</th>
+                            <th>Status</th>
+                            <th>Quantity</th>
+                            <th>Tanggal Adjustment</th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if (!empty($historyRetur)) {
+                        $i = 0;
+                        foreach ($historyRetur as $retur) {
+                            $i++;
+                    ?>
+                            <tr>
+                                <td>
+                                    <?= $i; ?>
+                                </td>
+                                <td>
+                                    <?= $retur['unique_scanid'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['lot'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['part_number'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['kode_rak'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['pic'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['status'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['quantity'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['tgl_retur'] ?>
+                                </td>
+                            </tr>
+                        <?php
                         }
                     } else {
                         ?>
@@ -245,9 +302,9 @@
 </div>
 <script>
     // Ensure the DOM is ready
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Attach a click event to the search button
-        $('#search').on('click', function () {
+        $('#search').on('click', function() {
             // Get the selected dates
             var minDate = $('#min').val();
 
@@ -258,7 +315,7 @@
             // Redirect to the same page with the selected date range as query parameters
             window.location.href = '<?= base_url('history/') ?>?min=' + formattedMinDate;
         });
-        $('#exportCheckIn').on('click', function () {
+        $('#exportCheckIn').on('click', function() {
             // Get the selected date
             var minDate = $('#min').val();
             var formattedMinDate = formatDate(minDate);
@@ -278,14 +335,14 @@
             return year + '-' + month + '-' + day;
         }
         // Attach a click event to the Export Excel button
-        $('#exportExcel').on('click', function () {
+        $('#exportExcel').on('click', function() {
             // Get the currently active tab
             var activeTab = $('.tabcontent:visible').attr('id');
 
             // Call a function to export data to Excel based on the active tab
             exportToExcel(activeTab);
         });
-        $('#searchInput').on('input', function () {
+        $('#searchInput').on('input', function() {
             // Your search logic
             var searchQuery = $(this).val().toLowerCase();
 
@@ -293,7 +350,7 @@
             var foundMatch = false;
 
             // Iterate through each content row in the table
-            $('#history tbody tr').each(function () {
+            $('#history tbody tr').each(function() {
                 var rowText = $(this).text().toLowerCase();
                 // Show/hide rows based on whether they contain the search query
                 var rowMatches = rowText.indexOf(searchQuery) > -1;
@@ -302,7 +359,7 @@
                 // Update the foundMatch flag based on rowMatches
                 foundMatch = foundMatch || rowMatches;
             });
-            $('#history2 tbody tr').each(function () {
+            $('#history2 tbody tr').each(function() {
                 var rowText = $(this).text().toLowerCase();
                 // Show/hide rows based on whether they contain the search query
                 var rowMatches = rowText.indexOf(searchQuery) > -1;
@@ -311,7 +368,7 @@
                 // Update the foundMatch flag based on rowMatches
                 foundMatch = foundMatch || rowMatches;
             });
-            $('#history3 tbody tr').each(function () {
+            $('#history3 tbody tr').each(function() {
                 var rowText = $(this).text().toLowerCase();
                 // Show/hide rows based on whether they contain the search query
                 var rowMatches = rowText.indexOf(searchQuery) > -1;
@@ -326,7 +383,7 @@
         });
 
         // Attach a keypress event to the search input to trigger search on Enter key
-        $('#searchInput').on('keypress', function (e) {
+        $('#searchInput').on('keypress', function(e) {
             if (e.which === 13) { // 13 is the key code for Enter
                 // Prevent the default form submission behavior on Enter key
                 e.preventDefault();

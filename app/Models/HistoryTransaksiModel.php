@@ -66,11 +66,24 @@ class HistoryTransaksiModel extends Model
             ->getResultArray();
         return $result;
     }
-    
+
     public function getAdjustment($minDate)
     {
         $result = $this->db->table('transaksi_history')
             ->where("trans_metadata LIKE '%\"tgl_adjust\":\"$minDate%'")
+            ->orderBy('id', 'desc') // Assuming you want to order by id in descending order
+            ->get()
+            ->getResultArray();
+        return $result;
+    }
+    public function getRetur($status, $minDate)
+    {
+        // $minDate = isset($dateRange['min']) ? $dateRange['min'] : date('Y-m-d');
+        // $maxDate = isset($dateRange['max']) ? $dateRange['max'] : date('Y-m-d');
+
+        $result = $this->db->table('transaksi_history')
+            ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
+            ->where("trans_metadata LIKE '%\"tgl_retur\":\"$minDate%'")
             ->orderBy('id', 'desc') // Assuming you want to order by id in descending order
             ->get()
             ->getResultArray();

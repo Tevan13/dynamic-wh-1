@@ -66,28 +66,74 @@ class ReturPartController extends Controller
                 return redirect()->route('return-part');
             }
         }
-        // Update status to 'checkin' for 'checkout' or 'adjust_co'
-        $this->TransaksiModel->where('unique_scanid', $scan)
-            ->protect(false)
-            ->whereIn('status', ['checkout', 'adjust_co'])
-            ->set(['status' => 'checkin'])
-            ->update();
+        $existingSlot = $this->RakModel->where('idRak', $existingScan['idRak'])
+            ->whereIn('status_rak', ['Terisi', 'Kosong'])->first();
+        // return dd($existingSlot, $existingScan);
+        if ($existingSlot !== null) {
+            // Update status to 'checkin' for 'checkout' or 'adjust_co'
+            $this->TransaksiModel->where('unique_scanid', $scan)
+                ->protect(false)
+                ->whereIn('status', ['checkout', 'adjust_co'])
+                ->set(['status' => 'checkin'])
+                ->update();
 
-        $rak = $this->RakModel->find($existingScan['idRak']);
-        $rak['total_packing'] += 1;
+            $rak = $this->RakModel->find($existingScan['idRak']);
+            $rak['total_packing'] += 1;
 
-        // Update status_rak based on total_packing and max_kapasitas
-        if ($rak['total_packing'] >= $part['max_kapasitas']) {
-            $rak['status_rak'] = 'Penuh';
+            // Update status_rak based on total_packing and max_kapasitas
+            $rak['status_rak'] = ($rak['total_packing'] >= $part['max_kapasitas']) ? 'Penuh' : (($rak['total_packing'] > 0) ? 'terisi' : 'kosong');
+
+            $this->RakModel->protect(false)
+                ->where('idRak', $existingScan['idRak'])
+                ->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])
+                ->update();
+
+            $historyData = [
+                'trans_metadata' => json_encode([
+                    'idTransaksi' => $existingScan['idTransaksi'],
+                    'part_number' => $part['part_number'],
+                    'kode_rak' => $existingSlot['kode_rak'],
+                    'unique_scanid' => $existingScan['unique_scanid'],
+                    'lot' => $existingScan['lot'],
+                    'quantity' => $existingScan['quantity'],
+                    'status' => 'checkin',
+                    'pic' => $existingScan['pic'],
+                    'tgl_retur' => $now,
+                ])
+            ];
+            // return dd($historyData);
+            $this->historyModel->protect(false)->insert($historyData, false);
         } else {
-            $rak['status_rak'] = ($rak['total_packing'] > 0) ? 'terisi' : 'kosong';
-        }
+            $overArea = $this->RakModel->where('kode_rak', 'Over Area')->first();
+            $this->TransaksiModel->where('unique_scanid', $scan)
+                ->protect(false)
+                ->whereIn('status', ['checkout', 'adjust_co'])
+                ->set(['idRak' => $overArea['idRak'], 'status' => 'checkin'])
+                ->update();
 
-        $this->RakModel->protect(false)
-            ->where('idRak', $existingScan['idRak'])
-            ->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])
-            ->update();
-        // Continue with your logic for successful update, if needed
+            $rak = $this->RakModel->find($overArea['idRak']);
+            $rak['total_packing'] += 1;
+
+            $rak['status_rak'] = ($rak['total_packing'] > 0) ? 'terisi' : 'kosong';
+            $this->RakModel->protect(false)
+                ->where('idRak', $overArea['idRak'])
+                ->set(['total_packing' => $rak['total_packing'], 'status_rak' => $rak['status_rak']])
+                ->update();
+            $historyData = [
+                'trans_metadata' => json_encode([
+                    'idTransaksi' => $existingScan['idTransaksi'],
+                    'part_number' => $part['part_number'],
+                    'kode_rak' => $overArea['kode_rak'],
+                    'unique_scanid' => $existingScan['unique_scanid'],
+                    'lot' => $existingScan['lot'],
+                    'quantity' => $existingScan['quantity'],
+                    'status' => 'checkin',
+                    'pic' => $existingScan['pic'],
+                    'tgl_retur' => $now,
+                ])
+            ];
+            $this->historyModel->protect(false)->insert($historyData, false);
+        }
         // Redirect or return success message
         session()->setFlashdata("success", "Part berhasil dikembalikan ke rak " . $rak['kode_rak'] . "!");
         return redirect()->route('return-part');

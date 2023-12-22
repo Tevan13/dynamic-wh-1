@@ -61,7 +61,9 @@ class Checkin extends Controller
             return redirect()->route('scan-ci');
         }
 
-        $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->whereIn('status', ['checkin', 'adjust_ci'])->findAll();
+        $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->whereIn('status', ['checkin', 'adjust_ci'])
+            ->orderBy('idRak', 'DESC')->findAll();
+        // return dd($transaksi);
         if (count($transaksi) <= 0) {
             $rak = $this->RakModel->where('status_rak', 'Kosong')->where('tipe_rak', $part['tipe_rak'])->first();
             if (!$rak) {
@@ -144,7 +146,9 @@ class Checkin extends Controller
                     $count++;
                 }
             }
+            // return dd($count, intval($part['max_kapasitas']));
             $rak = $this->RakModel->where('idRak', $transaksi[0]['idRak'])->first();
+            // return dd($rak);
             if ($count + 1 <= intval($part['max_kapasitas'])) {
                 $dataInput = [
                     'idPartNo' => $part['idPartNo'],
