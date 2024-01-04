@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class HistoryTransaksiModel extends Model
+class HistoryTransaksiModel1 extends Model
 {
     protected $table            = 'transaksi_history';
     // protected $primaryKey       = 'idTransaksi';
@@ -89,10 +89,10 @@ class HistoryTransaksiModel extends Model
     //          ->where("JSON_EXTRACT(transaksi_history.trans_metadata, '$.status')", $status)
     //          ->delete();
     // }
-    // public function hapusHistory($id)
-    // {
-    //     return $this->db->query('DELETE FROM history_transaksi WHERE id=?', [$id]);
-    // }
+    public function hapusHistory($id)
+    {
+        return $this->db->query('DELETE FROM history_transaksi WHERE id=?', [$id]);
+    }
 
     public function getAdjustment($minDate)
     {
@@ -118,37 +118,33 @@ class HistoryTransaksiModel extends Model
     }
     public function deleteCheckout($status, $minDate)
 {
-    // try {
+    try {
         // Begin transaction
-        // $this->db->transBegin();
+        $this->db->transBegin();
 
         // Step 1: Get checkin entities to be deleted
-        $delete = $this->db->table('transaksi_history')
+        $checkoutsToDelete = $this->db->table('transaksi_history')
+            ->select('id') // Select only the IDs for deletion
             ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
-            ->where("trans_metadata LIKE '%\"tgl_co\":\"$minDate%'")
-            ->delete();
-        // $checkoutsToDelete = $this->db->table('transaksi_history')
-        //     ->select('id') // Select only the IDs for deletion
-        //     ->where("trans_metadata LIKE '%\"status\":\"$status\"%'")
-        //     ->where("trans_metadata LIKE '%\"tgl_ci\":\"$minDate%'")
-        //     ->get()
-        //     ->getResultArray();
+            ->where("trans_metadata LIKE '%\"tgl_ci\":\"$minDate%'")
+            ->get()
+            ->getResultArray();
 
         // Step 2: Delete each checkin entity
-    //     foreach ($checkoutsToDelete as $checkout) {
-    //         $this->deleteCheckoutEntity($checkout['id']);
-    //     }
+        foreach ($checkoutsToDelete as $checkout) {
+            $this->deleteCheckoutEntity($checkout['id']);
+        }
 
-    //     // Commit transaction if everything is successful
-    //     $this->db->transCommit();
+        // Commit transaction if everything is successful
+        $this->db->transCommit();
 
-    //     return true;
-    // } catch (Exception $e) {
-    //     // Rollback transaction if an error occurs
-    //     $this->db->transRollback();
-    //     echo "Error: " . $e->getMessage();
-    //     return false;
-    // }
+        return true;
+    } catch (Exception $e) {
+        // Rollback transaction if an error occurs
+        $this->db->transRollback();
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
 }
 
 private function deleteCheckoutEntity($checkoutId)

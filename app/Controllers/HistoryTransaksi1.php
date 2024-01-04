@@ -154,9 +154,9 @@ class HistoryTransaksi extends BaseController
     //         return false;
     //     }
     // }
-    public function delete($idTransaksi)
+    public function delete($id)
     {
-        $delete = $this->HistoryTransaksiModel->where("trans_metadata LIKE '$idTransaksi'")->delete();
+        $delete = $this->HistoryTransaksiModel->where("trans_metadata LIKE '$id'")->delete();
         if ($delete) {
             session()->setFlashdata("success", "History berhasil dihapus!");
         } else {

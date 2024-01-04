@@ -68,6 +68,12 @@ $routes->delete('/master-user/(:any)', 'User::delete/$1');
 
 $routes->get('/history', 'HistoryTransaksi::index');
 $routes->get('/export-history', 'HistoryTransaksi::export');
+$routes->delete('/delete-history/(:any)', 'HistoryTransaksi::delete/$1');
+// $routes->delete('/historyTransaksi/(:unique_scanid/:any)', 'HistoryTransaksi::delete/$1');
+// $routes->delete('/historyTransaksi/(:num)', 'HistoryTransaksi::delete/$1');
+
+// $routes->delete('/history', 'HistoryTransaksi::delete/');
+$routes->get('/history1', 'HistoryTransaksi1::index');
 
 $routes->get('/adjustment', 'AdjustmentController::index', ['as' => 'adjustment']);
 
