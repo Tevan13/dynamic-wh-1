@@ -28,10 +28,10 @@ class rakModel extends Model
         return $this->db->table('tb_rak')->update($data, ["idRak" => $id]);
     }
 
-    public function deleteMasterRak($id)
-    {
-        return $this->db->query('DELETE FROM `tb_rak` WHERE idRak=?', [$id]);
-    }
+    // public function deleteMasterRak($id)
+    // {
+    //     return $this->db->query('DELETE FROM `tb_rak` WHERE idRak=?', [$id]);
+    // }
 
     public function getRakBy($id)
     {

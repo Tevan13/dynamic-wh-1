@@ -70,7 +70,7 @@
                 </div>
             </a>
         <?php endif; ?>
-        <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
+        <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')|| strtolower($level == 'delivery')) : ?>
             <a href="<?= base_url('/adjustment') ?>" class="card-item">
                 <div class="card" id="card">
                     <div class="card-body">
@@ -90,6 +90,13 @@
             <div class="card" id="card">
                 <div class="card-body">
                     <h5 class="card-title">HISTORY</h5>
+                </div>
+            </div>
+        </a>
+        <a href="<?= base_url('/history1') ?>" class="card-item">
+            <div class="card" id="card">
+                <div class="card-body">
+                    <h5 class="card-title">HISTORY2</h5>
                 </div>
             </div>
         </a>
