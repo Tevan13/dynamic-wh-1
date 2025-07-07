@@ -72,7 +72,6 @@ class AdjustmentController extends Controller
                 ];
 
                 $uniqueAdjust[] = $exist['unique_scanid'];
-
                 $this->TransaksiModel->protect(false)
                     ->where('unique_scanid', $exist['unique_scanid'])
                     ->set(['pic' => $d->pic, 'status' => 'adjust_ci', 'tgl_adjust' => $now])
@@ -84,6 +83,17 @@ class AdjustmentController extends Controller
                     ->update();
                 $uniqueAdjust[] = $checkout['unique_scanid'];
                 // return dd($uniqueAdjust);
+                $history[] = [
+                    'idTransaksi' => $checkout['idTransaksi'],
+                    'unique_scanid' => $d->unique_scanid,
+                    'part_number' => $d->part_number,
+                    'kode_rak' => $d->rak,
+                    'lot' => $d->lts,
+                    'quantity' => $d->qty,
+                    'status' => 'adjust_ci',
+                    'pic' => $d->pic,
+                    'tgl_adjust' => $now,
+                ];
             } else {
                 $insertedId;
                 if ((intval($aktual) + 1) <= intval($max)) {

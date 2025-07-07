@@ -134,7 +134,7 @@
 
             console.log(jsonDataArray);
         } else {
-            alert('Mohon untuk tidak mengisi kolom RAK, PIC dan mengecek apakah LTS ini Sudah terscan atau belum.');
+            alert('Mohon untuk mengisi kolom PIC, RAK, dan mengecek apakah LTS ini sudah terscan atau belum.');
         }
         scan.value = '';
     }

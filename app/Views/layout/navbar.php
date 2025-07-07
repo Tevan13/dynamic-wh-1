@@ -26,12 +26,8 @@ $level = strtolower(session()->get('tb_user')["level"]);
   li a:hover:not(.active),
   .dropdown:hover .dropbtn {
     background-color: azure;
+    color: #333;
   }
-
-  /* li a:hover,
-  .dropdown:hover .dropbtn {
-    background-color:azure;
-  } */
 
   li a:active,
   .dropdown:active .dropbtn {
@@ -77,6 +73,7 @@ $level = strtolower(session()->get('tb_user')["level"]);
   <?php endif; ?>
   <?php if (strtolower($level == 'admin') || strtolower($level == 'cs')) : ?>
     <li><a href="<?= base_url('/adjustment') ?>">Scan Adjustment</a></li>
+    <li><a href="<?= base_url('/return-part') ?>">Retur Part</a></li>
   <?php endif; ?>
   <li><a href="<?= base_url('/informationController') ?>">Informasi Rak</a></li>
   <li><a href="<?= base_url('/history') ?>">History</a></li>

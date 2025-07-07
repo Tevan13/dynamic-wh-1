@@ -31,6 +31,10 @@
         margin: 8px;
     }
 
+    .card-title {
+        font-weight: 500;
+    }
+
     #big-card {
         display: flex;
         flex-wrap: wrap;
@@ -118,7 +122,7 @@
             <a href="<?= base_url('/return-part') ?>" class="card-item">
                 <div class="card" id="card">
                     <div class="card-body">
-                        <h5 class="card-title">RETUR BARANG</h5>
+                        <h5 class="card-title">RETUR PART</h5>
                     </div>
                 </div>
             </a>

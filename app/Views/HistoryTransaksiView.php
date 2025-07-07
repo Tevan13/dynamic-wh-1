@@ -1,13 +1,18 @@
 <?= $this->extend('layout/index'); ?>
 <?= $this->section('content'); ?>
 <?= $this->include('layout/navbar'); ?>
-<title><?= $title ?></title>
+<title>
+    <?= $title ?>
+</title>
 <div class="container-fluid mt-3 mr-3" style="max-width:100%;font-size:15px;">
     <div class="card">
         <div class="card-body">
-            <h1 class="card-title"><?= $title ?></h1>
+            <h1 class="card-title">
+                <?= $title ?>
+            </h1>
             <button class="tablink btn btn-info" onclick="nextReport('adjustment')" style="float: right;">History
                 Adjustment</button>
+            <button class="tablink btn btn-info" onclick="nextReport('retur')" style="float: right; margin-right: 5px;">History Retur Part</button>
             <button class="tablink btn btn-info" onclick="nextReport('checkOut')" style="float: right; margin-right: 5px;">History Check
                 Out</button>
             <button class="tablink btn btn-info" onclick="nextReport('checkIn')" id="defaultOpen" style="float: right; margin-right: 5px;">History Check
@@ -164,22 +169,23 @@
                     <?php } ?>
                 </table>
             </div>
-
             <!-- adjustment table -->
             <div class="tabcontent" id="adjustment">
                 <table class="table table-bordered" id="history3">
                     <!-- <table> -->
-                    <tr>
-                        <th>No.</th>
-                        <th>No Transaksi</th>
-                        <th>ID Scan</th>
-                        <th>Part No</th>
-                        <th>Rak</th>
-                        <th>PIC</th>
-                        <th>Status</th>
-                        <th>Quantity</th>
-                        <th>Tanggal Adjustment</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>No Transaksi</th>
+                            <th>ID Scan</th>
+                            <th>Part No</th>
+                            <th>Rak</th>
+                            <th>PIC</th>
+                            <th>Status</th>
+                            <th>Quantity</th>
+                            <th>Tanggal Adjustment</th>
+                        </tr>
+                    </thead>
                     <?php
                     if (!empty($historyAdjustment)) {
                         $i = 0;
@@ -213,6 +219,70 @@
                                 </td>
                                 <td>
                                     <?= $adjustment['tgl_adjust'] ?>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                    } else {
+                        ?>
+                        <tr>
+                            <td style="text-align: center; background-color:#c9c9c9" colspan="9">Belum ada history
+                                adjustment
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+            <!-- retur table -->
+            <div class="tabcontent" id="retur">
+                <table class="table table-bordered" id="history4">
+                    <!-- <table> -->
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>No Transaksi</th>
+                            <th>ID Scan</th>
+                            <th>Part No</th>
+                            <th>Rak</th>
+                            <th>PIC</th>
+                            <th>Status</th>
+                            <th>Quantity</th>
+                            <th>Tanggal Adjustment</th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if (!empty($historyRetur)) {
+                        $i = 0;
+                        foreach ($historyRetur as $retur) {
+                            $i++;
+                    ?>
+                            <tr>
+                                <td>
+                                    <?= $i; ?>
+                                </td>
+                                <td>
+                                    <?= $retur['unique_scanid'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['lot'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['part_number'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['kode_rak'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['pic'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['status'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['quantity'] ?>
+                                </td>
+                                <td>
+                                    <?= $retur['tgl_retur'] ?>
                                 </td>
                             </tr>
                         <?php
@@ -281,6 +351,24 @@
 
             // Iterate through each content row in the table
             $('#history tbody tr').each(function() {
+                var rowText = $(this).text().toLowerCase();
+                // Show/hide rows based on whether they contain the search query
+                var rowMatches = rowText.indexOf(searchQuery) > -1;
+                $(this).toggle(rowMatches);
+
+                // Update the foundMatch flag based on rowMatches
+                foundMatch = foundMatch || rowMatches;
+            });
+            $('#history2 tbody tr').each(function() {
+                var rowText = $(this).text().toLowerCase();
+                // Show/hide rows based on whether they contain the search query
+                var rowMatches = rowText.indexOf(searchQuery) > -1;
+                $(this).toggle(rowMatches);
+
+                // Update the foundMatch flag based on rowMatches
+                foundMatch = foundMatch || rowMatches;
+            });
+            $('#history3 tbody tr').each(function() {
                 var rowText = $(this).text().toLowerCase();
                 // Show/hide rows based on whether they contain the search query
                 var rowMatches = rowText.indexOf(searchQuery) > -1;
