@@ -64,6 +64,7 @@ class Checkin extends Controller
         $transaksi = $this->TransaksiModel->where('idPartNo', $part['idPartNo'])->whereIn('status', ['checkin', 'adjust_ci'])
             ->orderBy('idRak', 'DESC')->findAll();
         // return dd($transaksi);
+      
         if (count($transaksi) <= 0) {
             $rak = $this->RakModel->where('status_rak', 'Kosong')->where('tipe_rak', $part['tipe_rak'])->first();
             if (!$rak) {
